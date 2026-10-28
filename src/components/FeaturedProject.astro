@@ -1,0 +1,67 @@
+---
+import type { Project } from "../data/projects";
+import ProjectLinks from "./ProjectLinks.astro";
+import Stack from "./Stack.astro";
+
+interface Props {
+  project: Project;
+  flip?: boolean;
+}
+
+const { project, flip = false } = Astro.props;
+---
+
+<article id={project.id} class="overflow-hidden rounded-md border border-rule bg-surface">
+  <div class="flex items-center justify-between gap-3 border-b border-rule px-5 py-2.5 font-mono text-xs text-muted sm:px-6">
+    <span><span class="text-accent">{project.code}</span> · {project.year}</span>
+    <span class="text-right">{project.status}</span>
+  </div>
+  <div class="grid gap-8 p-5 sm:p-6 lg:grid-cols-[1.1fr_1fr] lg:gap-10 lg:p-8">
+    <div class:list={["flex flex-col gap-5", flip && "lg:order-2"]}>
+      <div>
+        <h3 class="text-2xl font-semibold tracking-tight sm:text-3xl">{project.name}</h3>
+        <p class="mt-2 text-lg text-muted">{project.tagline}</p>
+      </div>
+      <p class="leading-relaxed">{project.description}</p>
+      <ul class="space-y-2.5">
+        {
+          project.highlights.map((item) => (
+            <li class="flex gap-3 text-[15px] leading-relaxed">
+              <span aria-hidden="true" class="mt-[9px] size-1.5 shrink-0 bg-accent" />
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <Stack items={project.stack} />
+      <ProjectLinks links={project.links} />
+    </div>
+
+    <div class:list={["flex flex-col gap-3", flip && "lg:order-1"]}>
+      {
+        project.images?.map((image, i) => (
+          <figure class:list={["overflow-hidden rounded border border-rule bg-paper", i > 0 && "hidden sm:block"]}>
+            <img src={image.src} alt={image.alt} width="1280" height="800" loading="lazy" decoding="async" class="block h-auto w-full" />
+          </figure>
+        ))
+      }
+      {
+        project.specs && (
+          <div class="rounded border border-rule bg-paper">
+            <p class="border-b border-rule px-4 py-2.5 font-mono text-xs tracking-wide text-muted uppercase">
+              Equipo objetivo · Samsung GT-S5301L
+            </p>
+            <dl class="divide-y divide-rule">
+              {project.specs.map((spec) => (
+                <div class="grid grid-cols-[6.5rem_1fr] gap-3 px-4 py-2.5 text-sm">
+                  <dt class="font-mono text-muted">{spec.label}</dt>
+                  <dd>{spec.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</article>

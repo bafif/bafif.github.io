@@ -1,0 +1,45 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+
+const nav = [
+  { href: "/#proyectos", label: "Proyectos" },
+  { href: "/#recorrido", label: "Recorrido" },
+  { href: "/#experiencia", label: "Experiencia" },
+  { href: "/#contacto", label: "Contacto" },
+];
+---
+
+<header class="sticky top-0 z-40 border-b border-rule bg-paper/85 backdrop-blur">
+  <div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+    <a href="/" class="flex items-center gap-2.5 font-mono text-sm font-medium tracking-tight">
+      <span
+        aria-hidden="true"
+        class="grid size-7 place-items-center rounded-[3px] border border-ink text-[11px] leading-none font-medium"
+        >BF</span
+      >
+      <span class="hidden sm:inline">Bautista Fiori</span>
+    </a>
+    <nav aria-label="Secciones" class="flex items-center gap-1">
+      <ul class="hidden items-center gap-1 md:flex">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="rounded px-3 py-1.5 text-sm text-muted transition-colors hover:bg-surface hover:text-ink"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a
+        href="/#proyectos"
+        class="rounded px-3 py-1.5 text-sm text-muted transition-colors hover:bg-surface hover:text-ink md:hidden"
+        >Proyectos</a
+      >
+      <ThemeToggle />
+    </nav>
+  </div>
+</header>
