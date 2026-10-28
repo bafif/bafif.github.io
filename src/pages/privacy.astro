@@ -1,0 +1,71 @@
+---
+import Base from "../layouts/Base.astro";
+import { profile } from "../data/profile";
+
+const updated = "28 de octubre de 2026";
+---
+
+<Base
+  title="Política de privacidad · Bautista Fiori"
+  description="Política de privacidad de este sitio y de las herramientas personales de Bautista Fiori que usan servicios de Google."
+>
+  <article class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-20">
+    <p class="font-mono text-xs tracking-wide text-muted uppercase">Última actualización: {updated}</p>
+    <h1 class="mt-3 text-4xl font-semibold tracking-tight">Política de privacidad</h1>
+
+    <div class="mt-10 space-y-10 leading-relaxed">
+      <section>
+        <h2 class="text-xl font-semibold tracking-tight">Este sitio</h2>
+        <p class="mt-3">
+          Este es un sitio estático. No usa cookies, analíticas ni rastreadores, y no carga recursos de terceros: las
+          fuentes se sirven desde el mismo sitio. Lo único que guarda es tu preferencia de tema claro u oscuro, y la
+          guarda en tu propio navegador.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-semibold tracking-tight">Herramientas personales que usan Google</h2>
+        <p class="mt-3">
+          <strong>BAFIF Obsidian</strong> es una herramienta personal que uso para sincronizar mis tareas de Google Tasks
+          con mis notas. No es un servicio abierto al público.
+        </p>
+        <ul class="mt-4 list-disc space-y-2 pl-5 marker:text-accent">
+          <li>Solo pide acceso a Google Tasks y solo a la cuenta de quien la autoriza.</li>
+          <li>Lee y actualiza tareas para mantenerlas sincronizadas con notas locales. No accede a ningún otro dato.</li>
+          <li>Los datos quedan en la computadora de quien la usa. No se envían a servidores propios ni de terceros.</li>
+          <li>No se venden, no se comparten y no se usan con fines publicitarios ni para entrenar modelos.</li>
+          <li>
+            El uso de los datos recibidos de las API de Google cumple con la
+            <a class="underline decoration-rule underline-offset-4 hover:decoration-ink" href="https://developers.google.com/terms/api-services-user-data-policy"
+              >Política de datos del usuario de los servicios de API de Google</a
+            >, incluidos sus requisitos de uso limitado.
+          </li>
+          <li>
+            El acceso se puede revocar en cualquier momento desde
+            <a class="underline decoration-rule underline-offset-4 hover:decoration-ink" href="https://myaccount.google.com/permissions"
+              >myaccount.google.com/permissions</a
+            >.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-semibold tracking-tight">Contacto</h2>
+        <p class="mt-3">
+          Para cualquier consulta sobre esta política, escribí a
+          <a class="underline decoration-rule underline-offset-4 hover:decoration-ink" href={`mailto:${profile.email}`}>{profile.email}</a>.
+        </p>
+      </section>
+
+      <section lang="en" class="rounded-md border border-rule bg-surface p-5 text-sm text-muted">
+        <h2 class="font-semibold text-ink">Summary in English</h2>
+        <p class="mt-2">
+          This static site sets no cookies and uses no analytics. BAFIF Obsidian is a personal tool that only requests
+          access to Google Tasks for the account that authorizes it, keeps the data on the user's own computer, and
+          never sells, shares or uses it for advertising or model training. Its use of information received from Google
+          APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements.
+        </p>
+      </section>
+    </div>
+  </article>
+</Base>

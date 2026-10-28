@@ -1,0 +1,36 @@
+---
+import type { Project } from "../data/projects";
+import Stack from "./Stack.astro";
+
+interface Props {
+  project: Project;
+  wide?: boolean;
+}
+
+const { project, wide = false } = Astro.props;
+const repo = project.links[0];
+---
+
+<article
+  id={project.id}
+  class:list={[
+    "group relative flex flex-col rounded-md border border-rule bg-surface p-5 transition-colors hover:border-ink sm:p-6",
+    wide && "sm:col-span-2",
+  ]}
+>
+  <div class="flex items-center justify-between gap-3 font-mono text-xs text-muted">
+    <span><span class="text-accent">{project.code}</span> · {project.year}</span>
+    <span>{project.status}</span>
+  </div>
+  <h3 class="mt-4 text-xl font-semibold tracking-tight">
+    <a href={repo?.href} class="after:absolute after:inset-0 focus-visible:outline-none">
+      {project.name}
+      <span aria-hidden="true" class="inline-block text-muted transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+    </a>
+  </h3>
+  <p class="mt-1.5 font-medium text-muted">{project.tagline}</p>
+  <p class="mt-4 text-[15px] leading-relaxed">{project.description}</p>
+  <div class="mt-auto pt-5">
+    <Stack items={project.stack} />
+  </div>
+</article>
