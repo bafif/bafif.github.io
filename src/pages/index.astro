@@ -1,0 +1,197 @@
+---
+import Base from "../layouts/Base.astro";
+import Chip from "../components/Chip.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import FeaturedProject from "../components/FeaturedProject.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { profile } from "../data/profile";
+import { projects } from "../data/projects";
+import { education, experience, timeline } from "../data/career";
+
+const featured = projects.filter((p) => p.featured);
+const rest = projects.filter((p) => !p.featured);
+---
+
+<Base
+  title="Bautista Fiori · Portfolio"
+  description="Técnico electrónico y estudiante de Ciencias de la Computación e IA en Rosario. Sistemas booteables, ports a ARM, herramientas de datos y más."
+>
+  <!-- Hero -->
+  <section class="relative overflow-hidden border-b border-rule">
+    <div aria-hidden="true" class="grid-paper pointer-events-none absolute inset-0"></div>
+    <div class="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.25fr_1fr] lg:py-24">
+      <div>
+        <p class="font-mono text-xs tracking-wide text-muted uppercase">
+          Hoja de datos · {profile.location}
+        </p>
+        <h1 class="mt-4 text-5xl leading-[0.95] font-semibold tracking-tight sm:text-7xl">
+          {profile.name}
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted sm:text-xl">{profile.lead}</p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a
+            href="#proyectos"
+            class="rounded border border-accent bg-accent px-4 py-2.5 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90"
+            >Ver proyectos</a
+          >
+          <a href={profile.github} class="rounded border border-rule bg-surface px-4 py-2.5 text-sm font-medium transition-colors hover:border-ink"
+            >GitHub ↗</a
+          >
+          <a
+            href={`mailto:${profile.email}`}
+            class="rounded border border-rule bg-surface px-4 py-2.5 text-sm font-medium transition-colors hover:border-ink">Escribime</a
+          >
+        </div>
+
+        <div class="mt-12 max-w-xl">
+          <p class="font-mono text-xs tracking-wide text-muted uppercase">Características</p>
+          <ul class="mt-3 grid gap-x-6 gap-y-2 sm:grid-cols-2">
+            {
+              profile.features.map((feature) => (
+                <li class="flex gap-2.5 text-[15px] leading-snug">
+                  <span aria-hidden="true" class="font-mono text-accent">▸</span>
+                  {feature}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <Chip />
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="proyectos" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+    <SectionHeading index="01" title="Proyectos" kicker="Del arranque de una PC de 32 bits a la nube: lo que construí, con el código a la vista." />
+    <div class="flex flex-col gap-8">
+      {featured.map((project, i) => <FeaturedProject project={project} flip={i % 2 === 1} />)}
+    </div>
+    <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {rest.map((project, i) => <ProjectCard project={project} wide={i === 0} />)}
+      <a
+        href={profile.github}
+        class="group flex flex-col justify-between gap-6 rounded-md border border-dashed border-rule p-5 transition-colors hover:border-accent sm:p-6"
+      >
+        <p class="font-mono text-xs text-muted">BF-xx · en curso</p>
+        <div>
+          <p class="text-xl font-semibold tracking-tight">
+            Más en GitHub <span aria-hidden="true" class="inline-block transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+          </p>
+          <p class="mt-1.5 text-muted">Experimentos, forks y lo que esté armando ahora.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section id="recorrido" class="border-y border-rule bg-surface">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <SectionHeading index="02" title="Recorrido" kicker="Años de hacer cosas, de reparar la primera PC hasta hoy." />
+      <ol class="relative grid gap-8 md:grid-cols-5 md:gap-6">
+        <span aria-hidden="true" class="absolute top-[7px] right-0 left-0 hidden h-px bg-rule md:block"></span>
+        {
+          timeline.map((milestone) => (
+            <li class="relative pl-6 md:pl-0">
+              <span
+                aria-hidden="true"
+                class="absolute top-[3px] left-0 size-[9px] rounded-full border-2 border-accent bg-surface md:relative md:top-0 md:block"
+              />
+              <p class="font-mono text-sm font-medium text-accent md:mt-4">{milestone.year}</p>
+              <ul class="mt-2 space-y-1.5 text-[15px] leading-snug">
+                {milestone.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Experience & education -->
+  <section id="experiencia" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+    <SectionHeading index="03" title="Experiencia y formación" />
+    <div class="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
+      <div class="flex flex-col divide-y divide-rule">
+        {
+          experience.map((role) => (
+            <article class="py-6 first:pt-0">
+              <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h3 class="text-lg font-semibold tracking-tight">
+                  {role.title}
+                  {role.place && <span class="text-muted"> · {role.place}</span>}
+                </h3>
+                <p class="font-mono text-xs text-muted">{role.period}</p>
+              </div>
+              <p class="mt-1 font-mono text-xs tracking-wide text-accent uppercase">{role.kind}</p>
+              <ul class="mt-3 space-y-1.5 text-[15px] leading-relaxed">
+                {role.items.map((item) => (
+                  <li class="flex gap-3">
+                    <span aria-hidden="true" class="mt-[9px] size-1.5 shrink-0 bg-rule" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="flex flex-col gap-10">
+        <div>
+          <h3 class="font-mono text-xs tracking-wide text-muted uppercase">Formación</h3>
+          <ul class="mt-4 space-y-5">
+            {
+              education.map((study) => (
+                <li class="border-l-2 border-accent pl-4">
+                  <p class="font-semibold leading-snug">{study.title}</p>
+                  <p class="mt-0.5 text-sm text-muted">{study.place}</p>
+                  <p class="mt-1.5 text-sm leading-relaxed">{study.detail}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-mono text-xs tracking-wide text-muted uppercase">Cómo trabajo</h3>
+          <dl class="mt-4 space-y-4">
+            {
+              profile.strengths.map((strength) => (
+                <div>
+                  <dt class="font-semibold">{strength.title}</dt>
+                  <dd class="mt-0.5 text-sm leading-relaxed text-muted">{strength.body}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contacto" class="border-t border-rule bg-ink text-paper">
+    <div class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 sm:py-20 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="font-mono text-sm text-accent">04</p>
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">¿Hacemos algo juntos?</h2>
+        <p class="mt-4 max-w-lg text-lg opacity-75">
+          Busco proyectos donde aprender herramientas nuevas y aplicar lo que ya sé. Escribime y lo charlamos.
+        </p>
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <a
+          href={`mailto:${profile.email}`}
+          class="rounded border border-accent bg-accent px-5 py-3 text-center font-medium text-accent-ink transition-opacity hover:opacity-90"
+          >{profile.email}</a
+        >
+        <a href={profile.github} class="rounded border border-paper/30 px-5 py-3 text-center font-medium transition-colors hover:border-paper"
+          >github.com/{profile.githubHandle} ↗</a
+        >
+      </div>
+    </div>
+  </section>
+</Base>
