@@ -19,7 +19,7 @@ docker compose run --rm web npm run build   # type-check and build into dist/
 - `src/data/projects.ts`: project entries. Only public repositories go here.
 - `src/data/career.ts`: experience, education and timeline.
 - `src/data/profile.ts`: name, lead text, contact links and the hero pinout.
-- `src/pages/privacy.astro`: privacy policy, also used as the OAuth privacy URL for personal Google tools.
+- `src/pages/privacy.astro`: privacy policy, also the privacy URL of the "Automatizaciones de Bautista Fiori" OAuth app (Google Cloud project `bafif-obsidian`).
 
 ## Deploy
 
