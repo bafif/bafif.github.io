@@ -119,18 +119,25 @@ export const projects: Project[] = [
     id: "curriculum",
     code: "BF-05",
     name: "Generador de CV",
-    tagline: "Currículums en PDF a partir de datos en JSON y Markdown.",
+    tagline: "Currículums en PDF a partir de datos en JSON y Markdown, con dos generadores independientes.",
     description:
-      "Toma la información personal en JSON y Markdown y la compone en un currículum con LaTeX. Separar los datos del " +
-      "diseño permite mantener una sola fuente y sacar versiones distintas sin tocar la maqueta.",
+      "Toma la información personal en JSON y Markdown y arma un currículum distinto para cada postulación a partir de " +
+      "perfiles que eligen qué secciones y entradas mostrar. Lo resuelven dos generadores que leen los mismos datos: " +
+      "uno en Python que compone con LaTeX y otro en C que escribe el PDF directamente, sin dependencias.",
     highlights: [
-      "Datos y presentación separados: JSON y Markdown de un lado, plantillas LaTeX del otro.",
-      "Incluye mi propio CV como ejemplo.",
+      "Datos y presentación separados: una sola fuente y un perfil en JSON por cada CV.",
+      "Generador en Python sobre la plantilla Wenneker, compilado con tectonic.",
+      "Generador en C17 que escribe el PDF a mano, con métricas de fuente propias y solo libc.",
+      "Pensado para una página, pero si el contenido no entra continúa en la columna principal sin romperse.",
+      "Tests en los dos lenguajes contra los datos reales. Incluye mi propio CV como ejemplo.",
     ],
-    stack: ["Python", "LaTeX", "JSON"],
-    year: 2025,
-    status: "Prototipo",
-    links: [{ label: "Repositorio", href: gh("curriculum") }],
+    stack: ["Python", "C17", "LaTeX", "PDF", "JSON"],
+    year: 2026,
+    status: "Estable · v1.0.0",
+    links: [
+      { label: "Repositorio", href: gh("curriculum") },
+      { label: "Release v1.0.0", href: `${gh("curriculum")}/releases/tag/v1.0.0` },
+    ],
   },
   {
     id: "morphtools",
