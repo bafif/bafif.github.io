@@ -27,11 +27,14 @@ export const projects: Project[] = [
     description:
       "Sistema operativo mínimo basado en Debian i386 que arranca desde un pendrive con una interfaz de rocola propia. " +
       "Un instalador guiado lo clona al disco interno y la máquina queda como jukebox dedicada: abre sola al prender, " +
-      "se maneja con controles de arcade y funciona en monitores modernos y de tubo, incluidos los de 15 kHz.",
+      "se maneja con controles de arcade y está pensada para monitores modernos y de tubo, incluidos los de 15 kHz.",
     highlights: [
       "ISO híbrida que arranca por BIOS y por UEFI x64, verificada de punta a punta en QEMU/KVM.",
-      "Soporte CRT real: VGA de 31 kHz y arcade/TV de 15 kHz con switchres y modelines.",
+      "El instalador clona el sistema a un disco vacío y ese disco arranca solo, también probado por BIOS y UEFI.",
+      "Soporte CRT: VGA de 31 kHz y arcade/TV de 15 kHz con switchres y modelines, con vuelta segura a VGA.",
       "Interfaz propia en SDL2 (Python y pygame-ce) sobre MPD, con logos y tema reemplazables.",
+      "Salida de audio por PipeWire elegible desde la interfaz: analógica, HDMI, USB o parlantes Bluetooth.",
+      "Tests de la interfaz sin pantalla (SDL dummy y un MPD simulado), CI con ruff y shellcheck.",
       "Build reproducible en Docker y releases con sumas SHA-256 publicadas.",
     ],
     stack: ["Debian i386", "Python", "SDL2", "MPD", "Docker", "GRUB"],
@@ -84,17 +87,21 @@ export const projects: Project[] = [
     name: "xport",
     tagline: "Extractor de tweets por rango de fechas, con un tope de uso garantizado por código.",
     description:
-      "Extrae los tweets de una o varias cuentas de X entre dos fechas y genera un CSV por cuenta. Su núcleo es el " +
-      "Compliance Gate: nunca más de 900.000 objetos en cualquier ventana móvil de 24 horas, por debajo del tope de " +
-      "los términos de X, fijado como constante de código y registrado en un ledger de auditoría.",
+      "Extrae los tweets de una o varias cuentas de X entre dos fechas y genera un CSV por cuenta. Una extensión " +
+      "para Chrome y Firefox captura las respuestas que x.com ya carga en la página y un servicio local en FastAPI " +
+      "las normaliza, las guarda y arma el CSV. Su núcleo es el Compliance Gate: nunca más de 900.000 objetos en " +
+      "cualquier ventana móvil de 24 horas, por debajo del tope de los términos de X, fijado como constante de " +
+      "código y registrado en un ledger de auditoría.",
     highlights: [
       "Ventana deslizante de 24 h con ledger de auditoría en SQLite, separado de los datos.",
-      "Tipado estricto con mypy, lint con ruff y tests con pytest.",
-      "Entorno reproducible con uv.",
+      "Extensión con WXT que recorre la búsqueda sola, esquiva el corte de ~1000 resultados achicando el rango y " +
+        "retoma entre sesiones desde lo ya capturado.",
+      "Arquitectura por capas con el backend intercambiable (scraping o API oficial) detrás de una interfaz.",
+      "230 tests, tipado estricto con mypy y lint con ruff; servicio en Docker (Alpine) detrás de nginx.",
     ],
-    stack: ["Python 3.12", "SQLite", "uv", "pytest", "mypy"],
+    stack: ["Python 3.12", "FastAPI", "SQLite", "TypeScript", "WXT", "Docker", "uv", "mypy"],
     year: 2026,
-    status: "En desarrollo",
+    status: "Beta",
     links: [{ label: "Repositorio", href: gh("xport") }],
   },
   {
