@@ -48,7 +48,7 @@ export const projects: Project[] = [
     featured: true,
     images: [
       { src: "/img/ui-nowplaying.png", alt: "Pantalla de reproducción de la interfaz de Rocola" },
-      { src: "/img/ui-menu.png", alt: "Menú de la biblioteca de música de Rocola" },
+      { src: "/img/ui-menu.png", alt: "Menú de Rocola: salida de audio, información, controles, biblioteca e instalador" },
     ],
   },
   {
