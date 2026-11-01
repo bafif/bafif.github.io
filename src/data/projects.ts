@@ -30,7 +30,7 @@ export const projects: Project[] = [
       "se maneja con controles de arcade y está pensada para monitores modernos y de tubo, incluidos los de 15 kHz.",
     highlights: [
       "ISO híbrida que arranca por BIOS y por UEFI x64, verificada de punta a punta en QEMU/KVM.",
-      "El instalador clona el sistema a un disco vacío y ese disco arranca solo, también probado por BIOS y UEFI.",
+      "El instalador clona el sistema a un disco vacío y ese disco arranca solo, también probado por BIOS y UEFI; al reinstalar conserva la música.",
       "Soporte CRT: VGA de 31 kHz y arcade/TV de 15 kHz con switchres y modelines, con vuelta segura a VGA.",
       "Interfaz propia en SDL2 (Python y pygame-ce) sobre MPD, con logos y tema reemplazables.",
       "Importa la música de un segundo pendrive apenas se enchufa: lo monta solo lectura, no duplica y la biblioteca se actualiza sola.",
