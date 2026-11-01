@@ -33,6 +33,7 @@ export const projects: Project[] = [
       "El instalador clona el sistema a un disco vacío y ese disco arranca solo, también probado por BIOS y UEFI.",
       "Soporte CRT: VGA de 31 kHz y arcade/TV de 15 kHz con switchres y modelines, con vuelta segura a VGA.",
       "Interfaz propia en SDL2 (Python y pygame-ce) sobre MPD, con logos y tema reemplazables.",
+      "Importa la música de un segundo pendrive apenas se enchufa: lo monta solo lectura, no duplica y la biblioteca se actualiza sola.",
       "Salida de audio por PipeWire elegible desde la interfaz: analógica, HDMI, USB o parlantes Bluetooth.",
       "Tests de la interfaz sin pantalla (SDL dummy y un MPD simulado), CI con ruff y shellcheck.",
       "Build reproducible en Docker y releases con sumas SHA-256 publicadas.",
