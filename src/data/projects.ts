@@ -32,7 +32,7 @@ export const projects: Project[] = [
       "ISO híbrida que arranca por BIOS y por UEFI x64, verificada de punta a punta en QEMU/KVM.",
       "El instalador clona el sistema a un disco vacío y ese disco arranca solo, también probado por BIOS y UEFI; al reinstalar conserva la música.",
       "Soporte CRT: VGA de 31 kHz y arcade/TV de 15 kHz con switchres y modelines, con vuelta segura a VGA.",
-      "Interfaz propia en SDL2 (Python y pygame-ce) sobre MPD, con logos y tema reemplazables.",
+      "Interfaz propia en SDL2 (Python y pygame) sobre MPD, con logos y tema reemplazables y controles reasignables desde la configuración.",
       "Importa la música de un segundo pendrive apenas se enchufa: lo monta solo lectura, no duplica y la biblioteca se actualiza sola.",
       "Salida de audio por PipeWire elegible desde la interfaz: analógica, HDMI, USB o parlantes Bluetooth.",
       "Tests de la interfaz sin pantalla (SDL dummy y un MPD simulado), CI con ruff y shellcheck.",
