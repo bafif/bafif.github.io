@@ -11,7 +11,7 @@ export const profile = {
     "emuladores a CPUs ARM de una década atrás y herramientas de datos con garantías verificadas por código.",
   features: [
     "Del circuito al deploy: electrónica, firmware y software.",
-    "Linux de punta a punta: Arch, Debian, Docker y nginx.",
+    "Linux de punta a punta: Arch, Debian, Podman y nginx.",
     "C, C++, Python, TypeScript, GDScript y Racket.",
     "Inglés C2 general y C1 técnico.",
   ],
@@ -46,7 +46,7 @@ export const pinout: readonly string[] = [
   "LaTeX",
   "AVR",
   "nginx",
-  "Docker",
+  "Podman",
   "Linux",
   "VCC",
 ];

@@ -36,9 +36,9 @@ export const projects: Project[] = [
       "Importa la música de un segundo pendrive apenas se enchufa: lo monta solo lectura, no duplica y la biblioteca se actualiza sola.",
       "Salida de audio por PipeWire elegible desde la interfaz: analógica, HDMI, USB o parlantes Bluetooth.",
       "Tests de la interfaz sin pantalla (SDL dummy y un MPD simulado), CI con ruff y shellcheck.",
-      "Build reproducible en Docker y releases con sumas SHA-256 publicadas.",
+      "Build reproducible en contenedores (Podman) y releases con sumas SHA-256 publicadas.",
     ],
-    stack: ["Debian i386", "Python", "SDL2", "MPD", "Docker", "GRUB"],
+    stack: ["Debian i386", "Python", "SDL2", "MPD", "Podman", "GRUB"],
     year: 2026,
     status: "Beta pública · v0.1.1",
     links: [
@@ -99,9 +99,9 @@ export const projects: Project[] = [
       "Extensión con WXT que recorre la búsqueda sola, esquiva el corte de ~1000 resultados achicando el rango y " +
         "retoma entre sesiones desde lo ya capturado.",
       "Arquitectura por capas con el backend intercambiable (scraping o API oficial) detrás de una interfaz.",
-      "230 tests, tipado estricto con mypy y lint con ruff; servicio en Docker (Alpine) detrás de nginx.",
+      "230 tests, tipado estricto con mypy y lint con ruff; servicio en un contenedor Alpine (Podman) detrás de nginx.",
     ],
-    stack: ["Python 3.12", "FastAPI", "SQLite", "TypeScript", "WXT", "Docker", "uv", "mypy"],
+    stack: ["Python 3.12", "FastAPI", "SQLite", "TypeScript", "WXT", "Podman", "uv", "mypy"],
     year: 2026,
     status: "Beta",
     links: [{ label: "Repositorio", href: gh("xport") }],
