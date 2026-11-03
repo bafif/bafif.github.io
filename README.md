@@ -7,11 +7,14 @@ parties.
 
 ## Development
 
-Everything runs inside Docker; never run `npm install` on the host.
+Everything runs in rootless Podman containers; never run `npm install` on the host. The repository is mounted
+read-only, so nothing that runs inside can change the sources or `.git`: dependencies, Astro's cache and the build
+live in volumes.
 
 ```sh
-docker compose up --build      # http://localhost:8080 (nginx → Astro dev server, with HMR)
-docker compose run --rm web npm run build   # type-check and build into dist/
+mkdir -p node_modules .astro dist            # once: mount points for those volumes
+podman compose up --build                    # http://localhost:8080 (nginx → Astro dev server, with HMR)
+podman compose run --rm web npm run build    # type-check and build (into the dist volume)
 ```
 
 ## Content
