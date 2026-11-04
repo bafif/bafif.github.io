@@ -8,11 +8,12 @@ parties.
 ## Development
 
 Everything runs in rootless Podman containers; never run `npm install` on the host. The repository is mounted
-read-only, so nothing that runs inside can change the sources or `.git`: dependencies, Astro's cache and the build
-live in volumes.
+read-only, so nothing that runs inside can change the sources or `.git`: dependencies and the build live in
+volumes. Astro's cache is a tmpfs, new in every container: Astro 7 keeps its dev server's pid there and stops
+that pid on the next start, which in a fresh container can be the new server itself.
 
 ```sh
-mkdir -p node_modules .astro dist            # once: mount points for those volumes
+mkdir -p node_modules .astro dist            # once: their mount points
 podman compose up --build                    # http://localhost:8080 (nginx → Astro dev server, with HMR)
 podman compose run --rm web npm run build    # type-check and build (into the dist volume)
 ```
