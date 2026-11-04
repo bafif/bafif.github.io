@@ -1,6 +1,6 @@
 # Dev stack (rootless Podman): `podman compose up --build`, then http://localhost:8080.
 # The repository is mounted read-only: nothing that runs in the container can change the sources or .git.
-# Dependencies, Astro's cache and builds live in volumes; their mount points (node_modules, .astro, dist) have to
+# Dependencies and builds live in volumes, Astro's cache in a tmpfs; their mount points (node_modules, .astro, dist) have to
 # exist in the checkout.
 services:
   web:
@@ -8,8 +8,11 @@ services:
     volumes:
       - .:/app:ro
       - node_modules:/app/node_modules
-      - astro:/app/.astro
       - dist:/app/dist
+    # Astro's cache, new in every container: Astro 7 records its dev server's pid in .astro/dev.json and stops
+    # that pid when it starts, which in a fresh container can be the new server itself.
+    tmpfs:
+      - /app/.astro:mode=1777,notmpcopyup
     environment:
       ASTRO_TELEMETRY_DISABLED: "1"
       HMR_CLIENT_PORT: "8080"
@@ -23,5 +26,4 @@ services:
       - web
 volumes:
   node_modules:
-  astro:
   dist:
