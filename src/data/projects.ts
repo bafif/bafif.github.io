@@ -125,27 +125,28 @@ export const projects: Project[] = [
     links: [{ label: "Repositorio", href: gh("map") }],
   },
   {
-    id: "curriculum",
+    id: "foja",
     code: "BF-05",
-    name: "Generador de CV",
-    tagline: "Currículums en PDF a partir de datos en JSON y Markdown, con dos generadores independientes.",
+    name: "Foja",
+    tagline: "Editor de currículums sin código sobre Typst: formularios, vista previa en vivo y exportación a varios formatos.",
     description:
-      "Toma la información personal en JSON y Markdown y arma un currículum distinto para cada postulación a partir de " +
-      "perfiles que eligen qué secciones y entradas mostrar. Lo resuelven dos generadores que leen los mismos datos: " +
-      "uno en Python que compone con LaTeX y otro en C que escribe el PDF directamente, sin dependencias.",
+      "Empezó como el generador de mi propio CV: los datos en JSON y Markdown, un perfil por cada postulación que elige " +
+      "qué secciones y entradas mostrar, y dos generadores que leen los mismos datos, uno en Python que compone con LaTeX " +
+      "y otro en C que escribe el PDF directamente. Foja le pone una interfaz encima: un editor que corre entero en el " +
+      "navegador, con formularios en lugar de archivos, Typst por debajo y una vista previa que es el resultado real.",
     highlights: [
-      "Datos y presentación separados: una sola fuente y un perfil en JSON por cada CV.",
-      "Generador en Python sobre la plantilla Wenneker, compilado con tectonic.",
-      "Generador en C17 que escribe el PDF a mano, con métricas de fuente propias y solo libc.",
-      "Pensado para una página, pero si el contenido no entra continúa en la columna principal sin romperse.",
-      "Tests en los dos lenguajes contra los datos reales. Incluye mi propio CV como ejemplo.",
+      "Un banco de entradas y un perfil por cada tipo de trabajo, cargados con formularios.",
+      "Vista previa en vivo con Typst en el navegador, que avisa si el CV entra en una página.",
+      "Exporta a PDF, JPG, Word, Typst, LaTeX, Markdown y JSON, sin cuentas ni servidor; funciona sin conexión.",
+      "Tres estilos propios, y estilos nuevos escritos en Typst.",
+      "La primera versión sigue en el repo: el generador en Python sobre LaTeX y el de C17 que escribe el PDF a mano.",
     ],
-    stack: ["Python", "C17", "LaTeX", "PDF", "JSON"],
+    stack: ["TypeScript", "Typst", "Astro", "React", "Python", "C17", "LaTeX"],
     year: 2026,
-    status: "Estable · v1.0.0",
+    status: "En desarrollo",
     links: [
-      { label: "Repositorio", href: gh("curriculum") },
-      { label: "Release v1.0.0", href: `${gh("curriculum")}/releases/tag/v1.0.0` },
+      { label: "Repositorio", href: "https://github.com/foja-cv/foja" },
+      { label: "Generador v1.0.0", href: "https://github.com/foja-cv/foja/releases/tag/cvgen-v1.0.0" },
     ],
   },
   {
