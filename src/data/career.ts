@@ -67,5 +67,5 @@ export const timeline: Milestone[] = [
   { year: 2022, items: ["Primer proyecto público: un tema GTK propio."] },
   { year: 2024, items: ["Pasantía en tecso: firmware para ATtiny85 y ESP32, y automatización en Raspberry Pi."] },
   { year: 2025, items: ["Mapa interactivo histórico, Racketarra, Generador de CV y Morphtools.", "Aportes a Alejandría."] },
-  { year: 2026, items: ["Rocola llega a beta pública.", "xport y su Compliance Gate.", "EX Emulators corriendo en el Galaxy Pocket Plus."] },
+  { year: 2026, items: ["Rocola llega a beta pública.", "Urna Abierta, la app libre para fiscales.", "xport y su Compliance Gate.", "EX Emulators corriendo en el Galaxy Pocket Plus."] },
 ];
