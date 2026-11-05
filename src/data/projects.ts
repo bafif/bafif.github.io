@@ -84,8 +84,49 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: "xport",
+    id: "urna-abierta",
     code: "BF-03",
+    name: "Urna Abierta",
+    tagline: "La app libre para organizar a los fiscales de un partido, en cualquier elección.",
+    description:
+      "Fiscalizar bien una elección hoy exige una estructura que solo tienen los partidos grandes. Urna Abierta es una app " +
+      "web instalable para que a una agrupación estudiantil o a un partido chico le alcance con su propio servidor. Cubre la " +
+      "elección entera, del padrón y las mesas al escrutinio y la foto del acta, con una vista para cada rol: el fiscal ve " +
+      "solo su mesa y tacha a quienes votan aunque no haya señal, y todo se sincroniza cuando vuelve la conexión. El " +
+      "proyecto no aloja nada: no hay servidor central ni telemetría. La acompaña un escáner que lee padrones escaneados " +
+      "en la propia computadora y los pasa a un formato abierto.",
+    highlights: [
+      "Protocolo de sincronización propio: con operaciones desordenadas y repetidas el resultado es siempre el mismo, y al " +
+        "volver la señal no se pierde ni se duplica ninguna.",
+      "Una elección entera en el navegador, de crearla a borrar los nombres: 46 pruebas de punta a punta contra los " +
+        "contenedores reales, en Chrome de Android y en WebKit.",
+      "Probada en un emulador de Android en modo avión: abre sin señal, sobrevive a un reinicio, avisa antes de perder " +
+        "datos con el disco lleno y, al volver la señal, llega todo al servidor.",
+      "Instalador de un solo ejecutable, probado instalando por SSH en Ubuntu: deja copias de seguridad cifradas que se " +
+        "restauran enteras en otro servidor.",
+      "Pensada para servidores gratuitos: con 1 GB de RAM y un cuarto de procesador anduvo con 200 mesas en hora pico, en " +
+        "una prueba de laboratorio.",
+      "Permisos por rol, un registro que nadie puede cambiar y herramientas para cumplir la ley de datos personales.",
+      "Escáner de padrones con OCR local: en dos padrones reales, el 98,4 % de los documentos coincide entre escaneos " +
+        "independientes, sin mandar los datos a ningún servicio.",
+      "Diseño para quien nunca la abrió: una pregunta por pantalla, un botón principal y cinco temas en modo claro y oscuro.",
+    ],
+    stack: ["TypeScript", "Svelte", "Fastify", "PostgreSQL", "PWA", "Caddy", "Python", "RapidOCR", "Playwright", "Podman"],
+    year: 2026,
+    status: "En desarrollo",
+    links: [
+      { label: "Repositorio", href: gh("urna-abierta") },
+      { label: "Escáner de padrones", href: gh("urna-abierta-padrones") },
+    ],
+    featured: true,
+    images: [
+      { src: "/img/urna-portada.webp", alt: "Tres pantallas de Urna Abierta: el plan del día, el padrón de la mesa sin señal y el conteo de sobres" },
+      { src: "/img/urna-temas.webp", alt: "La lista de quienes ya votaron en los cinco temas de Urna Abierta: Aula, Vidrio, Feria, Tablero y Mate" },
+    ],
+  },
+  {
+    id: "xport",
+    code: "BF-04",
     name: "xport",
     tagline: "Extractor de tweets por rango de fechas, con un tope de uso garantizado por código.",
     description:
@@ -108,7 +149,7 @@ export const projects: Project[] = [
   },
   {
     id: "map",
-    code: "BF-04",
+    code: "BF-05",
     name: "Mapa interactivo histórico",
     tagline: "Una enciclopedia que se recorre sobre el mapa.",
     description:
@@ -126,7 +167,7 @@ export const projects: Project[] = [
   },
   {
     id: "foja",
-    code: "BF-05",
+    code: "BF-06",
     name: "Foja",
     tagline: "Editor de currículums sin código sobre Typst: formularios, vista previa en vivo y exportación a varios formatos.",
     description:
@@ -151,7 +192,7 @@ export const projects: Project[] = [
   },
   {
     id: "morphtools",
-    code: "BF-06",
+    code: "BF-07",
     name: "Morphtools",
     tagline: "Diagramas automáticos de proyectos orientados a objetos.",
     description:
@@ -165,7 +206,7 @@ export const projects: Project[] = [
   },
   {
     id: "racketarra",
-    code: "BF-07",
+    code: "BF-08",
     name: "Racketarra",
     tagline: "Gestor visual de acordes de guitarra, escrito en Racket.",
     description:
@@ -179,7 +220,7 @@ export const projects: Project[] = [
   },
   {
     id: "alejandria",
-    code: "BF-08",
+    code: "BF-09",
     name: "Alejandría",
     tagline: "Apuntes universitarios hackeables, en Typst.",
     description:
@@ -193,7 +234,7 @@ export const projects: Project[] = [
   },
   {
     id: "gtk-theme",
-    code: "BF-09",
+    code: "BF-10",
     name: "gtk-bafif-theme",
     tagline: "Tema GTK propio para escritorios XFCE.",
     description: "Tema de escritorio diseñado con Themix, listo para clonar y usar en XFCE y cualquier entorno GTK.",
