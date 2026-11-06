@@ -186,8 +186,8 @@ export const projects: Project[] = [
     year: 2026,
     status: "En desarrollo",
     links: [
-      { label: "Repositorio", href: "https://github.com/foja-cv/foja" },
-      { label: "Generador v1.0.0", href: "https://github.com/foja-cv/foja/releases/tag/cvgen-v1.0.0" },
+      { label: "Repositorio", href: gh("foja") },
+      { label: "Generador v1.0.0", href: `${gh("foja")}/releases/tag/cvgen-v1.0.0` },
     ],
   },
   {
