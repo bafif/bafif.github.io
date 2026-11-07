@@ -23,6 +23,8 @@ podman compose run --rm web npm run build    # type-check and build (into the di
 - `src/data/projects.ts`: project entries. Only public repositories go here.
 - `src/data/career.ts`: experience, education and timeline.
 - `src/data/profile.ts`: name, lead text, contact links and the hero pinout.
+- `src/data/support.ts`: the aliases and crypto addresses listed on `/apoyar/` (`src/pages/apoyar.astro`). An entry
+  with an empty value is left out of the built page.
 - `src/pages/privacy.astro`: privacy policy, also the privacy URL of the "Automatizaciones de Bautista Fiori" OAuth app (Google Cloud project `bafif-obsidian`).
 
 ## Deploy
