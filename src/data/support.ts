@@ -1,16 +1,24 @@
-// Ways to send a donation, listed on /apoyar/. Paste each alias or address exactly as the app shows it.
-// An entry with an empty `value` is left out of the built site; the dev server shows it as a placeholder.
+// Ways to send a donation, listed on /donaciones/. Paste each alias, address or link exactly as the app shows it.
+// Anything left empty is left out of the built site; the dev server shows it as a placeholder.
 
 export type SupportMethod = {
   id: string;
   title: string;
-  // alias: a bank or wallet alias in Argentina; tag: a user name inside one app ($belotag); address: a crypto address.
-  kind: "alias" | "tag" | "address";
+  // alias: a bank or wallet alias in Argentina; address: a crypto address.
+  kind: "alias" | "address";
   currency: string;
-  // Crypto only: the network the address belongs to, as the app names it (for example "Tron (TRC-20)").
+  // Crypto only: the networks the address takes, as wallets name them.
   network?: string;
   value: string;
   note: string;
+};
+
+// A payment page that opens in a new tab. An entry can hold several links, one per amount.
+export type PaymentLink = {
+  id: string;
+  title: string;
+  note: string;
+  links: { label: string; url: string }[];
 };
 
 export const fromArgentina: SupportMethod[] = [
@@ -19,7 +27,7 @@ export const fromArgentina: SupportMethod[] = [
     title: "Mercado Pago, en pesos",
     kind: "alias",
     currency: "ARS",
-    value: "",
+    value: "proa.seda.kilo.mp",
     note: "Desde cualquier banco o billetera de Argentina.",
   },
   {
@@ -27,36 +35,43 @@ export const fromArgentina: SupportMethod[] = [
     title: "Mercado Pago, en dólares",
     kind: "alias",
     currency: "USD",
-    value: "",
+    value: "edad.cometa.catedral",
     note: "Desde una cuenta en dólares de un banco o una billetera de Argentina.",
   },
 ];
 
+// My own wallet: one address that works on every EVM network. Only networks where the wallet can pay the transfer
+// fee with the stablecoin itself are listed, so moving the money out never needs a second coin.
 export const crypto: SupportMethod[] = [
-  {
-    id: "belo-tag",
-    title: "Belo, entre usuarios de Belo",
-    kind: "tag",
-    currency: "USDT",
-    value: "",
-    note: "Si usás Belo, mandá los USDT a este usuario desde la app: llega al instante y sin comisión.",
-  },
-  {
-    id: "belo-address",
-    title: "Belo, desde otra billetera o un exchange",
-    kind: "address",
-    currency: "USDT",
-    network: "",
-    value: "",
-    note: "Mandá solo USDT y solo por la red indicada.",
-  },
   {
     id: "wallet",
     title: "Mi billetera",
     kind: "address",
-    currency: "USDT",
-    network: "",
+    currency: "USDT o USDC",
+    network: "BNB Chain, Arbitrum o Base",
     value: "",
-    note: "Mandá solo USDT y solo por la red indicada.",
+    note: "La misma dirección sirve en las tres redes: elegí la que tenga tu billetera o tu exchange.",
+  },
+];
+
+// Belo payment links are paid with Cash App from the United States. Each one asks for a fixed amount, never expires
+// and can be paid by anyone, any number of times.
+export const paymentLinks: PaymentLink[] = [
+  {
+    id: "cashapp",
+    title: "Cash App, desde Estados Unidos",
+    note: "Cada botón pide un monto fijo en dólares y se paga desde Cash App.",
+    links: [
+      { label: "1 USD", url: "" },
+      { label: "5 USD", url: "" },
+      { label: "10 USD", url: "" },
+      { label: "20 USD", url: "" },
+    ],
+  },
+  {
+    id: "github",
+    title: "GitHub Sponsors, con tarjeta",
+    note: "Por única vez o todos los meses, con una cuenta de GitHub. GitHub no cobra comisión.",
+    links: [{ label: "Ir a GitHub Sponsors", url: "" }],
   },
 ];

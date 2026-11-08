@@ -1,36 +1,55 @@
 ---
 import Base from "../layouts/Base.astro";
 import { profile } from "../data/profile";
-import { fromArgentina, crypto, type SupportMethod } from "../data/support";
+import { fromArgentina, crypto, paymentLinks, type SupportMethod, type PaymentLink } from "../data/support";
 
 // The built site only lists what is filled in; the dev server also shows the empty slots.
-const visible = (list: SupportMethod[]) => (import.meta.env.DEV ? list : list.filter((m) => m.value.trim() !== ""));
-const groups = [
+const dev = import.meta.env.DEV;
+const filled = (list: SupportMethod[]) => (dev ? list : list.filter((m) => m.value.trim() !== ""));
+const filledLinks = (list: PaymentLink[]) =>
+  list
+    .map((p) => ({ ...p, links: dev ? p.links : p.links.filter((l) => l.url.trim() !== "") }))
+    .filter((p) => p.links.length > 0);
+
+type Group = { id: string; title: string; intro: string; methods: SupportMethod[]; links: PaymentLink[] };
+const all: Group[] = [
   {
     id: "argentina",
-    label: "Tabla 1",
     title: "Desde Argentina",
     intro: `Transferencia al alias. Antes de confirmar vas a ver mi nombre, ${profile.fullName}.`,
-    methods: visible(fromArgentina),
+    methods: filled(fromArgentina),
+    links: [],
   },
   {
     id: "cripto",
-    label: "Tabla 2",
     title: "Con cripto, desde cualquier país",
-    intro: "Dólares digitales (USDT) a mi usuario de Belo o a una dirección.",
-    methods: visible(crypto),
+    intro: "Dólares digitales (USDT o USDC) a mi billetera.",
+    methods: filled(crypto),
+    links: [],
   },
-].filter((g) => g.methods.length > 0);
+  {
+    id: "links",
+    title: "Con un link de pago",
+    intro: "Con Cash App desde Estados Unidos, o con tarjeta desde GitHub.",
+    methods: [],
+    links: filledLinks(paymentLinks),
+  },
+];
+const groups = all
+  .filter((g) => g.methods.length + g.links.length > 0)
+  .map((g, i) => ({ ...g, label: `Tabla ${i + 1}` }));
 const hasAddresses = groups.some((g) => g.methods.some((m) => m.kind === "address"));
+const fromAbroad = groups.some((g) => g.id !== "argentina");
+const button =
+  "rounded border border-rule px-3 py-1.5 font-mono hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 ---
 
 <Base
-  title="Apoyar · Bautista Fiori"
-  description="Cómo apoyar con una donación los proyectos de software libre de Bautista Fiori: transferencia en pesos o en dólares, o USDT."
+  title="Donaciones · Bautista Fiori"
+  description="Cómo mandarle una donación a Bautista Fiori: transferencia en pesos o en dólares desde Argentina, cripto o un link de pago desde cualquier país."
 >
   <article class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-20">
-    <p class="font-mono text-xs tracking-wide text-muted uppercase">Donaciones</p>
-    <h1 class="mt-3 text-4xl font-semibold tracking-tight">Apoyar lo que hago</h1>
+    <h1 class="text-4xl font-semibold tracking-tight">Donaciones</h1>
 
     <div class="mt-6 space-y-4 leading-relaxed">
       <p>
@@ -61,9 +80,8 @@ const hasAddresses = groups.some((g) => g.methods.some((m) => m.kind === "addres
                     <h3 class="font-semibold">{m.title}</h3>
                     <p class="font-mono text-xs tracking-wide text-muted uppercase">
                       {m.currency}
-                      {m.kind === "address" && <> · red {m.network || "(falta la red)"}</>}
+                      {m.kind === "address" && <> · {m.network || "(falta la red)"}</>}
                       {m.kind === "alias" && <> · alias</>}
-                      {m.kind === "tag" && <> · usuario</>}
                     </p>
                   </div>
                   <div class="mt-3 flex flex-wrap items-center gap-3">
@@ -80,15 +98,34 @@ const hasAddresses = groups.some((g) => g.methods.some((m) => m.kind === "addres
                     {m.value && (
                       <button
                         type="button"
-                        class="copy shrink-0 rounded border border-rule px-3 py-1.5 font-mono text-xs hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        class:list={["copy shrink-0 text-xs", button]}
                         data-copy={m.value}
-                        aria-label={`Copiar ${{ alias: "el alias", tag: "el usuario", address: "la dirección" }[m.kind]} de ${m.title}`}
+                        aria-label={`Copiar ${m.kind === "alias" ? "el alias" : "la dirección"} de ${m.title}`}
                       >
                         Copiar
                       </button>
                     )}
                   </div>
                   <p class="mt-3 text-sm text-muted">{m.note}</p>
+                </li>
+              ))}
+              {group.links.map((p) => (
+                <li class="rounded-md border border-rule bg-surface p-5">
+                  <h3 class="font-semibold">{p.title}</h3>
+                  <div class="mt-3 flex flex-wrap gap-3">
+                    {p.links.map((l) =>
+                      l.url ? (
+                        <a class:list={["text-sm", button]} href={l.url} target="_blank" rel="noopener noreferrer">
+                          {l.label}
+                        </a>
+                      ) : (
+                        <span class="rounded border border-dashed border-rule px-3 py-1.5 font-mono text-sm text-muted italic">
+                          {l.label} (falta el link)
+                        </span>
+                      ),
+                    )}
+                  </div>
+                  <p class="mt-3 text-sm text-muted">{p.note}</p>
                 </li>
               ))}
             </ul>
@@ -104,24 +141,28 @@ const hasAddresses = groups.some((g) => g.methods.some((m) => m.kind === "addres
             </h2>
             <ol class="mt-3 list-decimal space-y-2 pl-5 marker:font-mono marker:text-accent">
               <li>
-                USDT existe en varias redes, y cada dirección sirve para una sola. Elegí en tu billetera la misma red
-                que figura arriba: si mandás por otra red, o mandás otra moneda, la plata se puede perder.
+                Mandá solo USDT o USDC, y solo por una de las redes que figuran al lado de la dirección. Por otra red, o
+                con otra moneda, la plata se puede perder.
               </li>
               <li>Copiá la dirección con el botón y, después de pegarla, revisá que coincidan los primeros y los últimos caracteres.</li>
-              <li>La comisión de la red la cobra tu billetera al enviar; varía según la red.</li>
+              <li>La comisión de la red la cobra tu billetera o tu exchange al enviar; en estas redes suele ser de centavos.</li>
             </ol>
           </section>
         )
       }
 
-      <section lang="en" class="rounded-md border border-rule bg-surface p-5 text-sm text-muted">
-        <h2 class="font-semibold text-ink">In English</h2>
-        <p class="mt-2">
-          Everything I publish is free and stays that way. If you want to support it from abroad, you can send USDT to
-          one of the addresses above, using exactly the network shown next to it; another coin or another network can
-          lose the funds. Donations don't buy anything. Thank you.
-        </p>
-      </section>
+      {
+        fromAbroad && (
+          <section lang="en" class="rounded-md border border-rule bg-surface p-5 text-sm text-muted">
+            <h2 class="font-semibold text-ink">In English</h2>
+            <p class="mt-2">
+              Everything I publish is free and stays that way. To chip in from abroad, use the crypto address or one of
+              the payment links above. Send crypto only on a network listed next to the address; another network or
+              another coin can lose the funds. Donations don't buy anything. Thank you.
+            </p>
+          </section>
+        )
+      }
     </div>
   </article>
 </Base>
