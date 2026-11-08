@@ -43,16 +43,26 @@ export const fromArgentina: SupportMethod[] = [
 // My own wallet: one address that works on every EVM network. Only networks where the wallet can pay the transfer
 // fee with the stablecoin itself are listed, so moving the money out never needs a second coin.
 //
-// Belo's deposit address stays here until my own wallet is ready; Belo credits USDT only on the networks it supports.
+// Belo's deposit addresses stay here until my own wallet is ready. Each network has its own address, and Belo only
+// credits the native version of each coin.
 export const crypto: SupportMethod[] = [
   {
-    id: "belo",
-    title: "Mi cuenta de Belo",
+    id: "belo-bnb",
+    title: "Belo, por BNB Chain",
     kind: "address",
-    currency: "USDT",
-    network: "Avalanche C-Chain",
-    value: "0x693f95e1c1aa969c09cc4546a00a1769e4b959cf",
-    note: "Solo USDT y solo por Avalanche C-Chain. La versión puente (USDT.e) no se acredita.",
+    currency: "USDT o USDC",
+    network: "BNB Chain (BEP-20)",
+    value: "0x89794fc2ca30e7aff4aff215e236256698e8286b",
+    note: "Solo USDT o USDC, y solo por BNB Chain (BEP-20).",
+  },
+  {
+    id: "belo-solana",
+    title: "Belo, por Solana",
+    kind: "address",
+    currency: "USDT o USDC",
+    network: "Solana",
+    value: "3u1LfiRoipGF4jXBEyE8trfxFtYCw27KFx1UC68ZBk3h",
+    note: "Solo USDT o USDC, y solo por Solana.",
   },
   {
     id: "wallet",
