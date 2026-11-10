@@ -5,6 +5,7 @@ export const profile = {
   email: "bautistafiori6@gmail.com",
   github: "https://github.com/bafif",
   githubHandle: "bafif",
+  linkedin: "https://www.linkedin.com/in/b-d-fiori/",
   lead:
     "Hago herramientas completas, pensadas para que alguien las use de verdad: un atlas de la historia con sus " +
     "fuentes, una app para que un partido chico fiscalice con su propio servidor, un editor de CV que corre entero " +

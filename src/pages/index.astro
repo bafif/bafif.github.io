@@ -29,6 +29,7 @@ const skins = { tellmap: TellMap, urna: Urna, xport: Xport, foja: Foja, rocola: 
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted sm:text-xl">{profile.lead}</p>
         <div class="mt-8 flex flex-wrap gap-3">
           <a href="#proyectos" class="boton boton-principal">Ver proyectos</a>
+          <a href={profile.linkedin} class="boton">LinkedIn <span aria-hidden="true">↗</span></a>
           <a href={profile.github} class="boton">GitHub <span aria-hidden="true">↗</span></a>
           <a href={`mailto:${profile.email}`} class="boton">Escribime</a>
         </div>
@@ -122,6 +123,7 @@ const skins = { tellmap: TellMap, urna: Urna, xport: Xport, foja: Foja, rocola: 
       </div>
       <div class="flex flex-col gap-3 sm:flex-row">
         <a href={`mailto:${profile.email}`} class="boton contacto-principal">{profile.email}</a>
+        <a href={profile.linkedin} class="boton contacto-secundario">LinkedIn <span aria-hidden="true">↗</span></a>
         <a href={profile.github} class="boton contacto-secundario">github.com/{profile.githubHandle} <span aria-hidden="true">↗</span></a>
       </div>
     </div>
