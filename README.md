@@ -44,6 +44,21 @@ To add a project: an entry in `showcases`, a skin in `pieles.css`, a component i
 `skins` map of `src/pages/index.astro`. Check the skin's text colors in normal and protan vision before
 publishing (I see as a protan): nothing told apart by hue alone, and no red as thin text on black.
 
+## Link preview
+
+`public/og.jpg` is the image WhatsApp, Telegram and LinkedIn show when the link is shared (Open Graph tags in
+`src/layouts/Base.astro`). Its source is `tools/og-image.html`; after changing it, render it again at 1200×630
+from the repository root and keep the JPEG under 300 KB:
+
+```sh
+google-chrome --headless=new --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630 \
+  --virtual-time-budget=8000 --screenshot=og.png "file://$PWD/tools/og-image.html"
+magick og.png -strip -quality 86 -interlace JPEG public/og.jpg && rm og.png
+```
+
+WhatsApp keeps a preview per link for a while: a link already shared before the change can keep showing the old
+one.
+
 ## Deploy
 
 Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes it with GitHub Pages
