@@ -85,6 +85,21 @@ const ogImageAlt =
           for (const v of vistas) v.target.classList.toggle("en-pantalla", v.isIntersecting);
         });
         for (const el of document.querySelectorAll("[data-vivo]")) vivo.observe(el);
+        // The projects' videos play by themselves, without controls, while they are on screen. Without this
+        // script, or with reduced motion, they keep their poster and the browser's controls.
+        const cine = new IntersectionObserver(
+          (vistas) => {
+            for (const v of vistas) {
+              if (v.isIntersecting) v.target.play().catch(() => {});
+              else v.target.pause();
+            }
+          },
+          { threshold: 0.35 },
+        );
+        for (const v of document.querySelectorAll("video[data-video]")) {
+          v.controls = false;
+          cine.observe(v);
+        }
       }
     </script>
   </body>

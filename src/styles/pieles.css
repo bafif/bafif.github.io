@@ -224,7 +224,8 @@
   box-shadow: none;
 }
 
-.v-muestra img {
+.v-muestra img,
+.v-muestra video {
   display: block;
   width: 100%;
   height: auto;

@@ -1,0 +1,26 @@
+---
+import type { ProjectVideo } from "../../data/projects";
+
+interface Props {
+  video: ProjectVideo;
+}
+
+// Silent and looped. Base.astro plays it while it is on screen and hides the controls; without that script, or
+// with reduced motion, it shows its poster and the browser's own controls.
+const { video } = Astro.props;
+---
+
+<video
+  data-video
+  controls
+  muted
+  loop
+  playsinline
+  preload="none"
+  poster={video.poster}
+  width={video.width}
+  height={video.height}
+  aria-label={video.label}
+>
+  <source src={video.src} type="video/mp4" />
+</video>

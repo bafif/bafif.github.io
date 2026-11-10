@@ -1,5 +1,7 @@
 export type ProjectLink = { label: string; href: string };
 export type ProjectImage = { src: string; alt: string; width: number; height: number };
+/** A short silent loop of the project running; the poster is its first frame. */
+export type ProjectVideo = { src: string; poster: string; label: string; caption: string; width: number; height: number };
 
 /** Each showcase wears its own project's look; the skin picks the component that draws it. */
 export type Skin = "tellmap" | "urna" | "xport" | "foja" | "rocola" | "pocket";
@@ -20,6 +22,7 @@ export type Showcase = {
   /** The first link is the main one. */
   links: ProjectLink[];
   images: ProjectImage[];
+  video?: ProjectVideo;
   specs?: { label: string; value: string }[];
   companion?: { name: string; tagline: string; href: string; image: ProjectImage };
 };
@@ -40,6 +43,15 @@ const site = (path: string) => `https://bafif.github.io/${path}/`;
 const img = (file: string, alt: string, width: number, height: number): ProjectImage => ({
   src: `/img/proyectos/${file}`,
   alt,
+  width,
+  height,
+});
+// Videos live in public/video/, each with a poster of the same name.
+const video = (name: string, label: string, caption: string, width: number, height: number): ProjectVideo => ({
+  src: `/video/${name}.mp4`,
+  poster: `/video/${name}.webp`,
+  label,
+  caption,
   width,
   height,
 });
@@ -84,13 +96,14 @@ export const showcases: Showcase[] = [
         1280,
         683,
       ),
-      img(
-        "tellmap-mundo.webp",
-        "El mundo en 117 d. C.: el Imperio romano en su máxima extensión, los partos, el Imperio kushán, los xianbei y la dinastía Han",
-        1280,
-        683,
-      ),
     ],
+    video: video(
+      "tellmap",
+      "Video de TellMAP: la línea de tiempo corre de 1350 a. C. a 117 d. C. sobre el Mediterráneo, la República romana se vuelve imperio y el mapa vuela a Roma y abre su ficha",
+      "De 1350 a. C. a 117 d. C.: las fronteras cambian con la línea de tiempo, Roma pasa de república a imperio y al tocarla se abre su ficha.",
+      1280,
+      682,
+    ),
   },
   {
     id: "urna-abierta",
@@ -223,6 +236,13 @@ export const showcases: Showcase[] = [
         720,
       ),
     ],
+    video: video(
+      "foja",
+      "Video del editor de Foja: se escribe un subtítulo nuevo y la vista previa lo muestra enseguida; después el mismo CV pasa por los estilos Banda, Minimal y Legajo",
+      "Lo que escribís aparece en la vista previa enseguida, y el mismo CV pasa por los tres estilos: Banda, Minimal y Legajo.",
+      1440,
+      860,
+    ),
   },
   {
     id: "rocola",
