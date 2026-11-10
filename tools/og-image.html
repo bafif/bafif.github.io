@@ -1,7 +1,8 @@
 <!doctype html>
 <!--
   Source of public/og.jpg, the preview image that WhatsApp, Telegram, LinkedIn and others show when the site's
-  link is shared. It is rendered at 1200x630 with headless Chrome; the command is in the README ("Link preview").
+  link is shared, and of public/og.en.jpg, its English version (this file opened with ?en). It is rendered at
+  1200x630 with headless Chrome; the commands are in the README ("Link preview").
 -->
 <html lang="es-AR">
   <head>
@@ -188,7 +189,7 @@
     <div class="texto">
       <p class="rotulo"><img src="../public/marca/emblema-oscuro.svg" alt="" />Portfolio · Rosario</p>
       <h1>Bautista <em>Fiori</em></h1>
-      <p class="lema">Un atlas de la historia, una app para fiscales, un editor de CV y una rocola. <b>Software que llega hasta el hardware.</b></p>
+      <p class="lema" data-en="An atlas of history, an app for poll watchers, a CV editor and a jukebox. &lt;b&gt;Software that reaches down to the hardware.&lt;/b&gt;">Un atlas de la historia, una app para fiscales, un editor de CV y una rocola. <b>Software que llega hasta el hardware.</b></p>
       <p class="dominio">bafif.github.io</p>
     </div>
     <div class="proyectos">
@@ -198,9 +199,15 @@
       <figure><img src="../public/img/proyectos/foja-editor.webp" alt="" /><figcaption>Foja</figcaption></figure>
       <figure><img src="../public/img/proyectos/xport-popup.webp" alt="" style="object-position: center 6%" /><figcaption>xport</figcaption></figure>
       <figure>
-        <div class="chip"><b>BCM21654</b><span>Cortex-A9 · sin idiv</span></div>
+        <div class="chip"><b>BCM21654</b><span data-en="Cortex-A9 · no idiv">Cortex-A9 · sin idiv</span></div>
         <figcaption>EX Emulators</figcaption>
       </figure>
     </div>
+    <script>
+      if (location.search === "?en") {
+        document.documentElement.lang = "en";
+        for (const el of document.querySelectorAll("[data-en]")) el.innerHTML = el.dataset.en;
+      }
+    </script>
   </body>
 </html>
