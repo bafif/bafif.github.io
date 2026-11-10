@@ -1,22 +1,39 @@
 ---
 import type { Showcase } from "../../data/projects";
 import Vitrina from "./Vitrina.astro";
+import { localize, type Lang } from "../../i18n";
 import RocolaPantalla from "./RocolaPantalla.astro";
 
 interface Props {
   project: Showcase;
+  lang: Lang;
   index: number;
   flip?: boolean;
 }
 
-const { project, index, flip } = Astro.props;
+const { project, lang, index, flip } = Astro.props;
 const [playing, ...selectors] = project.images;
-const eras = [
-  ["Ámbar", "fines de los 40"],
-  ["Cromo", "mediados de los 50"],
-  ["Neón", "los 60 y 70"],
-  ["Display", "los 80"],
-];
+const s = localize(
+  {
+    epocas: [
+      { es: "fines de los 40", en: "late '40s" },
+      { es: "mediados de los 50", en: "mid-'50s" },
+      { es: "los 60 y 70", en: "the '60s and '70s" },
+      { es: "los 80", en: "the '80s" },
+    ],
+    tarjetas: { es: "Arranque y pantallas", en: "Boot and displays" },
+    nota: {
+      es:
+        "Arriba, Reproduciendo con Ámbar, en movimiento como va a verse; abajo, el selector en los cuatro temas de época. " +
+        "Ámbar, el que viene por defecto, llega con la v0.1.2.",
+      en:
+        "Above, the now-playing screen in Ámbar, moving as it is going to look; below, the selector in the four period " +
+        "themes. Ámbar, the default, arrives with v0.1.2.",
+    },
+  },
+  lang,
+);
+const eras = ["Ámbar", "Cromo", "Neón", "Display"].map((name, i) => [name, s.epocas[i]]);
 // Selection codes, like the title strips of a jukebox.
 const cards = [
   ["A1", "BIOS + UEFI"],
@@ -26,8 +43,8 @@ const cards = [
 ];
 ---
 
-<Vitrina project={project} index={index} flip={flip} visible={4}>
-  <ul slot="firma" class="rc-tarjetas" aria-label="Arranque y pantallas">
+<Vitrina project={project} lang={lang} index={index} flip={flip} visible={4}>
+  <ul slot="firma" class="rc-tarjetas" aria-label={s.tarjetas}>
     {
       cards.map(([code, label]) => (
         <li>
@@ -39,7 +56,7 @@ const cards = [
   </ul>
 
   <Fragment slot="muestra">
-    <RocolaPantalla label={playing.alt} />
+    <RocolaPantalla label={playing.alt} lang={lang} />
     <div class="rc-temas">
       {
         selectors.map((image, i) => (
@@ -52,9 +69,6 @@ const cards = [
         ))
       }
     </div>
-    <p class="rc-nota">
-      Arriba, Reproduciendo con Ámbar, en movimiento como va a verse; abajo, el selector en los cuatro temas de época.
-      Ámbar, el que viene por defecto, llega con la v0.1.2.
-    </p>
+    <p class="rc-nota">{s.nota}</p>
   </Fragment>
 </Vitrina>

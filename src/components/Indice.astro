@@ -1,8 +1,15 @@
 ---
-import { showcases } from "../data/projects";
+import type { Showcase } from "../data/projects";
+import type { Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+  showcases: Showcase[];
+}
+const { lang, showcases } = Astro.props;
 ---
 
-<ol class="indice" aria-label="Índice de proyectos" data-revela>
+<ol class="indice" aria-label={lang === "es" ? "Índice de proyectos" : "Index of projects"} data-revela>
   {
     showcases.map((p, i) => {
       const thumb = p.images[0];
@@ -15,7 +22,7 @@ import { showcases } from "../data/projects";
               ) : (
                 <span class="ficha-sin-imagen">
                   <b>BCM21654</b>
-                  <span>Cortex-A9 · 850 MHz · sin idiv</span>
+                  <span>Cortex-A9 · 850 MHz · {lang === "es" ? "sin idiv" : "no idiv"}</span>
                 </span>
               )}
             </span>

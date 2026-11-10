@@ -1,6 +1,12 @@
 ---
 import { profile } from "../data/profile";
+import { routes, t, type Lang } from "../i18n";
 
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = t[lang];
 const year = new Date().getFullYear();
 ---
 
@@ -13,9 +19,9 @@ const year = new Date().getFullYear();
     </p>
     <ul class="flex flex-wrap gap-x-5 gap-y-2">
       <li><a href={profile.github} rel="me">GitHub</a></li>
-      <li><a href={`mailto:${profile.email}`}>Correo</a></li>
-      <li><a href="/donaciones/">Donaciones</a></li>
-      <li><a href="/privacy/">Privacidad</a></li>
+      <li><a href={`mailto:${profile.email}`}>{s.correo}</a></li>
+      <li><a href={routes.donaciones[lang]}>{s.donaciones}</a></li>
+      <li><a href={routes.privacidad[lang]}>{s.privacidad}</a></li>
     </ul>
   </div>
 </footer>

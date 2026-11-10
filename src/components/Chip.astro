@@ -1,5 +1,11 @@
 ---
 import { pinout } from "../data/profile";
+import type { Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
 
 // DIP-16 drawn as a datasheet "pin configuration" figure, in the brand's colors.
 const perSide = pinout.length / 2;
@@ -28,7 +34,9 @@ const mark = 34;
 
 <figure class="chip" data-vivo>
   <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="chip-title">
-    <title id="chip-title">Diagrama de pines con las tecnologías que uso: {pinout.join(", ")}</title>
+    <title id="chip-title">
+      {lang === "es" ? "Diagrama de pines con las tecnologías que uso" : "Pin diagram with the technologies I use"}: {pinout.join(", ")}
+    </title>
 
     {
       [...left.map((pin) => ({ ...pin, side: "l" })), ...right.map((pin) => ({ ...pin, side: "r" }))].map((pin) => (
@@ -85,7 +93,7 @@ const mark = 34;
       class="solo-oscuro"
     />
   </svg>
-  <figcaption>Fig. 1 — Configuración de pines, vista superior</figcaption>
+  <figcaption>Fig. 1 — {lang === "es" ? "Configuración de pines, vista superior" : "Pin configuration, top view"}</figcaption>
 </figure>
 
 <style>

@@ -1,0 +1,248 @@
+---
+// The donations page, in either language: src/pages/donaciones.astro and src/pages/en/donations.astro.
+import Base from "../../layouts/Base.astro";
+import { profile } from "../../data/profile";
+import { fromArgentina, crypto, paymentLinks, type SupportMethod, type PaymentLink } from "../../data/support";
+import { localize, routes, type Lang } from "../../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = localize(
+  {
+    titulo: { es: "Donaciones", en: "Donations" },
+    descripcion: {
+      es: "Cómo mandarle una donación a Bautista Fiori: transferencia en pesos o en dólares desde Argentina, cripto o un link de pago desde cualquier país.",
+      en: "How to send Bautista Fiori a donation: a transfer in pesos or dollars from Argentina, crypto or a payment link from any country.",
+    },
+    intro: {
+      es:
+        "Todo lo que publico es libre y gratis, y va a seguir así. Si algo te sirvió y querés darme una mano para " +
+        "dedicarle más tiempo, podés mandarme una donación por cualquiera de estos medios. Cualquier monto ayuda.",
+      en:
+        "Everything I publish is free and open, and it's going to stay that way. If something was useful to you and you'd " +
+        "like to give me a hand so I can put more time into it, you can send me a donation through any of these. Any " +
+        "amount helps.",
+    },
+    soloDonacion: {
+      es: "Es una donación: no compra nada ni da acceso a nada que no esté ya publicado. Gracias.",
+      en: "It's a donation: it doesn't buy anything or give access to anything that isn't already published. Thank you.",
+    },
+    argentina: { es: "Desde Argentina", en: "From Argentina" },
+    argentinaIntro: {
+      es: `Transferencia al alias. Antes de confirmar vas a ver mi nombre, ${profile.fullName}.`,
+      en: `A transfer to the alias. Before you confirm, you'll see my name, ${profile.fullName}.`,
+    },
+    cripto: { es: "Con cripto, desde cualquier país", en: "With crypto, from any country" },
+    criptoIntro: {
+      es: "Dólares digitales a una dirección cripto. Fijate qué moneda y qué redes acepta cada una.",
+      en: "Digital dollars to a crypto address. Check which coin and which networks each one takes.",
+    },
+    links: { es: "Con un link de pago", en: "With a payment link" },
+    linksIntro: {
+      es: "Con Cash App desde Estados Unidos, o con tarjeta desde GitHub.",
+      en: "With Cash App from the United States, or by card through GitHub.",
+    },
+    tabla: { es: "Tabla", en: "Table" },
+    faltaRed: { es: "(falta la red)", en: "(network missing)" },
+    faltaCompletar: { es: "(falta completar)", en: "(to be filled in)" },
+    faltaLink: { es: "(falta el link)", en: "(link missing)" },
+    copiar: { es: "Copiar", en: "Copy" },
+    copiado: { es: "Copiado", en: "Copied" },
+    copialoAMano: { es: "Copialo a mano", en: "Copy it by hand" },
+    copiarAlias: { es: "Copiar el alias de", en: "Copy the alias of" },
+    copiarDireccion: { es: "Copiar la dirección de", en: "Copy the address of" },
+    notas: { es: "Notas", en: "Notes" },
+    nota1: {
+      es:
+        "Cada dirección es de una sola red. Mandá solo la moneda que figura al lado de la dirección, y solo por esa red: " +
+        "por otra red, o con otra moneda, la plata se puede perder. Las versiones puente (USDT.e, USDC.e) no se acreditan.",
+      en:
+        "Each address is for a single network. Send only the coin listed next to the address, and only on that network: " +
+        "on another network, or with another coin, the money can be lost. Bridged versions (USDT.e, USDC.e) aren't credited.",
+    },
+    nota2: {
+      es: "Copiá la dirección con el botón y, después de pegarla, revisá que coincidan los primeros y los últimos caracteres.",
+      en: "Copy the address with the button and, after pasting it, check that the first and last characters match.",
+    },
+    nota3: {
+      es: "La comisión de la red la cobra tu billetera o tu exchange al enviar; en estas redes suele ser de centavos.",
+      en: "The network fee is charged by your wallet or exchange when you send; on these networks it's usually a few cents.",
+    },
+  },
+  lang,
+);
+
+// The built site only lists what is filled in; the dev server also shows the empty slots.
+const dev = import.meta.env.DEV;
+const filled = (list: SupportMethod[]) => (dev ? list : list.filter((m) => m.value.trim() !== ""));
+const filledLinks = (list: PaymentLink[]) =>
+  list
+    .map((p) => ({ ...p, links: dev ? p.links : p.links.filter((l) => l.url.trim() !== "") }))
+    .filter((p) => p.links.length > 0);
+
+type Group = { id: string; title: string; intro: string; methods: SupportMethod[]; links: PaymentLink[] };
+const all: Group[] = [
+  {
+    id: "argentina",
+    title: s.argentina,
+    intro: s.argentinaIntro,
+    methods: filled(localize(fromArgentina, lang)),
+    links: [],
+  },
+  {
+    id: "cripto",
+    title: s.cripto,
+    intro: s.criptoIntro,
+    methods: filled(localize(crypto, lang)),
+    links: [],
+  },
+  {
+    id: "links",
+    title: s.links,
+    intro: s.linksIntro,
+    methods: [],
+    links: filledLinks(localize(paymentLinks, lang)),
+  },
+];
+const groups = all
+  .filter((g) => g.methods.length + g.links.length > 0)
+  .map((g, i) => ({ ...g, label: `${s.tabla} ${i + 1}` }));
+const hasAddresses = groups.some((g) => g.methods.some((m) => m.kind === "address"));
+const fromAbroad = groups.some((g) => g.id !== "argentina");
+const button =
+  "rounded border border-rule px-3 py-1.5 font-mono hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+---
+
+<Base title={`${s.titulo} · Bautista Fiori`} description={s.descripcion} lang={lang} route="donaciones">
+  <article class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-20">
+    <h1 class="text-4xl font-semibold tracking-tight">{s.titulo}</h1>
+
+    <div class="mt-6 space-y-4 leading-relaxed">
+      <p>{s.intro}</p>
+      <p class="text-muted">{s.soloDonacion}</p>
+    </div>
+
+    <div class="mt-12 space-y-14">
+      {
+        groups.map((group) => (
+          <section aria-labelledby={`g-${group.id}`}>
+            <div class="flex flex-col gap-1 border-b border-rule pb-3">
+              <p class="font-mono text-xs tracking-wide text-accent-text uppercase">{group.label}</p>
+              <h2 id={`g-${group.id}`} class="text-xl font-semibold tracking-tight">
+                {group.title}
+              </h2>
+              <p class="text-sm text-muted">{group.intro}</p>
+            </div>
+
+            <ul class="mt-5 space-y-4">
+              {group.methods.map((m) => (
+                <li class="rounded-md border border-rule bg-surface p-5">
+                  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <h3 class="font-semibold">{m.title}</h3>
+                    <p class="font-mono text-xs tracking-wide text-muted uppercase">
+                      {m.currency}
+                      {m.kind === "address" && <> · {m.network || s.faltaRed}</>}
+                      {m.kind === "alias" && <> · alias</>}
+                    </p>
+                  </div>
+                  <div class="mt-3 flex flex-wrap items-center gap-3">
+                    <code
+                      class:list={[
+                        "min-w-0 flex-1 font-mono break-all",
+                        m.kind === "address" ? "text-sm" : "text-lg",
+                        m.value ? "text-ink" : "text-muted italic",
+                      ]}
+                      id={`v-${m.id}`}
+                    >
+                      {m.value || s.faltaCompletar}
+                    </code>
+                    {m.value && (
+                      <button
+                        type="button"
+                        class:list={["copy shrink-0 text-xs", button]}
+                        data-copy={m.value}
+                        data-copiar={s.copiar}
+                        data-copiado={s.copiado}
+                        data-a-mano={s.copialoAMano}
+                        aria-label={`${m.kind === "alias" ? s.copiarAlias : s.copiarDireccion} ${m.title}`}
+                      >
+                        {s.copiar}
+                      </button>
+                    )}
+                  </div>
+                  <p class="mt-3 text-sm text-muted">{m.note}</p>
+                </li>
+              ))}
+              {group.links.map((p) => (
+                <li class="rounded-md border border-rule bg-surface p-5">
+                  <h3 class="font-semibold">{p.title}</h3>
+                  <div class="mt-3 flex flex-wrap gap-3">
+                    {p.links.map((l) =>
+                      l.url ? (
+                        <a class:list={["text-sm", button]} href={l.url} target="_blank" rel="noopener noreferrer">
+                          {l.label}
+                        </a>
+                      ) : (
+                        <span class="rounded border border-dashed border-rule px-3 py-1.5 font-mono text-sm text-muted italic">
+                          {l.label} {s.faltaLink}
+                        </span>
+                      ),
+                    )}
+                  </div>
+                  <p class="mt-3 text-sm text-muted">{p.note}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+
+      {
+        hasAddresses && (
+          <section aria-labelledby="notas" class="rounded-md border border-rule p-5 text-sm leading-relaxed">
+            <h2 id="notas" class="font-mono text-xs tracking-wide text-muted uppercase">
+              {s.notas}
+            </h2>
+            <ol class="mt-3 list-decimal space-y-2 pl-5 marker:font-mono marker:text-accent-text">
+              <li>{s.nota1}</li>
+              <li>{s.nota2}</li>
+              <li>{s.nota3}</li>
+            </ol>
+          </section>
+        )
+      }
+
+      {
+        lang === "es" && fromAbroad && (
+          <section lang="en" class="rounded-md border border-rule bg-surface p-5 text-sm text-muted">
+            <h2 class="font-semibold text-ink">In English</h2>
+            <p class="mt-2">
+              Everything I publish is free and stays that way. To chip in from abroad, use the crypto address or one of
+              the payment links above. Send crypto only on a network listed next to the address; another network or
+              another coin can lose the funds. Donations don't buy anything. Thank you. The whole page is also
+              <a class="underline" href={routes.donaciones.en} hreflang="en" data-idioma="en">in English</a>.
+            </p>
+          </section>
+        )
+      }
+    </div>
+  </article>
+</Base>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>("button.copy")) {
+    button.addEventListener("click", async () => {
+      // The button's words come in the page's language, from its data attributes.
+      const value = button.dataset.copy ?? "";
+      try {
+        await navigator.clipboard.writeText(value);
+        button.textContent = button.dataset.copiado ?? "";
+      } catch {
+        button.textContent = button.dataset.aMano ?? "";
+      }
+      setTimeout(() => (button.textContent = button.dataset.copiar ?? ""), 2000);
+    });
+  }
+</script>

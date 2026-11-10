@@ -1,23 +1,36 @@
 ---
 import type { Showcase } from "../../data/projects";
 import Vitrina from "./Vitrina.astro";
+import { localize, type Lang } from "../../i18n";
 import ProyectoVideo from "./ProyectoVideo.astro";
 
 interface Props {
   project: Showcase;
+  lang: Lang;
   index: number;
   flip?: boolean;
 }
 
-const { project, index, flip } = Astro.props;
+const { project, lang, index, flip } = Astro.props;
 const [egypt] = project.images;
 const video = project.video;
+const s = localize(
+  {
+    desde: { es: "3400 a. C.", en: "3400 BC" },
+    ahora: { es: "1350 a. C.", en: "1350 BC" },
+    egipto: {
+      es: "Egipto en 1350 a. C., con lo que se escribió ahí en esa época: las Cartas de Amarna y el Gran Himno a Atón.",
+      en: "Egypt in 1350 BC, with what was written there at the time: the Amarna letters and the Great Hymn to the Aten.",
+    },
+  },
+  lang,
+);
 ---
 
-<Vitrina project={project} index={index} flip={flip}>
+<Vitrina project={project} lang={lang} index={index} flip={flip}>
   <div slot="firma" class="tm-tiempo" aria-hidden="true">
     <div class="tm-regla"><span class="tm-cursor"></span></div>
-    <div class="tm-extremos"><span>3400 a. C.</span><span class="tm-ahora">1350 a. C.</span><span>2024</span></div>
+    <div class="tm-extremos"><span>{s.desde}</span><span class="tm-ahora">{s.ahora}</span><span>2024</span></div>
   </div>
 
   <Fragment slot="muestra">
@@ -38,7 +51,7 @@ const video = project.video;
         ></span>
         <span class="tm-lente"><img src={egypt.src} alt={egypt.alt} width={egypt.width} height={egypt.height} loading="lazy" decoding="async" /></span>
       </div>
-      <figcaption>Egipto en 1350 a. C., con lo que se escribió ahí en esa época: las Cartas de Amarna y el Gran Himno a Atón.</figcaption>
+      <figcaption>{s.egipto}</figcaption>
     </figure>
   </Fragment>
 </Vitrina>
