@@ -1,99 +1,115 @@
 @import "tailwindcss";
+
+/* Fiori, my personal brand: Albiceleste in light mode, Rojinegro in dark mode (src/styles/marca, copied from the kit). */
+@import "./marca/tokens/fuentes.css";
+@import "./marca/tokens/marca.css" layer(base);
+
+/* Each project keeps its own typefaces in its showcase. Browsers only download a face when something uses it. */
+@import "./proyectos/fuentes.css";
 @import "@fontsource/ibm-plex-sans/400.css";
-@import "@fontsource/ibm-plex-sans/500.css";
 @import "@fontsource/ibm-plex-sans/600.css";
-@import "@fontsource/ibm-plex-sans/700.css";
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
 
-/* Datasheet palette: paper, ink, copper accent and a PCB-green trace. */
-:root {
-  --paper: #f3f0e8;
-  --surface: #fbfaf6;
-  --ink: #16181b;
-  --muted: #5b6068;
-  --rule: #d8d3c6;
-  --accent: #a94b25;
-  --accent-ink: #fbfaf6;
-  --accent-soft: #f0dccf;
-  --trace: #2c6a4d;
-  color-scheme: light;
-}
+/* Unlayered on purpose: the skins win over the brand and over utilities inside each showcase. */
+@import "./pieles.css";
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #0e1012;
-    --surface: #15181b;
-    --ink: #e9e6df;
-    --muted: #9a9ea5;
-    --rule: #2a2e33;
-    --accent: #e58a55;
-    --accent-ink: #16181b;
-    --accent-soft: #3a2418;
-    --trace: #6fbf98;
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme="dark"] {
-  --paper: #0e1012;
-  --surface: #15181b;
-  --ink: #e9e6df;
-  --muted: #9a9ea5;
-  --rule: #2a2e33;
-  --accent: #e58a55;
-  --accent-ink: #16181b;
-  --accent-soft: #3a2418;
-  --trace: #6fbf98;
-  color-scheme: dark;
-}
-
+/* Tailwind colors point at the brand tokens, so every page follows the mode on its own. */
 @theme inline {
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --color-paper: var(--paper);
-  --color-surface: var(--surface);
-  --color-ink: var(--ink);
-  --color-muted: var(--muted);
-  --color-rule: var(--rule);
-  --color-accent: var(--accent);
-  --color-accent-ink: var(--accent-ink);
-  --color-accent-soft: var(--accent-soft);
-  --color-trace: var(--trace);
+  --font-sans: var(--f-texto);
+  --font-serif: var(--f-titulo);
+  --font-mono: var(--f-mono);
+  --color-paper: var(--fondo);
+  --color-surface: var(--superficie);
+  --color-surface-2: var(--superficie-2);
+  --color-ink: var(--texto);
+  --color-muted: var(--texto-2);
+  --color-faint: var(--texto-3);
+  --color-rule: var(--borde);
+  --color-rule-strong: var(--borde-fuerte);
+  --color-accent: var(--acento);
+  --color-accent-text: var(--acento-texto);
+  --color-accent-ink: var(--acento-sobre);
+  --color-accent-soft: var(--acento-suave);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 5rem;
+    scroll-padding-top: 4.5rem;
   }
 
   body {
-    background-color: var(--paper);
-    color: var(--ink);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-
-  ::selection {
-    background-color: var(--accent);
-    color: var(--accent-ink);
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    background-color: var(--fondo);
+    color: var(--texto);
   }
 }
 
-/* Faint engineering grid behind the hero. */
-.grid-paper {
-  background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--rule) 55%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--rule) 55%, transparent) 1px, transparent 1px);
-  background-size: 24px 24px;
-  mask-image: linear-gradient(to bottom, black 40%, transparent);
+@layer components {
+  /* Plain links that should not look like links: navigation, buttons, cards. */
+  .fiori .llano,
+  .fiori .boton {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    padding: 0.65rem 1.05rem;
+    border-radius: var(--r-pildora);
+    border: 1px solid var(--borde-fuerte);
+    background: var(--superficie);
+    font-weight: 600;
+    font-size: var(--t-sm);
+    line-height: 1;
+    transition:
+      background-color var(--d-1) var(--curva),
+      border-color var(--d-1) var(--curva),
+      transform var(--d-1) var(--curva);
+  }
+
+  .boton:hover {
+    border-color: var(--texto);
+  }
+
+  .boton:active {
+    transform: translateY(1px);
+  }
+
+  .fiori .boton-principal {
+    background: var(--acento);
+    border-color: var(--acento);
+    color: var(--acento-sobre);
+  }
+
+  .fiori .boton-principal:hover {
+    background: var(--acento-hover);
+    border-color: var(--acento-hover);
+  }
+}
+
+/* Show the screenshot that matches the mode the page is in (specific enough to beat the skins). */
+:root .solo-oscuro {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .solo-claro {
+    display: none;
+  }
+  :root:not([data-tema="claro"]) .solo-oscuro {
+    display: block;
+  }
+}
+
+:root[data-tema="oscuro"] .solo-claro {
+  display: none;
+}
+
+:root[data-tema="oscuro"] .solo-oscuro {
+  display: block;
 }
 
 @media (prefers-reduced-motion: reduce) {

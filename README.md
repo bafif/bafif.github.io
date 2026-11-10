@@ -20,12 +20,29 @@ podman compose run --rm web npm run build    # type-check and build (into the di
 
 ## Content
 
-- `src/data/projects.ts`: project entries. Only public repositories go here.
+- `src/data/projects.ts`: the showcases (`showcases`) and the smaller projects (`smallProjects`). Only public
+  repositories go here.
 - `src/data/career.ts`: experience, education and timeline.
-- `src/data/profile.ts`: name, lead text, contact links and the hero pinout.
+- `src/data/profile.ts`: name, lead text and contact links.
 - `src/data/support.ts`: the aliases, crypto address and payment links listed on `/donaciones/`
   (`src/pages/donaciones.astro`). Anything left empty is left out of the built page.
 - `src/pages/privacy.astro`: privacy policy, also the privacy URL of the "Automatizaciones de Bautista Fiori" OAuth app (Google Cloud project `bafif-obsidian`).
+
+## Look
+
+The site itself wears Fiori, my personal brand: Albiceleste in light mode, Rojinegro in dark mode, Fraunces,
+Instrument Sans and JetBrains Mono. Its tokens, fonts and emblem are copied from the brand kit into
+`src/styles/marca/` and `public/marca/`; the mode follows the system and the toggle pins it with `data-tema`.
+
+Each project is shown in its own look instead. `src/styles/pieles.css` holds one skin per project, taken from
+that project's repository (palette, typefaces, motif), and `src/components/vitrinas/` has one component per
+project that fills the shared layout (`Vitrina.astro`) with its own details and screenshots. The same skin class
+dresses the project's tile in the index at the top. The projects' typefaces live in `src/styles/proyectos/`, with
+their licenses, and the screenshots in `public/img/proyectos/`.
+
+To add a project: an entry in `showcases`, a skin in `pieles.css`, a component in `vitrinas/` and its line in the
+`skins` map of `src/pages/index.astro`. Check the skin's text colors in normal and protan vision before
+publishing (I see as a protan): nothing told apart by hue alone, and no red as thin text on black.
 
 ## Deploy
 

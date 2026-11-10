@@ -1,29 +1,237 @@
 export type ProjectLink = { label: string; href: string };
+export type ProjectImage = { src: string; alt: string; width: number; height: number };
 
-export type Project = {
+/** Each showcase wears its own project's look; the skin picks the component that draws it. */
+export type Skin = "tellmap" | "urna" | "xport" | "foja" | "rocola" | "pocket";
+
+export type Showcase = {
   id: string;
-  code: string;
+  skin: Skin;
   name: string;
+  kind: string;
   tagline: string;
+  /** One line for the index at the top of the page. */
+  short: string;
   description: string;
   highlights: string[];
   stack: string[];
   year: number;
   status: string;
+  /** The first link is the main one. */
   links: ProjectLink[];
-  featured?: boolean;
-  images?: { src: string; alt: string }[];
+  images: ProjectImage[];
   specs?: { label: string; value: string }[];
+  companion?: { name: string; tagline: string; href: string; image: ProjectImage };
+};
+
+export type SmallProject = {
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  stack: string[];
+  year: number;
+  status: string;
+  href: string;
 };
 
 const gh = (repo: string) => `https://github.com/bafif/${repo}`;
+const site = (path: string) => `https://bafif.github.io/${path}/`;
+const img = (file: string, alt: string, width: number, height: number): ProjectImage => ({
+  src: `/img/proyectos/${file}`,
+  alt,
+  width,
+  height,
+});
 
-export const projects: Project[] = [
+export const showcases: Showcase[] = [
+  {
+    id: "tellmap",
+    skin: "tellmap",
+    name: "TellMAP",
+    kind: "Atlas histórico · Godot",
+    tagline: "La historia del mundo en un mapa vivo, con sus fuentes a mano.",
+    short: "Fronteras, pueblos y fuentes ordenados en el espacio y el tiempo.",
+    description:
+      "Un atlas para estudiar historia al revés: empezando por el mapa y por las fuentes. Movés la línea de tiempo y se " +
+      "corren las fronteras, nacen las ciudades y aparecen los textos que se escribieron en cada lugar. Cada texto tiene " +
+      "dos coordenadas: dónde y cuándo se escribió, y de qué lugar y época trata.",
+    highlights: [
+      "Fronteras de 1637 entidades políticas, de 3400 a. C. a 2024, tomadas de Cliopatria (Seshat Global History " +
+        "Databank): 13 400 registros revisados por historiadores.",
+      "El mapa se divide en 58 000 unidades que siguen esas fronteras reales, no una grilla que las aproxima.",
+      "Cada ficha separa las fuentes primarias de los estudios, dice qué tan segura es su fecha y lleva al texto " +
+        "completo cuando está en dominio público: Wikisource, Perseus, el Proyecto Gutenberg o Internet Archive.",
+      "Las cifras antiguas son estimaciones publicadas, con su autor y su rango de incertidumbre. Lo que no se sabe, se dice.",
+      "Relieve sombreado, ríos, costas con líneas de carta náutica y nombres que se curvan sobre el territorio, con tres " +
+        "temas de interfaz y cuatro niveles de calidad gráfica.",
+      "La enciclopedia son archivos JSON legibles, por paquetes: hoy trae un piloto completo del antiguo Egipto y una " +
+        "muestra de once regiones.",
+      "Sin cuentas ni telemetría: corre en la computadora y solo consulta Wikipedia al abrir una ficha, con caché.",
+    ],
+    stack: ["Godot 4.7", "GDScript", "Shaders", "QGIS", "JSON"],
+    year: 2026,
+    status: "En desarrollo · v0.3.0",
+    links: [
+      { label: "Ver el sitio", href: site("tmap") },
+      { label: "Descargar 0.3.0", href: `${gh("tmap")}/releases/latest` },
+      { label: "Repositorio", href: gh("tmap") },
+    ],
+    images: [
+      img(
+        "tellmap-egipto.webp",
+        "TellMAP en 1350 a. C.: Egipto seleccionado, con el panel que lista las fuentes escritas ahí en esa época, como las Cartas de Amarna y el Gran Himno a Atón",
+        1280,
+        683,
+      ),
+      img(
+        "tellmap-mundo.webp",
+        "El mundo en 117 d. C.: el Imperio romano en su máxima extensión, los partos, el Imperio kushán, los xianbei y la dinastía Han",
+        1280,
+        683,
+      ),
+    ],
+  },
+  {
+    id: "urna-abierta",
+    skin: "urna",
+    name: "Urna Abierta",
+    kind: "App web instalable · fiscalización",
+    tagline: "La app libre para organizar a los fiscales de tu partido, en cualquier elección.",
+    short: "Fiscales organizados con su propio servidor, aunque no haya señal.",
+    description:
+      "Fiscalizar bien una elección hoy exige una estructura que solo tienen los partidos grandes. Urna Abierta es una app " +
+      "web instalable para que a una agrupación estudiantil o a un partido chico le alcance con su propio servidor. Cubre la " +
+      "elección entera, del padrón y las mesas al escrutinio y la foto del acta, con una vista para cada rol: el fiscal ve " +
+      "solo su mesa y tacha a quienes votan aunque no haya señal, y todo se sincroniza cuando vuelve la conexión. El " +
+      "proyecto no aloja nada: no hay servidor central ni telemetría.",
+    highlights: [
+      "Protocolo de sincronización propio: con operaciones desordenadas y repetidas el resultado es siempre el mismo, y al " +
+        "volver la señal no se pierde ni se duplica ninguna.",
+      "Una elección entera en el navegador, de crearla a borrar los nombres: 46 pruebas de punta a punta contra los " +
+        "contenedores reales, en Chrome de Android y en WebKit.",
+      "Probada en un emulador de Android en modo avión: abre sin señal, sobrevive a un reinicio, avisa antes de perder " +
+        "datos con el disco lleno y, al volver la señal, llega todo al servidor.",
+      "Instalador de un solo ejecutable, probado instalando por SSH en Ubuntu: deja copias de seguridad cifradas que se " +
+        "restauran enteras en otro servidor.",
+      "Pensada para servidores gratuitos: con 1 GB de RAM y un cuarto de procesador anduvo con 200 mesas en hora pico, en " +
+        "una prueba de laboratorio.",
+      "Permisos por rol, un registro que nadie puede cambiar y herramientas para cumplir la ley de datos personales.",
+      "Diseño para quien nunca la abrió: una pregunta por pantalla, un botón principal y cinco temas en modo claro y oscuro.",
+    ],
+    stack: ["TypeScript", "Svelte", "Fastify", "PostgreSQL", "PWA", "Caddy", "Python", "RapidOCR", "Playwright", "Podman"],
+    year: 2026,
+    status: "En desarrollo",
+    links: [
+      { label: "Ver el sitio", href: site("urna-abierta") },
+      { label: "Repositorio", href: gh("urna-abierta") },
+    ],
+    images: [
+      img(
+        "urna-telefonos-claro.webp",
+        "Tres pantallas de Urna Abierta en el tema Aula: el plan del día, el padrón de la mesa con 281 votos por delante y el conteo de sobres",
+        1200,
+        972,
+      ),
+      img(
+        "urna-telefonos-oscuro.webp",
+        "Las mismas tres pantallas de Urna Abierta en el tema Aula de noche, verde pizarrón con botones amarillos",
+        1200,
+        972,
+      ),
+    ],
+    companion: {
+      name: "Escáner de padrones",
+      tagline:
+        "Lee padrones escaneados con OCR en la propia computadora y los pasa al formato abierto que lee la app. En dos " +
+        "padrones reales, el 98,4 % de los documentos coincide entre escaneos independientes.",
+      href: gh("urna-abierta-padrones"),
+      image: img(
+        "urna-lector.webp",
+        "El escáner de padrones pidiendo revisar una fila dudosa: la imagen escaneada arriba y el DNI marcado para corregir",
+        1280,
+        800,
+      ),
+    },
+  },
+  {
+    id: "xport",
+    skin: "xport",
+    name: "xport",
+    kind: "Extensión + servicio local",
+    tagline: "Los tweets de una cuenta de X, entre dos fechas, en un CSV.",
+    short: "Tweets por rango de fechas a CSV, con el tope de uso fijado en el código.",
+    description:
+      "Una extensión para Chrome y Firefox captura las respuestas que x.com ya carga en la página y un servicio local en " +
+      "FastAPI las normaliza, las guarda y arma un CSV por cuenta. Su núcleo es el Compliance Gate: nunca más de 900.000 " +
+      "objetos en cualquier ventana móvil de 24 horas, por debajo del tope de los términos de X, fijado como constante de " +
+      "código y registrado en un ledger de auditoría.",
+    highlights: [
+      "Ventana deslizante de 24 h con ledger de auditoría en SQLite, separado de los datos.",
+      "La extensión, hecha con WXT, recorre la búsqueda sola, esquiva el corte de unos 1000 resultados achicando el rango " +
+        "y retoma entre sesiones desde lo ya capturado.",
+      "Arquitectura por capas con el backend intercambiable (scraping o API oficial) detrás de una interfaz.",
+      "230 tests, tipado estricto con mypy y lint con ruff; el servicio corre en un contenedor Alpine (Podman) detrás de nginx.",
+    ],
+    stack: ["Python 3.12", "FastAPI", "SQLite", "TypeScript", "WXT", "Podman", "uv", "mypy"],
+    year: 2026,
+    status: "Beta",
+    links: [
+      { label: "Ver el sitio", href: site("xport") },
+      { label: "Repositorio", href: gh("xport") },
+    ],
+    images: [
+      img(
+        "xport-popup.webp",
+        "El popup de xport con datos de ejemplo: servicio local, cuenta, rango de fechas, los botones Capturar y Exportar CSV y el uso de las últimas 24 horas",
+        720,
+        1232,
+      ),
+    ],
+  },
+  {
+    id: "foja",
+    skin: "foja",
+    name: "Foja",
+    kind: "Editor web · Typst",
+    tagline: "Tu CV en Typst, sin escribir código.",
+    short: "Un editor de currículums con formularios y la vista previa real.",
+    description:
+      "Empezó como el generador de mi propio CV: los datos en JSON y Markdown, un perfil por cada postulación que elige " +
+      "qué secciones y entradas mostrar, y dos generadores que leen los mismos datos, uno en Python que compone con LaTeX " +
+      "y otro en C que escribe el PDF directamente. Foja le pone una interfaz encima: un editor que corre entero en el " +
+      "navegador, con formularios en lugar de archivos, Typst por debajo y una vista previa que es el resultado real.",
+    highlights: [
+      "Un banco de entradas y un perfil por cada tipo de trabajo, cargados con formularios.",
+      "Vista previa en vivo con Typst en el navegador, que avisa si el CV entra en una página.",
+      "Exporta a PDF, JPG, Word, Typst, LaTeX, Markdown y JSON, sin cuentas ni servidor; funciona sin conexión.",
+      "Tres estilos propios, y estilos nuevos escritos en Typst.",
+      "La primera versión sigue en el repo: el generador en Python sobre LaTeX y el de C17 que escribe el PDF a mano.",
+    ],
+    stack: ["TypeScript", "Typst", "Astro", "React", "Python", "C17", "LaTeX"],
+    year: 2026,
+    status: "En línea · en desarrollo",
+    links: [
+      { label: "Abrir el editor", href: site("foja") },
+      { label: "Repositorio", href: gh("foja") },
+      { label: "Generador v1.0.0", href: `${gh("foja")}/releases/tag/cvgen-v1.0.0` },
+    ],
+    images: [
+      img(
+        "foja-editor.webp",
+        "El editor de Foja: a la izquierda el panel Estilo y diseño con los estilos Legajo, Banda y Minimal, a la derecha la vista previa de un CV de ejemplo",
+        1200,
+        720,
+      ),
+    ],
+  },
   {
     id: "rocola",
-    code: "BF-01",
+    skin: "rocola",
     name: "Rocola",
+    kind: "Sistema booteable · Debian i386",
     tagline: "Un pendrive que convierte cualquier PC vieja en una rocola de arcade.",
+    short: "Un pendrive que vuelve rocola a una PC vieja, con monitor de tubo incluido.",
     description:
       "Sistema operativo mínimo basado en Debian i386 que arranca desde un pendrive con una interfaz de rocola propia. " +
       "Un instalador guiado lo clona al disco interno y la máquina queda como jukebox dedicada: abre sola al prender, " +
@@ -42,21 +250,22 @@ export const projects: Project[] = [
     year: 2026,
     status: "Beta pública · v0.1.1",
     links: [
+      { label: "Descargar la ISO", href: `${gh("rocola")}/releases` },
       { label: "Repositorio", href: gh("rocola") },
-      { label: "Descargar ISO", href: `${gh("rocola")}/releases` },
     ],
-    featured: true,
     images: [
-      { src: "/img/ui-nowplaying.png", alt: "Pantalla de reproducción de Rocola, con la portada del disco" },
-      { src: "/img/ui-library.png", alt: "Biblioteca de Rocola por artista, con la cantidad de canciones de cada uno" },
-      { src: "/img/ui-menu.png", alt: "Menú de Rocola: salida de audio, información, controles, biblioteca e instalador" },
+      img("rocola-nowplaying.webp", "Pantalla de reproducción de Rocola, con la portada del disco", 1280, 800),
+      img("rocola-library.webp", "Biblioteca de Rocola por artista, con la cantidad de canciones de cada uno", 1280, 800),
+      img("rocola-menu.webp", "Menú de Rocola: salida de audio, información, controles, biblioteca e instalador", 1280, 800),
     ],
   },
   {
     id: "pocket-emu",
-    code: "BF-02",
+    skin: "pocket",
     name: "EX Emulators para Galaxy Pocket Plus",
+    kind: "Port a ARMv7 · Android 4.0",
     tagline: "GBA.emu y GBC.emu con un toolchain de 2026, corriendo en un Android 4.0 de un solo núcleo.",
+    short: "Dos emuladores compilados en 2026 para un teléfono de 2012 sin división por hardware.",
     description:
       "Fork de EX Emulators, de Robert Broglia, adaptado a un Samsung GT-S5301L. Compila con Clang 23, C++26 y CMake 4.4 " +
       "para un CPU sin división entera por hardware, y los dos emuladores corren fluidos en el equipo real.",
@@ -70,10 +279,10 @@ export const projects: Project[] = [
     year: 2026,
     status: "Release · v1.5.85-pocket1",
     links: [
+      { label: "Descargar el APK", href: `${gh("emu-ex-plus-alpha")}/releases` },
       { label: "Repositorio", href: gh("emu-ex-plus-alpha") },
-      { label: "Descargar APK", href: `${gh("emu-ex-plus-alpha")}/releases` },
     ],
-    featured: true,
+    images: [],
     specs: [
       { label: "SoC", value: "Broadcom BCM21654" },
       { label: "CPU", value: "Cortex-A9, 1 núcleo @ 850 MHz" },
@@ -83,165 +292,53 @@ export const projects: Project[] = [
       { label: "Sistema", value: "Android 4.0.4 · API 15" },
     ],
   },
-  {
-    id: "urna-abierta",
-    code: "BF-03",
-    name: "Urna Abierta",
-    tagline: "La app libre para organizar a los fiscales de un partido, en cualquier elección.",
-    description:
-      "Fiscalizar bien una elección hoy exige una estructura que solo tienen los partidos grandes. Urna Abierta es una app " +
-      "web instalable para que a una agrupación estudiantil o a un partido chico le alcance con su propio servidor. Cubre la " +
-      "elección entera, del padrón y las mesas al escrutinio y la foto del acta, con una vista para cada rol: el fiscal ve " +
-      "solo su mesa y tacha a quienes votan aunque no haya señal, y todo se sincroniza cuando vuelve la conexión. El " +
-      "proyecto no aloja nada: no hay servidor central ni telemetría. La acompaña un escáner que lee padrones escaneados " +
-      "en la propia computadora y los pasa a un formato abierto.",
-    highlights: [
-      "Protocolo de sincronización propio: con operaciones desordenadas y repetidas el resultado es siempre el mismo, y al " +
-        "volver la señal no se pierde ni se duplica ninguna.",
-      "Una elección entera en el navegador, de crearla a borrar los nombres: 46 pruebas de punta a punta contra los " +
-        "contenedores reales, en Chrome de Android y en WebKit.",
-      "Probada en un emulador de Android en modo avión: abre sin señal, sobrevive a un reinicio, avisa antes de perder " +
-        "datos con el disco lleno y, al volver la señal, llega todo al servidor.",
-      "Instalador de un solo ejecutable, probado instalando por SSH en Ubuntu: deja copias de seguridad cifradas que se " +
-        "restauran enteras en otro servidor.",
-      "Pensada para servidores gratuitos: con 1 GB de RAM y un cuarto de procesador anduvo con 200 mesas en hora pico, en " +
-        "una prueba de laboratorio.",
-      "Permisos por rol, un registro que nadie puede cambiar y herramientas para cumplir la ley de datos personales.",
-      "Escáner de padrones con OCR local: en dos padrones reales, el 98,4 % de los documentos coincide entre escaneos " +
-        "independientes, sin mandar los datos a ningún servicio.",
-      "Diseño para quien nunca la abrió: una pregunta por pantalla, un botón principal y cinco temas en modo claro y oscuro.",
-    ],
-    stack: ["TypeScript", "Svelte", "Fastify", "PostgreSQL", "PWA", "Caddy", "Python", "RapidOCR", "Playwright", "Podman"],
-    year: 2026,
-    status: "En desarrollo",
-    links: [
-      { label: "Repositorio", href: gh("urna-abierta") },
-      { label: "Escáner de padrones", href: gh("urna-abierta-padrones") },
-    ],
-    featured: true,
-    images: [
-      { src: "/img/urna-portada.webp", alt: "Tres pantallas de Urna Abierta: el plan del día, el padrón de la mesa sin señal y el conteo de sobres" },
-      { src: "/img/urna-temas.webp", alt: "La lista de quienes ya votaron en los cinco temas de Urna Abierta: Aula, Vidrio, Feria, Tablero y Mate" },
-    ],
-  },
-  {
-    id: "xport",
-    code: "BF-04",
-    name: "xport",
-    tagline: "Extractor de tweets por rango de fechas, con un tope de uso garantizado por código.",
-    description:
-      "Extrae los tweets de una o varias cuentas de X entre dos fechas y genera un CSV por cuenta. Una extensión " +
-      "para Chrome y Firefox captura las respuestas que x.com ya carga en la página y un servicio local en FastAPI " +
-      "las normaliza, las guarda y arma el CSV. Su núcleo es el Compliance Gate: nunca más de 900.000 objetos en " +
-      "cualquier ventana móvil de 24 horas, por debajo del tope de los términos de X, fijado como constante de " +
-      "código y registrado en un ledger de auditoría.",
-    highlights: [
-      "Ventana deslizante de 24 h con ledger de auditoría en SQLite, separado de los datos.",
-      "Extensión con WXT que recorre la búsqueda sola, esquiva el corte de ~1000 resultados achicando el rango y " +
-        "retoma entre sesiones desde lo ya capturado.",
-      "Arquitectura por capas con el backend intercambiable (scraping o API oficial) detrás de una interfaz.",
-      "230 tests, tipado estricto con mypy y lint con ruff; servicio en un contenedor Alpine (Podman) detrás de nginx.",
-    ],
-    stack: ["Python 3.12", "FastAPI", "SQLite", "TypeScript", "WXT", "Podman", "uv", "mypy"],
-    year: 2026,
-    status: "Beta",
-    links: [{ label: "Repositorio", href: gh("xport") }],
-  },
-  {
-    id: "map",
-    code: "BF-05",
-    name: "Mapa interactivo histórico",
-    tagline: "Una enciclopedia que se recorre sobre el mapa.",
-    description:
-      "Aplicación en Godot para consultar información histórica, geográfica y demográfica directamente sobre un mapa. " +
-      "Las provincias se generan a partir de un mapa de bits y su definición, y los asentamientos se crean, guardan y cargan.",
-    highlights: [
-      "Provincias generadas desde un bitmap de colores y su definición en JSON.",
-      "Asentamientos editables con guardado y carga.",
-      "Herramientas en Python para convertir los datos de origen.",
-    ],
-    stack: ["Godot 4", "GDScript", "Python"],
-    year: 2025,
-    status: "Prototipo",
-    links: [{ label: "Repositorio", href: gh("map") }],
-  },
-  {
-    id: "foja",
-    code: "BF-06",
-    name: "Foja",
-    tagline: "Editor de currículums sin código sobre Typst: formularios, vista previa en vivo y exportación a varios formatos.",
-    description:
-      "Empezó como el generador de mi propio CV: los datos en JSON y Markdown, un perfil por cada postulación que elige " +
-      "qué secciones y entradas mostrar, y dos generadores que leen los mismos datos, uno en Python que compone con LaTeX " +
-      "y otro en C que escribe el PDF directamente. Foja le pone una interfaz encima: un editor que corre entero en el " +
-      "navegador, con formularios en lugar de archivos, Typst por debajo y una vista previa que es el resultado real.",
-    highlights: [
-      "Un banco de entradas y un perfil por cada tipo de trabajo, cargados con formularios.",
-      "Vista previa en vivo con Typst en el navegador, que avisa si el CV entra en una página.",
-      "Exporta a PDF, JPG, Word, Typst, LaTeX, Markdown y JSON, sin cuentas ni servidor; funciona sin conexión.",
-      "Tres estilos propios, y estilos nuevos escritos en Typst.",
-      "La primera versión sigue en el repo: el generador en Python sobre LaTeX y el de C17 que escribe el PDF a mano.",
-    ],
-    stack: ["TypeScript", "Typst", "Astro", "React", "Python", "C17", "LaTeX"],
-    year: 2026,
-    status: "En desarrollo",
-    links: [
-      { label: "Repositorio", href: gh("foja") },
-      { label: "Generador v1.0.0", href: `${gh("foja")}/releases/tag/cvgen-v1.0.0` },
-    ],
-  },
+];
+
+export const smallProjects: SmallProject[] = [
   {
     id: "morphtools",
-    code: "BF-07",
     name: "Morphtools",
     tagline: "Diagramas automáticos de proyectos orientados a objetos.",
     description:
       "Recorre un proyecto en TypeScript y genera un diagrama en Mermaid con sus declaraciones y las importaciones entre " +
       "módulos. Apunta a diagramas de clases UML y a más lenguajes.",
-    highlights: ["Salida en Mermaid, lista para documentación.", "Nació para estudiar TypeScript y colaborar en Excalidraw."],
     stack: ["TypeScript", "Node.js", "Mermaid"],
     year: 2025,
     status: "Prototipo",
-    links: [{ label: "Repositorio", href: gh("morphtools") }],
+    href: gh("morphtools"),
   },
   {
     id: "racketarra",
-    code: "BF-08",
     name: "Racketarra",
     tagline: "Gestor visual de acordes de guitarra, escrito en Racket.",
     description:
       "Calcula dónde cae cada acorde a lo largo del mástil, deja elegir una nota por cuerda y arma una viñeta con el " +
-      "dibujo del acorde. Con varios acordes queda una hoja ordenada para tener a mano mientras se toca.",
-    highlights: ["Escrito en Racket mientras cursaba Programación 1 de la Licenciatura."],
+      "dibujo del acorde. Lo escribí mientras cursaba Programación 1 de la Licenciatura.",
     stack: ["Racket"],
     year: 2025,
     status: "Prototipo",
-    links: [{ label: "Repositorio", href: gh("racketarra") }],
+    href: gh("racketarra"),
   },
   {
     id: "alejandria",
-    code: "BF-09",
     name: "Alejandría",
     tagline: "Apuntes universitarios hackeables, en Typst.",
     description:
       "Colaboro en un repositorio de apuntes pensados para descargarse, configurarse y compilarse a gusto de cada lector. " +
       "Aporté apuntes de matemática con demostraciones y explicaciones narradas, y un script que recompila los PDF solos.",
-    highlights: ["Demostraciones y explicaciones narradas.", "Recompilación automática de los PDF."],
     stack: ["Typst"],
     year: 2025,
     status: "Colaboración",
-    links: [{ label: "Repositorio", href: gh("alejandria") }],
+    href: gh("alejandria"),
   },
   {
     id: "gtk-theme",
-    code: "BF-10",
     name: "gtk-bafif-theme",
     tagline: "Tema GTK propio para escritorios XFCE.",
     description: "Tema de escritorio diseñado con Themix, listo para clonar y usar en XFCE y cualquier entorno GTK.",
-    highlights: [],
     stack: ["GTK", "SCSS"],
     year: 2022,
     status: "Terminado",
-    links: [{ label: "Repositorio", href: gh("gtk-bafif-theme") }],
+    href: gh("gtk-bafif-theme"),
   },
 ];

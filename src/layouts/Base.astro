@@ -21,8 +21,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#f3f0e8" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0e1012" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f5f8fc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -30,16 +30,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:locale" content="es_AR" />
     <script is:inline>
       try {
-        const theme = localStorage.getItem("theme");
-        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+        // "theme" is the key the previous version of the site used.
+        let tema = localStorage.getItem("tema");
+        const viejo = localStorage.getItem("theme");
+        if (!tema && viejo) tema = viejo === "dark" ? "oscuro" : viejo === "light" ? "claro" : null;
+        if (tema === "claro" || tema === "oscuro") document.documentElement.dataset.tema = tema;
       } catch {}
     </script>
   </head>
-  <body class="min-h-dvh">
+  <body class="fiori min-h-dvh">
     <a
       href="#contenido"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-accent focus:px-3 focus:py-2 focus:text-accent-ink"
-      >Saltar al contenido</a
+      class="boton boton-principal sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50">Saltar al contenido</a
     >
     <Header />
     <main id="contenido">

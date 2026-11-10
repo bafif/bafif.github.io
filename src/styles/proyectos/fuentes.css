@@ -1,0 +1,57 @@
+/*
+ * Typefaces of the projects, copied from each repository with their licenses (OFL, and the Bitstream Charter
+ * license for XCharter). They are only used inside each project's showcase.
+ */
+
+/* TellMAP: Cinzel for titles, EB Garamond for text. */
+@font-face {
+  font-family: "Cinzel";
+  src: url("./fuentes/Cinzel.woff2") format("woff2");
+  font-weight: 400 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "EB Garamond";
+  src: url("./fuentes/EBGaramond.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "EB Garamond";
+  src: url("./fuentes/EBGaramond-Italic.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Urna Abierta, Aula theme. */
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("./fuentes/atkinson-hyperlegible-next-latin-wght-normal.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+/* Foja: XCharter, the serif its CVs are set in. */
+@font-face {
+  font-family: "XCharter";
+  src: url("./fuentes/XCharter-Roman.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "XCharter";
+  src: url("./fuentes/XCharter-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "XCharter";
+  src: url("./fuentes/XCharter-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}

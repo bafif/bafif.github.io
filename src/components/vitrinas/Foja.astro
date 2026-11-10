@@ -1,0 +1,31 @@
+---
+import type { Showcase } from "../../data/projects";
+import Vitrina from "./Vitrina.astro";
+
+interface Props {
+  project: Showcase;
+  index: number;
+  flip?: boolean;
+}
+
+const { project, index, flip } = Astro.props;
+const [editor] = project.images;
+const formats = ["PDF", "JPG", "Word", "Typst", "LaTeX", "Markdown", "JSON"];
+---
+
+<Vitrina project={project} index={index} flip={flip}>
+  <img slot="logo" class="v-logo" src="/img/proyectos/foja-hoja.svg" alt="" width="48" height="48" />
+
+  <dl slot="firma" class="fj-formatos">
+    <dt>Exporta a</dt>
+    {formats.map((format) => <dd>{format}</dd>)}
+  </dl>
+
+  <figure slot="muestra">
+    <div class="fj-ventana">
+      <div class="fj-barra" aria-hidden="true"><span></span><span></span><span></span></div>
+      <img src={editor.src} alt={editor.alt} width={editor.width} height={editor.height} loading="lazy" decoding="async" />
+    </div>
+    <figcaption>El editor con el panel de estilo abierto y la vista previa de un CV de ejemplo.</figcaption>
+  </figure>
+</Vitrina>

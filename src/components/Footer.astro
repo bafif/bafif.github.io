@@ -4,16 +4,35 @@ import { profile } from "../data/profile";
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-rule">
-  <div
-    class="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 font-mono text-xs text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6"
-  >
-    <p>© {year} {profile.fullName} · {profile.location}</p>
+<footer class="pie">
+  <div class="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <p class="flex items-center gap-2.5">
+      <img src="/marca/emblema-claro.svg" alt="" width="20" height="20" class="solo-claro size-5" />
+      <img src="/marca/emblema-oscuro.svg" alt="" width="20" height="20" class="solo-oscuro size-5" />
+      © {year} {profile.fullName} · {profile.location}
+    </p>
     <ul class="flex flex-wrap gap-x-5 gap-y-2">
-      <li><a class="hover:text-ink" href={profile.github}>GitHub</a></li>
-      <li><a class="hover:text-ink" href={`mailto:${profile.email}`}>Correo</a></li>
-      <li><a class="hover:text-ink" href="/donaciones/">Donaciones</a></li>
-      <li><a class="hover:text-ink" href="/privacy/">Privacidad</a></li>
+      <li><a href={profile.github}>GitHub</a></li>
+      <li><a href={`mailto:${profile.email}`}>Correo</a></li>
+      <li><a href="/donaciones/">Donaciones</a></li>
+      <li><a href="/privacy/">Privacidad</a></li>
     </ul>
   </div>
 </footer>
+
+<style>
+  .pie {
+    border-top: 1px solid var(--borde);
+    background-image: var(--franjas);
+  }
+
+  :global(:root[data-tema="oscuro"]) .pie {
+    background-image: var(--mitades);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-tema="claro"])) .pie {
+      background-image: var(--mitades);
+    }
+  }
+</style>

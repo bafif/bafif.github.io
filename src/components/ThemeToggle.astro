@@ -1,8 +1,8 @@
 <button
   type="button"
   data-theme-toggle
-  class="grid size-9 place-items-center rounded text-muted transition-colors hover:bg-surface hover:text-ink"
-  aria-label="Cambiar entre tema claro y oscuro"
+  class="grid size-9 place-items-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-ink"
+  aria-label="Cambiar entre Albiceleste (claro) y Rojinegro (oscuro)"
 >
   <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
     <circle cx="12" cy="12" r="8.5"></circle>
@@ -14,18 +14,19 @@
   const root = document.documentElement;
   const media = window.matchMedia("(prefers-color-scheme: dark)");
 
-  function current(): "light" | "dark" {
-    const explicit = root.dataset.theme;
-    if (explicit === "light" || explicit === "dark") return explicit;
-    return media.matches ? "dark" : "light";
+  function current(): "claro" | "oscuro" {
+    const explicit = root.dataset.tema;
+    if (explicit === "claro" || explicit === "oscuro") return explicit;
+    return media.matches ? "oscuro" : "claro";
   }
 
   for (const button of document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]")) {
     button.addEventListener("click", () => {
-      const next = current() === "dark" ? "light" : "dark";
-      root.dataset.theme = next;
+      const next = current() === "oscuro" ? "claro" : "oscuro";
+      root.dataset.tema = next;
       try {
-        localStorage.setItem("theme", next);
+        localStorage.setItem("tema", next);
+        localStorage.removeItem("theme");
       } catch {}
     });
   }

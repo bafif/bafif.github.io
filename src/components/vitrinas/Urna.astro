@@ -1,0 +1,59 @@
+---
+import type { Showcase } from "../../data/projects";
+import Vitrina from "./Vitrina.astro";
+
+interface Props {
+  project: Showcase;
+  index: number;
+  flip?: boolean;
+}
+
+const { project, index, flip } = Astro.props;
+const [day, night] = project.images;
+const companion = project.companion;
+const promises = ["Tus datos en tu servidor.", "Funciona sin señal.", "La puede usar cualquiera, desde la primera vez."];
+---
+
+<Vitrina project={project} index={index} flip={flip}>
+  <svg slot="logo" class="v-logo ua-logo" viewBox="0 0 48 48" aria-hidden="true">
+    <path d="M7 15v21a6 6 0 006 6h22a6 6 0 006-6V15" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"></path>
+    <rect x="17" y="4" width="14" height="22" rx="2" fill="currentColor" transform="rotate(8 24 15)"></rect>
+  </svg>
+
+  <ul slot="firma" class="ua-promesas">
+    {
+      promises.map((promise) => (
+        <li>
+          <span class="ua-tilde" aria-hidden="true">✓</span>
+          {promise}
+        </li>
+      ))
+    }
+  </ul>
+
+  <Fragment slot="muestra">
+    <div class="ua-telefonos">
+      <img class="solo-claro" src={day.src} alt={day.alt} width={day.width} height={day.height} loading="lazy" decoding="async" />
+      <img class="solo-oscuro" src={night.src} alt={night.alt} width={night.width} height={night.height} loading="lazy" decoding="async" />
+    </div>
+    {
+      companion && (
+        <div class="ua-acompanante">
+          <img
+            src={companion.image.src}
+            alt={companion.image.alt}
+            width={companion.image.width}
+            height={companion.image.height}
+            loading="lazy"
+            decoding="async"
+          />
+          <div>
+            <h3>{companion.name}</h3>
+            <p>{companion.tagline}</p>
+            <a href={companion.href}>Repositorio del escáner ↗</a>
+          </div>
+        </div>
+      )
+    }
+  </Fragment>
+</Vitrina>
