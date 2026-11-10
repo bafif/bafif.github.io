@@ -1,0 +1,135 @@
+---
+// The privacy policy, in either language. /privacy/ (Spanish) is also the privacy URL of the "Automatizaciones de
+// Bautista Fiori" OAuth app, so it never moves; /en/privacy/ is its English version.
+import Base from "../../layouts/Base.astro";
+import { profile } from "../../data/profile";
+import { localize, routes, type Lang } from "../../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = localize(
+  {
+    titulo: { es: "Política de privacidad", en: "Privacy policy" },
+    descripcion: {
+      es: "Política de privacidad de este sitio y de las automatizaciones personales de Bautista Fiori que usan servicios de Google.",
+      en: "Privacy policy of this site and of Bautista Fiori's personal automations that use Google services.",
+    },
+    actualizada: { es: "Última actualización: 10 de noviembre de 2026", en: "Last updated: November 10, 2026" },
+    sitio: { es: "Este sitio", en: "This site" },
+    sitioTexto: {
+      es:
+        "Este es un sitio estático. No usa cookies, analíticas ni rastreadores, y no carga recursos de terceros: las " +
+        "fuentes se sirven desde el mismo sitio. Lo único que guarda es tu preferencia de tema claro u oscuro y de " +
+        "idioma, y la guarda en tu propio navegador.",
+      en:
+        "This is a static site. It uses no cookies, analytics or trackers, and it loads nothing from third parties: the " +
+        "fonts are served from the site itself. All it keeps is your choice of light or dark theme and of language, and it " +
+        "keeps it in your own browser.",
+    },
+    google: { es: "Automatizaciones personales con Google", en: "Personal automations with Google" },
+    googleTexto: {
+      es:
+        "es el nombre con el que Google muestra un conjunto de scripts personales que corro en mi propia computadora: " +
+        "sincronizan tareas con mis notas, ordenan y respaldan documentos y leen calendarios. No es un servicio abierto " +
+        "al público ni está afiliado a Google.",
+      en:
+        "is the name under which Google shows a set of personal scripts that I run on my own computer: they sync tasks " +
+        "with my notes, sort and back up documents and read calendars. It is not a service open to the public, and it is " +
+        "not affiliated with Google.",
+    },
+    cuentas: {
+      es:
+        "Solo se usa con cuentas que me pertenecen o que administro, y cada script pide únicamente el acceso que " +
+        "necesita: Google Tasks, Google Drive o Google Calendar.",
+      en:
+        "It is only used with accounts that I own or manage, and each script asks only for the access it needs: Google " +
+        "Tasks, Google Drive or Google Calendar.",
+    },
+    datos: {
+      es:
+        "Los datos se procesan en mi computadora y quedan ahí o en las mismas cuentas de Google. No se envían a " +
+        "servidores propios ni de terceros.",
+      en:
+        "The data is processed on my computer and stays there or in the same Google accounts. It is not sent to servers " +
+        "of my own or of anyone else.",
+    },
+    noSeVenden: {
+      es: "No se venden, no se comparten y no se usan con fines publicitarios ni para entrenar modelos.",
+      en: "It is not sold, not shared, and not used for advertising or to train models.",
+    },
+    politica: [
+      { es: "El uso de los datos recibidos de las API de Google cumple con la", en: "The use of data received from Google APIs adheres to the" },
+      {
+        es: "Política de datos del usuario de los servicios de API de Google",
+        en: "Google API Services User Data Policy",
+      },
+      { es: ", incluidos sus requisitos de uso limitado.", en: ", including the Limited Use requirements." },
+    ],
+    revocar: { es: "El acceso se puede revocar en cualquier momento desde", en: "Access can be revoked at any time at" },
+    contacto: { es: "Contacto", en: "Contact" },
+    consulta: { es: "Para cualquier consulta sobre esta política, escribí a", en: "For any question about this policy, write to" },
+  },
+  lang,
+);
+const link = "underline decoration-rule underline-offset-4 hover:decoration-ink";
+---
+
+<Base title={`${s.titulo} · Bautista Fiori`} description={s.descripcion} lang={lang} route="privacidad">
+  <article class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-20">
+    <p class="font-mono text-xs tracking-wide text-muted uppercase">{s.actualizada}</p>
+    <h1 class="mt-3 text-4xl font-semibold tracking-tight">{s.titulo}</h1>
+
+    <div class="mt-10 space-y-10 leading-relaxed">
+      <section>
+        <h2 class="text-xl font-semibold tracking-tight">{s.sitio}</h2>
+        <p class="mt-3">{s.sitioTexto}</p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-semibold tracking-tight">{s.google}</h2>
+        <p class="mt-3">
+          <strong>Automatizaciones de Bautista Fiori</strong>{" "}{s.googleTexto}
+        </p>
+        <ul class="mt-4 list-disc space-y-2 pl-5 marker:text-accent-text">
+          <li>{s.cuentas}</li>
+          <li>{s.datos}</li>
+          <li>{s.noSeVenden}</li>
+          <li>
+            {s.politica[0]}{" "}
+            <a class={link} href="https://developers.google.com/terms/api-services-user-data-policy">{s.politica[1]}</a>{s.politica[2]}
+          </li>
+          <li>
+            {s.revocar}{" "}
+            <a class={link} href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-semibold tracking-tight">{s.contacto}</h2>
+        <p class="mt-3">
+          {s.consulta}{" "}
+          <a class={link} href={`mailto:${profile.email}`}>{profile.email}</a>.
+        </p>
+      </section>
+
+      {
+        lang === "es" && (
+          <section lang="en" class="rounded-md border border-rule bg-surface p-5 text-sm text-muted">
+            <h2 class="font-semibold text-ink">Summary in English</h2>
+            <p class="mt-2">
+              This static site sets no cookies and uses no analytics. "Automatizaciones de Bautista Fiori" is a set of personal
+              scripts that run on my own computer and access Google Tasks, Drive or Calendar only for accounts I own or
+              manage. Data stays on that computer or in the same Google accounts and is never sold, shared, or used for
+              advertising or model training. Use of information received from Google APIs adheres to the Google API
+              Services User Data Policy, including the Limited Use requirements. The full policy is also
+              <a class="underline" href={routes.privacidad.en} hreflang="en" data-idioma="en">in English</a>.
+            </p>
+          </section>
+        )
+      }
+    </div>
+  </article>
+</Base>

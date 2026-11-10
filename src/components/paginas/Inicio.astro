@@ -1,0 +1,307 @@
+---
+// The home page, in either language: src/pages/index.astro (Spanish) and src/pages/en/index.astro (English).
+import Base from "../../layouts/Base.astro";
+import SectionHeading from "../SectionHeading.astro";
+import Indice from "../Indice.astro";
+import Chip from "../Chip.astro";
+import TellMap from "../vitrinas/TellMap.astro";
+import Urna from "../vitrinas/Urna.astro";
+import Xport from "../vitrinas/Xport.astro";
+import Foja from "../vitrinas/Foja.astro";
+import Rocola from "../vitrinas/Rocola.astro";
+import Pocket from "../vitrinas/Pocket.astro";
+import { profile } from "../../data/profile";
+import { showcases as allShowcases, smallProjects as allSmall } from "../../data/projects";
+import { timeline as allTimeline } from "../../data/career";
+import { localize, type Lang } from "../../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const showcases = localize(allShowcases, lang);
+const smallProjects = localize(allSmall, lang);
+const timeline = localize(allTimeline, lang);
+const lead = localize(profile.lead, lang);
+const s = localize(
+  {
+    descripcion: {
+      es: "Los proyectos de Bautista Fiori: un atlas de la historia con sus fuentes, una app para fiscales, un editor de CV en Typst, una rocola booteable y más.",
+      en: "Bautista Fiori's projects: an atlas of history with its sources, an app for poll watchers, a CV editor on Typst, a bootable jukebox and more.",
+    },
+    hoja: { es: "Hoja de datos", en: "Datasheet" },
+    verProyectos: { es: "Ver proyectos", en: "See the projects" },
+    escribime: { es: "Escribime", en: "Write to me" },
+    proyectos: { es: "Proyectos", en: "Projects" },
+    proyectosBajada: {
+      es: "Del arranque de una PC de 32 bits a un atlas de la historia. Cada proyecto se muestra con su propia estética y con sus pantallas.",
+      en: "From booting a 32-bit PC to an atlas of history. Each project is shown in its own look, with its own screens.",
+    },
+    tambien: { es: "También", en: "Also" },
+    prototipos: { es: "Prototipos y aportes", en: "Prototypes and contributions" },
+    enCurso: { es: "En curso", en: "Ongoing" },
+    masEnGithub: { es: "Más en GitHub", en: "More on GitHub" },
+    experimentos: {
+      es: "Experimentos, forks y lo que esté armando ahora.",
+      en: "Experiments, forks and whatever I'm building right now.",
+    },
+    recorrido: { es: "Recorrido", en: "Timeline" },
+    recorridoBajada: { es: "Los proyectos, año por año.", en: "The projects, year by year." },
+    contacto: { es: "Contacto", en: "Contact" },
+    // The question, split around the word in italics.
+    teSirve: [
+      { es: "¿Te sirve alguno de estos ", en: "Could one of these " },
+      { es: "proyectos", en: "projects" },
+      { es: "?", en: " be of use to you?" },
+    ],
+    sumarte: {
+      es: "Si querés usar uno, sumarte o contarme qué le falta, escribime o abrí un issue en su repositorio.",
+      en: "If you want to use one, join in or tell me what it's missing, write to me or open an issue in its repository.",
+    },
+  },
+  lang,
+);
+
+const skins = { tellmap: TellMap, urna: Urna, xport: Xport, foja: Foja, rocola: Rocola, pocket: Pocket } as const;
+---
+
+<Base title="Bautista Fiori · Portfolio" description={s.descripcion} lang={lang} route="inicio">
+  <!-- Hero -->
+  <section class="portada">
+    <div class="mx-auto grid max-w-6xl items-center gap-6 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.4fr_1fr] lg:gap-8">
+      <div class="vidrio">
+        <p class="rotulo">{s.hoja} · {profile.location}</p>
+        <h1 class="mt-4 text-[clamp(3rem,9vw,5.75rem)]">Bautista <em>Fiori</em></h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted sm:text-xl">{lead}</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#proyectos" class="boton boton-principal">{s.verProyectos}</a>
+          <a href={profile.github} class="boton">GitHub <span aria-hidden="true">↗</span></a>
+          <a href={`mailto:${profile.email}`} class="boton">{s.escribime}</a>
+        </div>
+      </div>
+      <div class="vidrio vidrio-figura">
+        <Chip lang={lang} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="proyectos" class="mx-auto max-w-6xl px-4 pt-16 pb-14 sm:px-6 sm:pt-24">
+    <SectionHeading index="01" title={s.proyectos} kicker={s.proyectosBajada} />
+    <Indice lang={lang} showcases={showcases} />
+  </section>
+
+  {
+    showcases.map((project, i) => {
+      const Skin = skins[project.skin];
+      return <Skin project={project} lang={lang} index={i + 1} flip={i % 2 === 1} />;
+    })
+  }
+
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+    <p class="rotulo">{s.tambien}</p>
+    <h2 class="mt-3 text-[clamp(1.75rem,3.5vw,2.25rem)]">{s.prototipos}</h2>
+    <ul class="mt-8 grid gap-4 sm:grid-cols-2" data-revela>
+      {
+        smallProjects.map((p) => (
+          <li>
+            <a href={p.href} class="llano chico">
+              <span class="rotulo">
+                {p.status} · {p.year}
+              </span>
+              <span class="chico-nombre">
+                {p.name} <span aria-hidden="true">↗</span>
+              </span>
+              <span class="chico-lema">{p.tagline}</span>
+              <span class="chico-texto">{p.description}</span>
+              <span class="chico-stack">{p.stack.join(" · ")}</span>
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href={profile.github} class="llano chico chico-mas">
+          <span class="rotulo">{s.enCurso}</span>
+          <span class="chico-nombre">{s.masEnGithub} <span aria-hidden="true">↗</span></span>
+          <span class="chico-texto">{s.experimentos}</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Timeline -->
+  <section id="recorrido" class="franja">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <SectionHeading index="02" title={s.recorrido} kicker={s.recorridoBajada} />
+      <ol class="recorrido relative grid gap-8 md:grid-cols-3 md:gap-6" data-revela>
+        <span aria-hidden="true" class="recorrido-linea absolute top-[7px] right-0 left-0 hidden h-px bg-rule-strong md:block"></span>
+        {
+          timeline.map((milestone) => (
+            <li class="relative pl-6 md:pl-0">
+              <span aria-hidden="true" class="hito absolute top-[3px] left-0 md:relative md:top-0 md:block" />
+              <p class="font-serif text-2xl font-semibold text-accent-text md:mt-4">{milestone.year}</p>
+              <ul class="mt-2 space-y-1.5 text-[15px] leading-snug">
+                {milestone.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contacto" class="contacto">
+    <div class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 sm:py-20 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="contacto-rotulo">03 · {s.contacto}</p>
+        <h2 class="mt-3 text-[clamp(2rem,5vw,3.25rem)]">{s.teSirve[0]}<em>{s.teSirve[1]}</em>{s.teSirve[2]}</h2>
+        <p class="mt-4 max-w-lg text-lg opacity-85">{s.sumarte}</p>
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <a href={`mailto:${profile.email}`} class="boton contacto-principal">{profile.email}</a>
+        <a href={profile.github} class="boton contacto-secundario">github.com/{profile.githubHandle} <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* The jersey stripes: sky blue by day, Newell's red by night. */
+  .portada {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--borde);
+    background-image: var(--franjas);
+  }
+
+  :global(:root[data-tema="oscuro"]) .portada {
+    background-image: repeating-linear-gradient(90deg, transparent 0 22px, rgb(226 0 26 / 0.1) 22px 44px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-tema="claro"])) .portada {
+      background-image: repeating-linear-gradient(90deg, transparent 0 22px, rgb(226 0 26 / 0.1) 22px 44px);
+    }
+  }
+
+  /* Frosted glass over the stripes: the blur softens them so the text reads clean on top. */
+  .vidrio {
+    position: relative;
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+    border: 1px solid var(--borde);
+    border-radius: var(--r-4);
+    background: light-dark(rgb(255 255 255 / 0.74), rgb(10 10 11 / 0.76));
+    backdrop-filter: blur(10px) saturate(1.15);
+    -webkit-backdrop-filter: blur(10px) saturate(1.15);
+    box-shadow: var(--sombra-2), var(--brillo-interior);
+  }
+
+  .vidrio-figura {
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .chico {
+    display: grid;
+    gap: 0.35rem;
+    height: 100%;
+    padding: 1.35rem 1.4rem;
+    border: 1px solid var(--borde);
+    border-radius: var(--r-3);
+    background: var(--superficie);
+    box-shadow: var(--sombra-1);
+    transition:
+      border-color var(--d-1) var(--curva),
+      transform var(--d-2) var(--curva);
+  }
+
+  .chico:hover {
+    border-color: var(--acento-borde);
+    transform: translateY(-2px);
+  }
+
+  .chico-mas {
+    border-style: dashed;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .chico-nombre {
+    font-family: var(--f-titulo);
+    font-variation-settings: var(--f-titulo-ajustes);
+    font-weight: 560;
+    font-size: 1.4rem;
+    line-height: 1.15;
+  }
+
+  .chico-lema {
+    font-weight: 600;
+  }
+
+  .chico-texto {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--texto-2);
+  }
+
+  .chico-stack {
+    margin-top: 0.35rem;
+    font-family: var(--f-mono);
+    font-size: 0.75rem;
+    color: var(--texto-3);
+  }
+
+  .franja {
+    border-block: 1px solid var(--borde);
+    background-color: var(--superficie-2);
+  }
+
+  .hito {
+    width: 11px;
+    height: 11px;
+    rotate: 45deg;
+    background: var(--destello);
+    border: 1px solid var(--borde-fuerte);
+  }
+
+  /* Deep navy by day, Newell's red by night: always a fill with light letters. */
+  .contacto {
+    background: light-dark(var(--azul-noche), var(--rojo-boton));
+    color: #ffffff;
+  }
+
+  .contacto h2 {
+    color: #ffffff;
+  }
+
+  .contacto h2 em {
+    color: light-dark(var(--celeste-claro), #ffffff);
+  }
+
+  .contacto-rotulo {
+    font-family: var(--f-mono);
+    font-size: var(--t-2xs);
+    font-weight: 600;
+    letter-spacing: var(--rotulo-tracking);
+    text-transform: uppercase;
+    color: light-dark(var(--celeste-claro), #ffffff);
+  }
+
+  .contacto-principal {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: light-dark(var(--azul-noche), var(--negro));
+  }
+
+  .contacto-secundario {
+    background: transparent;
+    border-color: rgb(255 255 255 / 0.45);
+    color: #ffffff;
+  }
+
+  .contacto-secundario:hover {
+    border-color: #ffffff;
+  }
+</style>

@@ -1,20 +1,31 @@
 ---
 import type { Showcase } from "../../data/projects";
 import Vitrina from "./Vitrina.astro";
+import { localize, type Lang } from "../../i18n";
 
 interface Props {
   project: Showcase;
+  lang: Lang;
   index: number;
   flip?: boolean;
 }
 
-const { project, index, flip } = Astro.props;
+const { project, lang, index, flip } = Astro.props;
+const s = localize(
+  {
+    equipo: { es: "Equipo objetivo", en: "Target device" },
+    porque: { es: "Por qué no alcanzaba con compilar", en: "Why building it wasn't enough" },
+    nota: { es: "sin idiva ni idivt: no hay división entera", en: "no idiva or idivt: no integer division" },
+    dentro: { es: "en", en: "in" },
+  },
+  lang,
+);
 ---
 
-<Vitrina project={project} index={index} flip={flip}>
+<Vitrina project={project} lang={lang} index={index} flip={flip}>
   <Fragment slot="muestra">
     <div class="pk-hoja">
-      <p class="pk-titulo"><span>Equipo objetivo</span><span>Samsung GT-S5301L</span></p>
+      <p class="pk-titulo"><span>{s.equipo}</span><span>Samsung GT-S5301L</span></p>
       <dl class="pk-specs">
         {
           project.specs?.map((spec) => (
@@ -27,15 +38,15 @@ const { project, index, flip } = Astro.props;
       </dl>
     </div>
     <div class="pk-hoja">
-      <p class="pk-titulo"><span>Por qué no alcanzaba con compilar</span><span>ARMv7</span></p>
+      <p class="pk-titulo"><span>{s.porque}</span><span>ARMv7</span></p>
       <pre class="pk-codigo"><code>/proc/cpuinfo
   swp half thumb fastmult vfp edsp neon vfpv3
-  <span class="pk-nota">sin idiva ni idivt: no hay división entera</span>
+  <span class="pk-nota">{s.nota}</span>
 
 <span class="pk-mal">-march=armv7ve</span>  udiv/sdiv → SIGILL
 <span class="pk-bien">-march=armv7-a -mtune=cortex-a9</span>
 
-check-symbols  <span class="pk-bien">0 udiv/sdiv en libmain.so</span></code></pre>
+check-symbols  <span class="pk-bien">0 udiv/sdiv {s.dentro} libmain.so</span></code></pre>
     </div>
   </Fragment>
 </Vitrina>

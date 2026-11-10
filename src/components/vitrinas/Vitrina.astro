@@ -1,15 +1,17 @@
 ---
 import type { Showcase } from "../../data/projects";
+import type { Lang } from "../../i18n";
 
 interface Props {
   project: Showcase;
+  lang: Lang;
   index: number;
   flip?: boolean;
   /** How many highlights show before "ver más". */
   visible?: number;
 }
 
-const { project: p, index, flip = false, visible = 3 } = Astro.props;
+const { project: p, lang, index, flip = false, visible = 3 } = Astro.props;
 const shown = p.highlights.slice(0, visible);
 const more = p.highlights.slice(visible);
 const number = String(index).padStart(2, "0");
@@ -37,7 +39,13 @@ const number = String(index).padStart(2, "0");
           more.length > 0 && (
             <details class="v-mas">
               <summary>
-                {more.length === 1 ? "Un detalle más" : `${more.length} detalles más`}
+                {lang === "es"
+                  ? more.length === 1
+                    ? "Un detalle más"
+                    : `${more.length} detalles más`
+                  : more.length === 1
+                    ? "One more detail"
+                    : `${more.length} more details`}
               </summary>
               <ul class="v-puntos">
                 {more.map((item) => (
@@ -47,7 +55,7 @@ const number = String(index).padStart(2, "0");
             </details>
           )
         }
-        <ul class="v-stack" aria-label="Tecnologías">
+        <ul class="v-stack" aria-label={lang === "es" ? "Tecnologías" : "Technologies"}>
           {p.stack.map((item) => <li>{item}</li>)}
         </ul>
         <ul class="v-enlaces">

@@ -1,21 +1,30 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro";
+import { routes, t, type Lang, type Route } from "../i18n";
 
+interface Props {
+  lang: Lang;
+  route?: Route;
+}
+const { lang, route } = Astro.props;
+const s = t[lang];
+const home = routes.inicio[lang];
+const other: Lang = lang === "es" ? "en" : "es";
 const nav = [
-  { href: "/#proyectos", label: "Proyectos" },
-  { href: "/#recorrido", label: "Recorrido" },
-  { href: "/#contacto", label: "Contacto" },
+  { href: `${home}#proyectos`, label: s.proyectos },
+  { href: `${home}#recorrido`, label: s.recorrido },
+  { href: `${home}#contacto`, label: s.contacto },
 ];
 ---
 
 <header class="cabecera sticky top-0 z-40">
   <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-    <a href="/" class="llano flex items-center gap-3">
+    <a href={home} class="llano flex items-center gap-3">
       <img src="/marca/emblema-claro.svg" alt="" width="32" height="32" class="solo-claro size-8" />
       <img src="/marca/emblema-oscuro.svg" alt="" width="32" height="32" class="solo-oscuro size-8" />
-      <span class="font-serif text-[1.2rem] leading-none font-semibold tracking-tight">Bautista <em>Fiori</em></span>
+      <span class="font-serif text-[1.2rem] leading-none font-semibold tracking-tight whitespace-nowrap">Bautista <em>Fiori</em></span>
     </a>
-    <nav aria-label="Secciones" class="flex items-center gap-1">
+    <nav aria-label={s.secciones} class="flex items-center gap-1">
       <ul class="hidden items-center gap-1 md:flex">
         {
           nav.map((item) => (
@@ -28,10 +37,25 @@ const nav = [
         }
       </ul>
       <a
-        href="/#proyectos"
-        class="llano rounded-full px-3 py-1.5 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-ink md:hidden">Proyectos</a
+        href={`${home}#proyectos`}
+        class="llano rounded-full px-3 py-1.5 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-ink md:hidden">{s.proyectos}</a
       >
-      <ThemeToggle />
+      {
+        route && (
+          <a
+            href={routes[route][other]}
+            hreflang={other}
+            lang={other}
+            data-idioma={other}
+            aria-label={`${s.idioma}: ${s.otroIdioma}`}
+            class="llano rounded-full px-3 py-1.5 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-ink"
+          >
+            <span class="sm:hidden" aria-hidden="true">{other.toUpperCase()}</span>
+            <span class="hidden sm:inline">{s.otroIdioma}</span>
+          </a>
+        )
+      }
+      <ThemeToggle lang={lang} />
     </nav>
   </div>
 </header>

@@ -4,11 +4,29 @@
  * tubes, the 45 turns at 45 rpm with the cover as its label, the bulbs of the arch chase each other and the clock
  * and the progress lamps follow the song. Pure CSS; it all stands still under prefers-reduced-motion.
  */
+import { localize, type Lang } from "../../i18n";
+
 interface Props {
   label: string;
+  lang: Lang;
 }
 
-const { label } = Astro.props;
+const { label, lang } = Astro.props;
+// The screen's own words, in the page's language, as Rocola shows them in each.
+const s = localize(
+  {
+    tema: { es: "Sesenta cuadros", en: "Sixty Frames" },
+    autor: { es: "Los Píxeles · Modo Texto", en: "The Pixels · Text Mode" },
+    sello: { es: "LOS PÍXELES", en: "THE PIXELS" },
+    volumen: { es: "Volumen", en: "Volume" },
+    sigue: { es: "A continuación", en: "Up next" },
+    siguiente: { es: "A2 · Barrido horizontal", en: "A2 · Horizontal Sweep" },
+    pausa: { es: "Pausa", en: "Pause" },
+    atras: { es: "Atrás", en: "Back" },
+    menu: { es: "Menú", en: "Menu" },
+  },
+  lang,
+);
 
 // Seven bubbles per tube; sizes are in tube widths, so they scale with the screen.
 const bubbles = [0, 1].map((tube) =>
@@ -59,14 +77,14 @@ const volumeLit = 5;
 
     <div class="rc-bandeja" aria-hidden="true">
       <div class="rc-disco"></div>
-      <div class="rc-etiqueta"></div>
+      <div class="rc-etiqueta" data-sello={s.sello}></div>
       <div class="rc-reflejo"></div>
       <div class="rc-brazo"></div>
     </div>
 
     <div class="rc-info" aria-hidden="true">
       <div class="rc-tira">
-        <b>A1</b><span class="rc-tema">Sesenta cuadros</span><span class="rc-autor">Los Píxeles · Modo Texto</span>
+        <b>A1</b><span class="rc-tema">{s.tema}</span><span class="rc-autor">{s.autor}</span>
       </div>
       <div class="rc-fila">
         <span class="rc-lamparas rc-avance">
@@ -75,16 +93,16 @@ const volumeLit = 5;
         <span><span class="rc-reloj"></span> / 3:31</span>
       </div>
       <div class="rc-fila">
-        <span>Volumen</span>
+        <span>{s.volumen}</span>
         <span class="rc-lamparas">
           {Array.from({ length: volume }, (_, i) => <i class:list={[i < volumeLit && "rc-on"]} />)}
         </span>
       </div>
-      <p class="rc-sigue"><em>A continuación</em>A2 · Barrido horizontal</p>
+      <p class="rc-sigue"><em>{s.sigue}</em>{s.siguiente}</p>
     </div>
 
     <div class="rc-leyenda" aria-hidden="true">
-      <span><kbd></kbd>Pausa</span><span><kbd>←→</kbd>Volumen</span><span><kbd></kbd>Atrás</span><span><kbd></kbd>Menú</span>
+      <span><kbd></kbd>{s.pausa}</span><span><kbd>←→</kbd>{s.volumen}</span><span><kbd></kbd>{s.atras}</span><span><kbd></kbd>{s.menu}</span>
     </div>
   </div>
 </div>
@@ -239,7 +257,7 @@ const volumeLit = 5;
   }
 
   .rc-etiqueta::after {
-    content: "LOS PÍXELES";
+    content: attr(data-sello);
     position: absolute;
     top: 9%;
     left: 0;

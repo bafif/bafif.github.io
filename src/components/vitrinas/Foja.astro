@@ -1,25 +1,37 @@
 ---
 import type { Showcase } from "../../data/projects";
 import Vitrina from "./Vitrina.astro";
+import { localize, type Lang } from "../../i18n";
 import ProyectoVideo from "./ProyectoVideo.astro";
 
 interface Props {
   project: Showcase;
+  lang: Lang;
   index: number;
   flip?: boolean;
 }
 
-const { project, index, flip } = Astro.props;
+const { project, lang, index, flip } = Astro.props;
 const [editor] = project.images;
 const video = project.video;
 const formats = ["PDF", "JPG", "Word", "Typst", "LaTeX", "Markdown", "JSON"];
+const s = localize(
+  {
+    exporta: { es: "Exporta a", en: "Exports to" },
+    captura: {
+      es: "El editor con el panel de estilo abierto y la vista previa de un CV de ejemplo.",
+      en: "The editor with the style panel open and the preview of a sample CV.",
+    },
+  },
+  lang,
+);
 ---
 
-<Vitrina project={project} index={index} flip={flip}>
+<Vitrina project={project} lang={lang} index={index} flip={flip}>
   <img slot="logo" class="v-logo" src="/img/proyectos/foja-hoja.svg" alt="" width="48" height="48" />
 
   <dl slot="firma" class="fj-formatos">
-    <dt>Exporta a</dt>
+    <dt>{s.exporta}</dt>
     {formats.map((format) => <dd>{format}</dd>)}
   </dl>
 
@@ -34,6 +46,6 @@ const formats = ["PDF", "JPG", "Word", "Typst", "LaTeX", "Markdown", "JSON"];
         )
       }
     </div>
-    <figcaption>{video ? video.caption : "El editor con el panel de estilo abierto y la vista previa de un CV de ejemplo."}</figcaption>
+    <figcaption>{video ? video.caption : s.captura}</figcaption>
   </figure>
 </Vitrina>

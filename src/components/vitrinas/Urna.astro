@@ -1,20 +1,33 @@
 ---
 import type { Showcase } from "../../data/projects";
 import Vitrina from "./Vitrina.astro";
+import { localize, type Lang } from "../../i18n";
 
 interface Props {
   project: Showcase;
+  lang: Lang;
   index: number;
   flip?: boolean;
 }
 
-const { project, index, flip } = Astro.props;
+const { project, lang, index, flip } = Astro.props;
 const [day, night] = project.images;
 const companion = project.companion;
-const promises = ["Tus datos en tu servidor.", "Funciona sin señal.", "La puede usar cualquiera, desde la primera vez."];
+const s = localize(
+  {
+    promesas: [
+      { es: "Tus datos en tu servidor.", en: "Your data on your server." },
+      { es: "Funciona sin señal.", en: "Works without signal." },
+      { es: "La puede usar cualquiera, desde la primera vez.", en: "Anyone can use it, the first time round." },
+    ],
+    escaner: { es: "Repositorio del escáner", en: "The scanner's repository" },
+  },
+  lang,
+);
+const promises = s.promesas;
 ---
 
-<Vitrina project={project} index={index} flip={flip}>
+<Vitrina project={project} lang={lang} index={index} flip={flip}>
   <svg slot="logo" class="v-logo ua-logo" viewBox="0 0 48 48" aria-hidden="true">
     <path d="M7 15v21a6 6 0 006 6h22a6 6 0 006-6V15" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"></path>
     <rect x="17" y="4" width="14" height="22" rx="2" fill="currentColor" transform="rotate(8 24 15)"></rect>
@@ -52,7 +65,7 @@ const promises = ["Tus datos en tu servidor.", "Funciona sin señal.", "La puede
           <div>
             <h3>{companion.name}</h3>
             <p>{companion.tagline}</p>
-            <a href={companion.href}>Repositorio del escáner ↗</a>
+            <a href={companion.href}>{s.escaner} ↗</a>
           </div>
         </div>
       )

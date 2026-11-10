@@ -2,28 +2,43 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import { routes, t, type Lang, type Route } from "../i18n";
 
 interface Props {
   title: string;
   description: string;
+  lang: Lang;
+  /** The page, to link it with its other language. The 404 page has none: it is one page for both. */
+  route?: Route;
 }
 
-const { title, description } = Astro.props;
+const { title, description, lang, route } = Astro.props;
+const other: Lang = lang === "es" ? "en" : "es";
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const alternates = route && { es: new URL(routes[route].es, Astro.site), en: new URL(routes[route].en, Astro.site) };
 // Link previews (WhatsApp, Telegram, LinkedIn...) need an absolute URL. Source: tools/og-image.html.
-const ogImage = new URL("/og.jpg", Astro.site);
-const ogImageAlt =
-  "Los proyectos de Bautista Fiori, con capturas de TellMAP, Urna Abierta, Rocola, Foja, xport y EX Emulators";
+const ogImage = new URL(lang === "en" ? "/og.en.jpg" : "/og.jpg", Astro.site);
+const ogImageAlt = t[lang].ogAlt;
+const locales = { es: "es_AR", en: "en_US" };
 ---
 
 <!doctype html>
-<html lang="es-AR">
+<html lang={lang === "es" ? "es-AR" : "en"}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {
+      alternates && (
+        <>
+          <link rel="alternate" hreflang="es" href={alternates.es} />
+          <link rel="alternate" hreflang="en" href={alternates.en} />
+          <link rel="alternate" hreflang="x-default" href={alternates.en} />
+        </>
+      )
+    }
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#f5f8fc" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
@@ -31,7 +46,8 @@ const ogImageAlt =
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content="es_AR" />
+    <meta property="og:locale" content={locales[lang]} />
+    <meta property="og:locale:alternate" content={locales[other]} />
     <meta property="og:site_name" content="Bautista Fiori" />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:type" content="image/jpeg" />
@@ -41,6 +57,32 @@ const ogImageAlt =
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={ogImageAlt} />
+    <!--
+      The language: the one picked in the header (saved as "idioma"), or else Spanish when any of the browser's
+      languages is Spanish and English otherwise. A page in the other language sends the visitor to its twin, once;
+      crawlers stay where they are, so both versions get indexed.
+    -->
+    <script is:inline define:vars={{ pagina: lang, gemela: route ? routes[route][other] : null }}>
+      let elegido = null;
+      try {
+        elegido = localStorage.getItem("idioma");
+      } catch {}
+      if (elegido !== "es" && elegido !== "en") elegido = null;
+      const preferidos = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
+      const idioma = elegido || (preferidos.some((l) => /^es(-|$)/i.test(l)) ? "es" : "en");
+      const robot = /bot|crawl|spider|slurp|facebookexternalhit|lighthouse/i.test(navigator.userAgent);
+      if (gemela && idioma !== pagina && (elegido || !robot)) location.replace(gemela + location.hash);
+      document.documentElement.dataset.idioma = idioma;
+      // The language link in the header saves the choice and keeps the section the visitor is on.
+      document.addEventListener("click", (e) => {
+        const enlace = e.target instanceof Element && e.target.closest("a[data-idioma]");
+        if (!enlace) return;
+        try {
+          localStorage.setItem("idioma", enlace.dataset.idioma);
+        } catch {}
+        if (location.hash) enlace.href = enlace.getAttribute("href").split("#")[0] + location.hash;
+      });
+    </script>
     <script is:inline>
       try {
         // "theme" is the key the previous version of the site used.
@@ -58,13 +100,13 @@ const ogImageAlt =
   <body class="fiori min-h-dvh">
     <a
       href="#contenido"
-      class="boton boton-principal sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50">Saltar al contenido</a
+      class="boton boton-principal sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50">{t[lang].saltar}</a
     >
-    <Header />
+    <Header lang={lang} route={route} />
     <main id="contenido">
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
     <script is:inline>
       if (document.documentElement.classList.contains("anima")) {
         // Blocks come in once, the first time they are seen.
