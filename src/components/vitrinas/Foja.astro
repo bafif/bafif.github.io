@@ -1,6 +1,7 @@
 ---
 import type { Showcase } from "../../data/projects";
 import Vitrina from "./Vitrina.astro";
+import ProyectoVideo from "./ProyectoVideo.astro";
 
 interface Props {
   project: Showcase;
@@ -10,6 +11,7 @@ interface Props {
 
 const { project, index, flip } = Astro.props;
 const [editor] = project.images;
+const video = project.video;
 const formats = ["PDF", "JPG", "Word", "Typst", "LaTeX", "Markdown", "JSON"];
 ---
 
@@ -24,8 +26,14 @@ const formats = ["PDF", "JPG", "Word", "Typst", "LaTeX", "Markdown", "JSON"];
   <figure slot="muestra">
     <div class="fj-ventana">
       <div class="fj-barra" aria-hidden="true"><span></span><span></span><span></span></div>
-      <img src={editor.src} alt={editor.alt} width={editor.width} height={editor.height} loading="lazy" decoding="async" />
+      {
+        video ? (
+          <ProyectoVideo video={video} />
+        ) : (
+          <img src={editor.src} alt={editor.alt} width={editor.width} height={editor.height} loading="lazy" decoding="async" />
+        )
+      }
     </div>
-    <figcaption>El editor con el panel de estilo abierto y la vista previa de un CV de ejemplo.</figcaption>
+    <figcaption>{video ? video.caption : "El editor con el panel de estilo abierto y la vista previa de un CV de ejemplo."}</figcaption>
   </figure>
 </Vitrina>

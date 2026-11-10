@@ -44,6 +44,38 @@ To add a project: an entry in `showcases`, a skin in `pieles.css`, a component i
 `skins` map of `src/pages/index.astro`. Check the skin's text colors in normal and protan vision before
 publishing (I see as a protan): nothing told apart by hue alone, and no red as thin text on black.
 
+## Motion
+
+Each showcase comes in as it scrolls into view and has a small animation of its own, taken from what the project
+does: the TellMAP map drifts inside its frame, a scan line sweeps Urna's reader, the xport query types itself out,
+EX Emulators crosses out the flag that crashes. Rocola's now-playing screen is not a screenshot but the Ámbar theme
+drawn in HTML and CSS (`src/components/vitrinas/RocolaPantalla.astro`), with the bubbles, the turning 45, the
+chasing bulbs and a clock that follows the song. The chip in the hero runs a signal around its pins.
+
+All of it lives in `src/styles/animaciones.css` and waits for the `anima` class, which `src/layouts/Base.astro`
+sets only when the visitor hasn't asked for reduced motion; without it, or without JavaScript, the page is the
+same page standing still. Animations stop while they are off screen.
+
+## Videos
+
+`public/video/` holds a short silent loop of a project running, with a poster of the same name (its first frame).
+A showcase that has one (`video` in `src/data/projects.ts`) plays it while it is on screen; with reduced motion it
+shows the poster and the browser's controls. They are recorded, not edited:
+
+```sh
+tools/videos/tellmap.sh                      # TellMAP in Godot, headless inside cage (needs ~/tmap)
+node tools/grabar.mjs video https://bafif.github.io/foja/editor/ public/video/foja.mp4 --ancho 1440 --alto 860 \
+  --esperar 5000 --segundos 14 --lento 0.25 --antes @tools/videos/foja-ejemplo.js --guion tools/videos/foja.mjs
+node tools/grabar.mjs video http://localhost:8080/ public/video/rocola.mp4 --ancho 1366 --alto 900 --escala 2 \
+  --selector .rc-bisel --recorte .rc-bisel --segundos 10 --lento 0.12      # with the dev stack up
+```
+
+`tools/grabar.mjs` drives headless Chrome: it slows every animation down, captures frames as fast as it can, stamps
+each with the page's own time and lets ffmpeg resample them to a steady 30 frames per second, so the video is smooth
+even though a capture takes much longer than a frame. A `--guion` module can scroll, type or click on the way.
+Make each poster from the first frame (`ffmpeg -i x.mp4 -frames:v 1 x.png`, then `magick x.png -quality 80 x.webp`)
+and keep each video under 2 MB.
+
 ## Link preview
 
 `public/og.jpg` is the image WhatsApp, Telegram and LinkedIn show when the link is shared (Open Graph tags in

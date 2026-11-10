@@ -3,8 +3,9 @@
 // No dependencies: Node 22+ (fetch and WebSocket) and google-chrome. Run from the host, like the link preview.
 //
 //   node tools/grabar.mjs captura <url> <out-dir> [--ancho 1366 --alto 900 --esperar 1500] [selector...]
-//   node tools/grabar.mjs video <url> <out.mp4> [--ancho 1280 --alto 720 --segundos 8 --cps 30
-//                                   --selector css --recorte css --oscuro --guion file.mjs]
+//   node tools/grabar.mjs video <url> <out.mp4> [--ancho 1280 --alto 720 --escala 1 --segundos 8 --cps 30
+//                                   --lento 0.1 --selector css --recorte css --guion file.mjs]
+// Both take --oscuro (dark mode), --quieto (reduced motion) and --antes "js" or --antes @file.js (see below).
 //
 // Video: every CSS animation and transition is slowed down (Animation.setPlaybackRate), frames are captured as fast
 // as Chrome gives them, each frame is stamped with the page's own animation time, and ffmpeg resamples them to a
@@ -13,7 +14,7 @@
 // seconds; it can scroll or type to tell a story (pagina.evaluar runs an expression in the page).
 
 import { spawn } from "node:child_process";
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -24,12 +25,13 @@ if (!modo || !url || !salida) {
   process.exit(2);
 }
 
-const opciones = { ancho: 1280, alto: 720, esperar: 1500, segundos: 8, cps: 30, lento: 0.1 };
+const opciones = { ancho: 1280, alto: 720, esperar: 1500, segundos: 8, cps: 30, lento: 0.1, antes: [] };
 const selectores = [];
 for (let i = 0; i < resto.length; i++) {
   const a = resto[i];
   if (a === "--oscuro") opciones.oscuro = true;
   else if (a === "--quieto") opciones.quieto = true;
+  else if (a === "--antes") opciones.antes.push(resto[++i]);
   else if (a.startsWith("--")) opciones[a.slice(2)] = resto[++i];
   else selectores.push(a);
 }
@@ -54,6 +56,8 @@ const chrome = spawn(
   ],
   { stdio: "ignore" },
 );
+// Chrome goes with us, also when something fails halfway.
+process.on("exit", () => chrome.kill());
 
 async function conectar() {
   for (let i = 0; i < 100; i++) {
@@ -98,8 +102,16 @@ const evento = (method) =>
     lista.push(f);
     oyentes.set(method, lista);
   });
+// A page that navigates away never settles a pending evaluation: give up after 30 seconds.
 const evaluar = async (expression) =>
-  (await cdp("Runtime.evaluate", { expression, awaitPromise: true, returnByValue: true })).result.value;
+  (
+    await Promise.race([
+      cdp("Runtime.evaluate", { expression, awaitPromise: true, returnByValue: true }),
+      espera(30000).then(() => {
+        throw new Error(`la página no respondió: ${expression.slice(0, 60)}`);
+      }),
+    ])
+  ).result.value;
 
 await cdp("Page.enable");
 await cdp("Runtime.enable");
@@ -121,6 +133,15 @@ const cargada = evento("Page.loadEventFired");
 await cdp("Page.navigate", { url });
 await cargada;
 await evaluar("document.fonts.ready.then(() => true)");
+// --antes "js": an expression run (and awaited) once the page has loaded, before anything is captured; what it
+// returns is printed, which also makes it handy to look around a page. "@file" reads the expression from a file.
+// It can be given several times; they run in order, --esperar milliseconds apart.
+for (const [i, antes] of opciones.antes.entries()) {
+  if (i > 0) await espera(opciones.esperar);
+  const js = antes.startsWith("@") ? readFileSync(antes.slice(1), "utf8") : antes;
+  const r = await evaluar(js);
+  if (r !== undefined) console.log(typeof r === "string" ? r : JSON.stringify(r, null, 1));
+}
 
 async function recorte(selector) {
   const caja = await evaluar(`(() => {

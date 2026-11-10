@@ -1,6 +1,7 @@
 ---
 import type { Showcase } from "../../data/projects";
 import Vitrina from "./Vitrina.astro";
+import ProyectoVideo from "./ProyectoVideo.astro";
 
 interface Props {
   project: Showcase;
@@ -9,7 +10,8 @@ interface Props {
 }
 
 const { project, index, flip } = Astro.props;
-const [egypt, world] = project.images;
+const [egypt] = project.images;
+const video = project.video;
 ---
 
 <Vitrina project={project} index={index} flip={flip}>
@@ -19,21 +21,24 @@ const [egypt, world] = project.images;
   </div>
 
   <Fragment slot="muestra">
-    <figure>
+    {
+      video && (
+        <figure>
+          <div class="tm-marco">
+            <span class="tm-esquina" /><span class="tm-esquina" /><span class="tm-esquina" /><span class="tm-esquina" />
+            <span class="tm-lente"><ProyectoVideo video={video} /></span>
+          </div>
+          <figcaption>{video.caption}</figcaption>
+        </figure>
+      )
+    }
+    <figure class:list={[video && "mt-7 hidden sm:block"]}>
       <div class="tm-marco">
         <span class="tm-esquina"></span><span class="tm-esquina"></span><span class="tm-esquina"></span><span class="tm-esquina"
         ></span>
         <span class="tm-lente"><img src={egypt.src} alt={egypt.alt} width={egypt.width} height={egypt.height} loading="lazy" decoding="async" /></span>
       </div>
       <figcaption>Egipto en 1350 a. C., con lo que se escribió ahí en esa época: las Cartas de Amarna y el Gran Himno a Atón.</figcaption>
-    </figure>
-    <figure class="mt-7 hidden sm:block">
-      <div class="tm-marco">
-        <span class="tm-esquina"></span><span class="tm-esquina"></span><span class="tm-esquina"></span><span class="tm-esquina"
-        ></span>
-        <span class="tm-lente"><img src={world.src} alt={world.alt} width={world.width} height={world.height} loading="lazy" decoding="async" /></span>
-      </div>
-      <figcaption>El mundo en 117 d. C., con el Imperio romano en su máxima extensión.</figcaption>
     </figure>
   </Fragment>
 </Vitrina>
