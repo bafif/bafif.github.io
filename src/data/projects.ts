@@ -108,8 +108,8 @@ export const showcases: Showcase[] = [
     highlights: [
       "Protocolo de sincronización propio: con operaciones desordenadas y repetidas el resultado es siempre el mismo, y al " +
         "volver la señal no se pierde ni se duplica ninguna.",
-      "Una elección entera en el navegador, de crearla a borrar los nombres: 46 pruebas de punta a punta contra los " +
-        "contenedores reales, en Chrome de Android y en WebKit.",
+      "50 pruebas de punta a punta recorren una elección entera en el navegador, de crearla a borrar los nombres al " +
+        "final, contra los contenedores reales, en Chrome de Android y en WebKit.",
       "Probada en un emulador de Android en modo avión: abre sin señal, sobrevive a un reinicio, avisa antes de perder " +
         "datos con el disco lleno y, al volver la señal, llega todo al servidor.",
       "Instalador de un solo ejecutable, probado instalando por SSH en Ubuntu: deja copias de seguridad cifradas que se " +
@@ -162,16 +162,16 @@ export const showcases: Showcase[] = [
     tagline: "Los tweets de una cuenta de X, entre dos fechas, en un CSV.",
     short: "Tweets por rango de fechas a CSV, con el tope de uso fijado en el código.",
     description:
-      "Una extensión para Chrome y Firefox captura las respuestas que x.com ya carga en la página y un servicio local en " +
-      "FastAPI las normaliza, las guarda y arma un CSV por cuenta. Su núcleo es el Compliance Gate: nunca más de 900.000 " +
-      "objetos en cualquier ventana móvil de 24 horas, por debajo del tope de los términos de X, fijado como constante de " +
-      "código y registrado en un ledger de auditoría.",
+      "Una extensión para Chrome y Firefox recorre la búsqueda de X por vos, copia lo que la página ya descargó y se lo " +
+      "pasa a un servicio local en FastAPI, que lo guarda sin repetir y arma un CSV por cuenta. Todo gira alrededor de un " +
+      "tope: nunca más de 900.000 posts en cualquier ventana de 24 horas, por debajo del millón que permiten los términos " +
+      "de X. El tope es una constante del código, no una opción de configuración.",
     highlights: [
-      "Ventana deslizante de 24 h con ledger de auditoría en SQLite, separado de los datos.",
+      "Ventana deslizante de 24 h, con su registro en una base SQLite aparte: borrar los tweets no pone la cuenta en cero.",
       "La extensión, hecha con WXT, recorre la búsqueda sola, esquiva el corte de unos 1000 resultados achicando el rango " +
         "y retoma entre sesiones desde lo ya capturado.",
       "Arquitectura por capas con el backend intercambiable (scraping o API oficial) detrás de una interfaz.",
-      "230 tests, tipado estricto con mypy y lint con ruff; el servicio corre en un contenedor Alpine (Podman) detrás de nginx.",
+      "Más de 300 tests, tipado estricto con mypy y lint con ruff; el servicio corre en un contenedor Alpine (Podman) detrás de nginx.",
     ],
     stack: ["Python 3.12", "FastAPI", "SQLite", "TypeScript", "WXT", "Podman", "uv", "mypy"],
     year: 2026,
@@ -197,16 +197,15 @@ export const showcases: Showcase[] = [
     tagline: "Tu CV en Typst, sin escribir código.",
     short: "Un editor de currículums con formularios y la vista previa real.",
     description:
-      "Empezó como el generador de mi propio CV: los datos en JSON y Markdown, un perfil por cada postulación que elige " +
-      "qué secciones y entradas mostrar, y dos generadores que leen los mismos datos, uno en Python que compone con LaTeX " +
-      "y otro en C que escribe el PDF directamente. Foja le pone una interfaz encima: un editor que corre entero en el " +
+      "Empezó como el generador de mi propio CV: los datos en JSON y Markdown, un perfil por postulación que elige qué " +
+      "mostrar, y dos generadores sobre los mismos datos, uno en Python que compone con LaTeX y otro en C17 que escribe " +
+      "el PDF a mano. Los dos siguen en el repo. Foja le pone una interfaz encima: un editor que corre entero en el " +
       "navegador, con formularios en lugar de archivos, Typst por debajo y una vista previa que es el resultado real.",
     highlights: [
       "Un banco de entradas y un perfil por cada tipo de trabajo, cargados con formularios.",
       "Vista previa en vivo con Typst en el navegador, que avisa si el CV entra en una página.",
       "Exporta a PDF, JPG, Word, Typst, LaTeX, Markdown y JSON, sin cuentas ni servidor; funciona sin conexión.",
       "Tres estilos propios, y estilos nuevos escritos en Typst.",
-      "La primera versión sigue en el repo: el generador en Python sobre LaTeX y el de C17 que escribe el PDF a mano.",
     ],
     stack: ["TypeScript", "Typst", "Astro", "React", "Python", "C17", "LaTeX"],
     year: 2026,
@@ -241,7 +240,7 @@ export const showcases: Showcase[] = [
       "El instalador clona el sistema a un disco vacío y ese disco arranca solo, también probado por BIOS y UEFI; al reinstalar conserva la música.",
       "Soporte CRT: VGA de 31 kHz y arcade/TV de 15 kHz con switchres y modelines, con vuelta segura a VGA.",
       "Cuatro temas de rocolas de época, ya diseñados: Ámbar (fines de los 40, con tubos de burbujas), Cromo (mediados " +
-        "de los 50), Neón (los 60 y 70) y Display (los 80, de LED y pensado para 240p). Ámbar va por defecto y llega con la v0.1.2.",
+        "de los 50), Neón (los 60 y 70) y Display (los 80, de LED y pensado para 240p). Ámbar va a venir por defecto desde la v0.1.2.",
       "Interfaz propia en SDL2 (Python y pygame) sobre MPD: biblioteca por artista y álbum, portada del disco al reproducir, logos y tema reemplazables y controles reasignables desde la configuración.",
       "Importa la música de un segundo pendrive apenas se enchufa: lo monta solo lectura, no duplica y la biblioteca se actualiza sola.",
       "Salida de audio por PipeWire elegible desde la interfaz: analógica, HDMI, USB o parlantes Bluetooth.",

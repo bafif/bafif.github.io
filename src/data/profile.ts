@@ -6,9 +6,10 @@ export const profile = {
   github: "https://github.com/bafif",
   githubHandle: "bafif",
   lead:
-    "Técnico electrónico y estudiante de Ciencias de la Computación e Inteligencia Artificial en la UNR. " +
-    "Escribo software que llega hasta el hardware: sistemas booteables para PCs de 32 bits, ports de " +
-    "emuladores a CPUs ARM de una década atrás y herramientas de datos con garantías verificadas por código.",
+    "Técnico electrónico y estudiante de Ciencias de la Computación y de Inteligencia Artificial en la UNR. " +
+    "Hago herramientas completas, pensadas para que alguien las use de verdad: un atlas de la historia con sus " +
+    "fuentes, una app para que un partido chico fiscalice con su propio servidor, un editor de CV que corre entero " +
+    "en el navegador y un pendrive que vuelve rocola a cualquier PC vieja.",
   features: [
     "Del circuito al deploy: electrónica, firmware y software.",
     "Linux de punta a punta: Arch, Debian, Podman y nginx.",
@@ -18,15 +19,15 @@ export const profile = {
   strengths: [
     {
       title: "Resolución",
-      body: "Encuentro por mi cuenta la solución a los problemas y trabajo enfocado en llegar al resultado, también bajo presión.",
+      body: "Cuando algo no anda, bajo hasta encontrar por qué. El port al Galaxy Pocket se destrabó cuando vi que su procesador no tiene instrucción para dividir.",
     },
     {
       title: "Ritmo sostenido",
-      body: "Avanzo sin frustrarme ante la dificultad, sin perder el hilo, y levanto la mano apenas algo se traba.",
+      body: "Avanzo sin frustrarme ante la dificultad y levanto la mano apenas algo se traba, en vez de esconderlo.",
     },
     {
       title: "Comunicación técnica",
-      body: "Explico e informo sin ambigüedades. Leer documentación técnica es parte de mi día a día.",
+      body: "Escribo la documentación que me gustaría encontrar: qué hace cada cosa, qué no y qué falta probar. Doy clases desde 2018: explicar es parte de mi día a día.",
     },
   ],
 } as const;

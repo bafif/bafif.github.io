@@ -74,7 +74,7 @@ export const timeline: Milestone[] = [
       "Urna Abierta, la app libre para fiscales.",
       "Foja, mi editor de CV, queda en línea.",
       "Rocola llega a beta pública.",
-      "xport y su Compliance Gate.",
+      "xport, para bajar tweets a CSV sin pasar el tope de X.",
       "EX Emulators corriendo en el Galaxy Pocket Plus.",
     ],
   },
