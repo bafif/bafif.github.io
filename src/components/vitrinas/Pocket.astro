@@ -1,0 +1,41 @@
+---
+import type { Showcase } from "../../data/projects";
+import Vitrina from "./Vitrina.astro";
+
+interface Props {
+  project: Showcase;
+  index: number;
+  flip?: boolean;
+}
+
+const { project, index, flip } = Astro.props;
+---
+
+<Vitrina project={project} index={index} flip={flip}>
+  <Fragment slot="muestra">
+    <div class="pk-hoja">
+      <p class="pk-titulo"><span>Equipo objetivo</span><span>Samsung GT-S5301L</span></p>
+      <dl class="pk-specs">
+        {
+          project.specs?.map((spec) => (
+            <div>
+              <dt>{spec.label}</dt>
+              <dd>{spec.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+    <div class="pk-hoja">
+      <p class="pk-titulo"><span>Por qué no alcanzaba con compilar</span><span>ARMv7</span></p>
+      <pre class="pk-codigo"><code>/proc/cpuinfo
+  swp half thumb fastmult vfp edsp neon vfpv3
+  <span class="pk-nota">sin idiva ni idivt: no hay división entera</span>
+
+<span class="pk-mal">-march=armv7ve</span>  udiv/sdiv → SIGILL
+<span class="pk-bien">-march=armv7-a -mtune=cortex-a9</span>
+
+check-symbols  <span class="pk-bien">0 udiv/sdiv en libmain.so</span></code></pre>
+    </div>
+  </Fragment>
+</Vitrina>

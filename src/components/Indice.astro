@@ -1,0 +1,147 @@
+---
+import { showcases } from "../data/projects";
+---
+
+<ol class="indice" aria-label="Índice de proyectos">
+  {
+    showcases.map((p, i) => {
+      const thumb = p.images[0];
+      return (
+        <li>
+          <a href={`#${p.id}`} class={`llano ficha piel-${p.skin}`}>
+            <span class="ficha-vista" aria-hidden="true">
+              {thumb ? (
+                <img src={thumb.src} alt="" width={thumb.width} height={thumb.height} loading="lazy" decoding="async" />
+              ) : (
+                <span class="ficha-sin-imagen">
+                  <b>BCM21654</b>
+                  <span>Cortex-A9 · 850 MHz · sin idiv</span>
+                </span>
+              )}
+            </span>
+            <span class="ficha-texto">
+              <span class="ficha-numero">{String(i + 1).padStart(2, "0")}</span>
+              <span class="ficha-nombre">{p.name}</span>
+              <span class="ficha-corto">{p.short}</span>
+            </span>
+          </a>
+        </li>
+      );
+    })
+  }
+</ol>
+
+<style>
+  .indice {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  }
+
+  .ficha {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--r-3);
+    border: 1px solid var(--v-borde);
+    background: var(--v-fondo);
+    color: var(--v-texto);
+    font-family: var(--v-f-texto);
+    font-feature-settings: normal;
+    box-shadow: var(--sombra-1);
+    transition:
+      transform var(--d-2) var(--curva),
+      box-shadow var(--d-2) var(--curva);
+  }
+
+  .ficha:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--sombra-3);
+  }
+
+  .ficha-vista {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 1px solid var(--v-borde);
+    background: var(--v-superficie);
+  }
+
+  .ficha-vista img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transition: scale var(--d-3) var(--curva);
+  }
+
+  .ficha:hover .ficha-vista img {
+    scale: 1.04;
+  }
+
+  /* xport's popup is tall: show its top half. */
+  .piel-xport .ficha-vista img {
+    object-position: center 8%;
+  }
+
+  .ficha-sin-imagen {
+    display: grid;
+    place-content: center;
+    gap: 0.35rem;
+    height: 100%;
+    text-align: center;
+    font-family: var(--v-f-mono);
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--v-borde) 70%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--v-borde) 70%, transparent) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  .ficha-sin-imagen b {
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .ficha-sin-imagen span {
+    font-size: 0.75rem;
+    color: var(--v-suave);
+  }
+
+  .ficha-texto {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1rem 1.1rem 1.15rem;
+  }
+
+  .ficha-numero {
+    font-family: var(--v-f-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--v-acento-texto);
+  }
+
+  .ficha-nombre {
+    font-family: var(--v-f-titulo);
+    font-weight: var(--v-peso-titulo, 700);
+    font-size: 1.35rem;
+    line-height: 1.1;
+    color: var(--v-titulo);
+  }
+
+  .piel-tellmap .ficha-nombre,
+  .piel-rocola .ficha-nombre {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .ficha-corto {
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: var(--v-suave);
+  }
+</style>

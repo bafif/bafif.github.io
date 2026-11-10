@@ -1,0 +1,48 @@
+/*
+ * Fuentes de la marca, servidas desde el mismo sitio (nada de Google Fonts en producción).
+ * Las rutas son relativas a este archivo: copiá la carpeta fuentes/ al lado de tokens/.
+ * Las tres son OFL 1.1 (licencias en fuentes/).
+ */
+
+/* Fraunces: títulos, cifras grandes y el reloj. Ejes: opsz 9-144, wght 100-900, SOFT 0-100, WONK 0-1. */
+@font-face {
+  font-family: "Fraunces";
+  src: url("../fuentes/fraunces.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("../fuentes/fraunces-italica.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Instrument Sans: la interfaz y el texto corrido. Ejes: wght 400-700, wdth 75-100. */
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("../fuentes/instrument-sans.woff2") format("woff2-variations");
+  font-weight: 400 700;
+  font-stretch: 75% 100%;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("../fuentes/instrument-sans-italica.woff2") format("woff2-variations");
+  font-weight: 400 700;
+  font-stretch: 75% 100%;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* JetBrains Mono: fechas, horas chicas, códigos y datos tabulares. */
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fuentes/jetbrains-mono.woff2") format("woff2-variations");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}

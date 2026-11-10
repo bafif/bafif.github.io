@@ -1,0 +1,39 @@
+---
+import type { Showcase } from "../../data/projects";
+import Vitrina from "./Vitrina.astro";
+
+interface Props {
+  project: Showcase;
+  index: number;
+  flip?: boolean;
+}
+
+const { project, index, flip } = Astro.props;
+const [playing, ...others] = project.images;
+const chips = ["BIOS + UEFI", "VGA 31 kHz", "Arcade 15 kHz", "Debian i386"];
+---
+
+<Vitrina project={project} index={index} flip={flip}>
+  <ul slot="firma" class="rc-chips" aria-label="Arranque y pantallas">
+    {chips.map((chip) => <li>{chip}</li>)}
+  </ul>
+
+  <Fragment slot="muestra">
+    <div class="rc-tubo">
+      <div class="rc-pantalla">
+        <img src={playing.src} alt={playing.alt} width={playing.width} height={playing.height} loading="lazy" decoding="async" />
+      </div>
+    </div>
+    <div class="rc-mas">
+      {
+        others.map((image) => (
+          <div class="rc-tubo">
+            <div class="rc-pantalla">
+              <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Fragment>
+</Vitrina>

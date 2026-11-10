@@ -1,0 +1,958 @@
+/*
+ * Project skins. Every showcase (and its tile in the index) wears the look of its own project: the palette, the
+ * typefaces and the motif come from each repository. Colors with a light and a dark version follow the page's mode
+ * through light-dark(); xport and Rocola only exist in dark, so they pin color-scheme.
+ *
+ * Variables each skin defines:
+ *   --v-fondo --v-superficie --v-texto --v-suave --v-titulo --v-borde --v-borde-fuerte
+ *   --v-acento (button fill) --v-sobre-acento --v-acento-texto
+ *   --v-f-titulo --v-f-texto --v-f-mono --v-peso-titulo --v-radio --v-radio-boton --v-vineta
+ */
+
+/* ---------- Shared structure ---------- */
+
+.vitrina {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--v-fondo);
+  color: var(--v-texto);
+  font-family: var(--v-f-texto);
+  /* The brand turns on stylistic sets for its own faces; in other faces they swap letters (EB Garamond's ss01). */
+  font-feature-settings: normal;
+  padding-block: clamp(3.5rem, 8vw, 6.5rem);
+}
+
+.v-marco {
+  position: relative;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .v-marco {
+    padding-inline: 1.5rem;
+  }
+}
+
+.v-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1.25rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--v-borde);
+  font-family: var(--v-f-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-suave);
+}
+
+.v-numero {
+  color: var(--v-acento-texto);
+  font-weight: 600;
+}
+
+.v-estado {
+  margin-left: auto;
+}
+
+.v-cuerpo {
+  display: grid;
+  /* minmax(0, …) keeps long code lines and screenshots from widening the column past the screen. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.75rem;
+}
+
+@media (min-width: 64rem) {
+  .v-cuerpo {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 3.5rem;
+    align-items: start;
+  }
+
+  .v-invertida .v-texto {
+    order: 2;
+  }
+}
+
+.v-logo {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.25rem;
+}
+
+.vitrina .v-nombre {
+  margin: 0;
+  font-family: var(--v-f-titulo);
+  font-variation-settings: normal;
+  font-weight: var(--v-peso-titulo, 700);
+  font-size: clamp(2.4rem, 5.5vw, 3.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--v-titulo);
+}
+
+.v-lema {
+  margin-top: 0.85rem;
+  font-size: clamp(1.15rem, 2vw, 1.35rem);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.v-descripcion {
+  margin-top: 1.35rem;
+  line-height: 1.65;
+  color: var(--v-texto);
+  text-wrap: pretty;
+}
+
+.v-puntos {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1.35rem;
+  padding: 0;
+  list-style: none;
+}
+
+.v-puntos li {
+  position: relative;
+  padding-left: 1.5rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.v-puntos li::before {
+  content: var(--v-vineta, "—");
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--v-acento-texto);
+  font-family: var(--v-f-mono);
+}
+
+.v-mas {
+  margin-top: 0.75rem;
+}
+
+.v-mas > summary {
+  display: inline-flex;
+  gap: 0.5em;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--v-f-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--v-acento-texto);
+}
+
+.v-mas > summary::-webkit-details-marker {
+  display: none;
+}
+
+.v-mas > summary::before {
+  content: "+";
+}
+
+.v-mas[open] > summary::before {
+  content: "−";
+}
+
+.v-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.6rem;
+  padding: 0;
+  list-style: none;
+}
+
+.v-stack li {
+  padding: 0.28rem 0.6rem;
+  border: 1px solid var(--v-borde);
+  border-radius: var(--v-radio);
+  font-family: var(--v-f-mono);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  color: var(--v-suave);
+}
+
+.v-enlaces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.6rem;
+  padding: 0;
+  list-style: none;
+}
+
+.vitrina a.v-enlace {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.65rem 1.05rem;
+  border: 1px solid var(--v-borde-fuerte);
+  border-radius: var(--v-radio-boton, var(--v-radio));
+  font-family: var(--v-f-boton, var(--v-f-texto));
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--v-texto);
+  text-decoration: none;
+  transition:
+    transform var(--d-1) var(--curva),
+    background-color var(--d-1) var(--curva);
+}
+
+.vitrina a.v-enlace:hover {
+  transform: translateY(-1px);
+}
+
+.vitrina a.v-enlace-principal {
+  background: var(--v-acento);
+  border-color: var(--v-acento);
+  color: var(--v-sobre-acento);
+}
+
+.vitrina :focus-visible {
+  outline: 2px solid var(--v-acento-texto);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+.v-muestra img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.v-muestra figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--v-suave);
+}
+
+/* ---------- TellMAP: marble and bronze at night, illuminated parchment by day ---------- */
+
+.piel-tellmap {
+  --v-fondo: light-dark(#e6d9bb, #1a1e24);
+  --v-superficie: light-dark(#ddcda8, #232931);
+  --v-superficie-2: light-dark(#d3c099, #2c333d);
+  --v-texto: light-dark(#2c2116, #ece3cf);
+  --v-suave: light-dark(#6a5843, #a99e88);
+  --v-titulo: light-dark(#7c2d22, #e2c48a);
+  --v-borde: light-dark(#b49b70, #4f4639);
+  --v-borde-fuerte: light-dark(#7c2d22, #a8875a);
+  --v-acento: light-dark(#8e2b22, #d4ab62);
+  --v-sobre-acento: light-dark(#f4ead2, #1a1e24);
+  --v-acento-texto: light-dark(#8e2b22, #d4ab62);
+  --v-f-titulo: "Cinzel", "Trajan Pro", Georgia, serif;
+  --v-f-texto: "EB Garamond", Garamond, "Times New Roman", serif;
+  --v-f-mono: "Cinzel", Georgia, serif;
+  --v-peso-titulo: 600;
+  --v-radio: 2px;
+  --v-vineta: "◆";
+}
+
+.vitrina.piel-tellmap {
+  font-size: 1.12rem;
+  /* Chart lines on the water, like the map's own shader, and a vignette. */
+  background-image:
+    radial-gradient(ellipse at 50% 40%, transparent 55%, light-dark(rgb(60 40 20 / 0.18), rgb(0 0 0 / 0.45))),
+    repeating-linear-gradient(32deg, transparent 0 46px, color-mix(in oklab, var(--v-borde) 22%, transparent) 46px 47px),
+    repeating-linear-gradient(-58deg, transparent 0 46px, color-mix(in oklab, var(--v-borde) 14%, transparent) 46px 47px);
+}
+
+.piel-tellmap .v-cabecera {
+  border-bottom: 0;
+  border-image: linear-gradient(90deg, transparent, var(--v-borde-fuerte) 18%, var(--v-borde-fuerte) 82%, transparent) 1;
+  border-bottom: 1px solid;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+}
+
+.vitrina.piel-tellmap .v-nombre {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.piel-tellmap .v-lema {
+  font-style: italic;
+  font-size: clamp(1.3rem, 2.2vw, 1.55rem);
+}
+
+.piel-tellmap .v-puntos li::before {
+  font-size: 0.7em;
+  top: 0.35em;
+}
+
+.piel-tellmap .v-stack li,
+.piel-tellmap .v-mas > summary {
+  font-family: var(--v-f-titulo);
+  letter-spacing: 0.06em;
+}
+
+.vitrina.piel-tellmap a.v-enlace {
+  font-family: var(--v-f-titulo);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* The double frame with diamonds at the corners, from the app's panels. */
+.tm-marco {
+  position: relative;
+  padding: 6px;
+  border: 1px solid var(--v-borde-fuerte);
+  background: var(--v-superficie);
+  box-shadow: 0 18px 40px -22px rgb(0 0 0 / 0.6);
+}
+
+.tm-marco > img {
+  border: 1px solid var(--v-borde-fuerte);
+}
+
+.tm-esquina {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  background: var(--v-fondo);
+  border: 1px solid var(--v-borde-fuerte);
+  rotate: 45deg;
+}
+
+.tm-esquina:nth-of-type(1) {
+  top: -6px;
+  left: -6px;
+}
+.tm-esquina:nth-of-type(2) {
+  top: -6px;
+  right: -6px;
+}
+.tm-esquina:nth-of-type(3) {
+  bottom: -6px;
+  left: -6px;
+}
+.tm-esquina:nth-of-type(4) {
+  bottom: -6px;
+  right: -6px;
+}
+
+.piel-tellmap figcaption {
+  font-style: italic;
+  font-size: 0.98rem;
+}
+
+/* The time slider, with the range the map really covers. */
+.tm-tiempo {
+  margin-top: 1.4rem;
+}
+
+.tm-regla {
+  position: relative;
+  height: 14px;
+  background:
+    linear-gradient(var(--v-borde-fuerte), var(--v-borde-fuerte)) center / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, var(--v-borde) 0 1px, transparent 1px 7.69%) bottom / 100% 6px no-repeat;
+}
+
+.tm-cursor {
+  position: absolute;
+  top: 50%;
+  left: 37.8%; /* 1350 BC between 3400 BC and AD 2024 */
+  width: 11px;
+  height: 11px;
+  translate: -50% -50%;
+  rotate: 45deg;
+  background: var(--v-acento);
+}
+
+.tm-extremos {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+  font-family: var(--v-f-titulo);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--v-suave);
+}
+
+.tm-extremos .tm-ahora {
+  position: absolute;
+  left: 37.8%;
+  translate: -50% 0;
+  color: var(--v-acento-texto);
+}
+
+/* ---------- Urna Abierta: the Aula theme, a ruled notebook by day and a blackboard at night ---------- */
+
+.piel-urna {
+  --v-fondo: light-dark(#fdfefb, #14302a);
+  --v-superficie: light-dark(#ffffff, #1b3b33);
+  --v-superficie-2: light-dark(#eef4f8, #21463c);
+  --v-texto: light-dark(#14233a, #f3f6ec);
+  --v-suave: light-dark(#46566b, #c2d3c8);
+  --v-titulo: light-dark(#14233a, #f3f6ec);
+  --v-borde: light-dark(#c6d9e8, #3a5d52);
+  --v-borde-fuerte: light-dark(#1e5a44, #f5d768);
+  --v-margen: light-dark(#e2726e, #3a5d52);
+  --v-acento: light-dark(#1e5a44, #f5d768);
+  --v-sobre-acento: light-dark(#ffffff, #16261f);
+  --v-acento-texto: light-dark(#1e5a44, #f5d768);
+  --v-f-titulo: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --v-f-texto: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --v-f-mono: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --v-peso-titulo: 800;
+  --v-radio: 10px;
+  --v-radio-boton: 12px;
+  --v-vineta: "✓";
+}
+
+/* Ruled lines and the red margin of a school notebook. */
+.vitrina.piel-urna {
+  background-image:
+    linear-gradient(90deg, transparent 0 2.2rem, var(--v-margen) 2.2rem calc(2.2rem + 2px), transparent calc(2.2rem + 2px)),
+    repeating-linear-gradient(180deg, transparent 0 31px, color-mix(in oklab, var(--v-borde) 70%, transparent) 31px 32px);
+}
+
+@media (min-width: 40rem) {
+  .vitrina.piel-urna {
+    background-image:
+      linear-gradient(90deg, transparent 0 4.5rem, var(--v-margen) 4.5rem calc(4.5rem + 2px), transparent calc(4.5rem + 2px)),
+      repeating-linear-gradient(180deg, transparent 0 31px, color-mix(in oklab, var(--v-borde) 70%, transparent) 31px 32px);
+  }
+}
+
+.piel-urna .v-marco {
+  padding-left: 3.25rem;
+}
+
+@media (min-width: 40rem) {
+  .piel-urna .v-marco {
+    padding-left: 6rem;
+  }
+}
+
+.piel-urna .v-cabecera {
+  border-bottom: 2px solid var(--v-borde-fuerte);
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+.piel-urna .v-puntos li::before {
+  font-weight: 800;
+}
+
+.piel-urna .v-stack li {
+  border-width: 2px;
+}
+
+.piel-urna .v-enlace {
+  border-width: 2px;
+}
+
+.ua-logo {
+  color: var(--v-acento-texto);
+}
+
+.ua-promesas {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1.35rem;
+  padding: 0.9rem 1.1rem;
+  border: 2px solid var(--v-borde);
+  border-radius: var(--v-radio);
+  background: var(--v-superficie);
+  list-style: none;
+  font-weight: 700;
+}
+
+.ua-promesas li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+}
+
+.ua-tilde {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: var(--v-acento);
+  color: var(--v-sobre-acento);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.ua-telefonos {
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.ua-acompanante {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.75rem;
+  padding: 1.1rem;
+  border: 2px solid var(--v-borde);
+  border-radius: var(--v-radio);
+  background: var(--v-superficie);
+}
+
+@media (min-width: 40rem) {
+  .ua-acompanante {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: center;
+  }
+}
+
+.ua-acompanante img {
+  border-radius: 6px;
+  border: 1px solid var(--v-borde);
+}
+
+.ua-acompanante h3 {
+  margin: 0;
+  font-family: var(--v-f-titulo);
+  font-variation-settings: normal;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--v-titulo);
+}
+
+.ua-acompanante p {
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--v-suave);
+}
+
+.vitrina .ua-acompanante a {
+  display: inline-block;
+  margin-top: 0.6rem;
+  color: var(--v-acento-texto);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+/* ---------- xport: lights out, the blue of X, and a CSV grid ---------- */
+
+.piel-xport {
+  color-scheme: dark;
+  --v-fondo: #000000;
+  --v-superficie: #16181c;
+  --v-texto: #e7e9ea;
+  --v-suave: #8b9095;
+  --v-titulo: #e7e9ea;
+  --v-borde: #2f3336;
+  --v-borde-fuerte: #536471;
+  --v-acento: #1d9bf0;
+  --v-sobre-acento: #000000;
+  --v-acento-texto: #1d9bf0;
+  --v-ambar: #ffd400;
+  --v-f-titulo: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --v-f-texto: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --v-f-mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", monospace;
+  --v-peso-titulo: 800;
+  --v-radio: 4px;
+  --v-radio-boton: 999px;
+  --v-vineta: "↗";
+}
+
+.vitrina.piel-xport {
+  background-image:
+    linear-gradient(#16181c 1px, transparent 1px),
+    linear-gradient(90deg, #16181c 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* The arrow corner of everything xport hands out. */
+.vitrina.piel-xport::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  width: clamp(72px, 12vw, 150px);
+  aspect-ratio: 1;
+  background: var(--v-acento);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.piel-xport .v-numero::before {
+  content: "↗ ";
+}
+
+.piel-xport .v-estado {
+  margin-right: clamp(3.5rem, 10vw, 8rem);
+}
+
+.piel-xport .v-logo {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 11px;
+  outline: 1px solid var(--v-borde);
+}
+
+.xp-consulta {
+  display: block;
+  margin-top: 1.35rem;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--v-borde);
+  border-radius: var(--v-radio);
+  background: var(--v-superficie);
+  font-family: var(--v-f-mono);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  color: var(--v-suave);
+}
+
+.xp-consulta b {
+  font-weight: 500;
+  color: var(--v-texto);
+}
+
+.xp-consulta span {
+  color: var(--v-acento-texto);
+}
+
+.xp-promesa {
+  margin-top: 1.1rem;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--v-ambar);
+  font-weight: 700;
+}
+
+.xp-popup {
+  max-width: 22rem;
+  margin-inline: auto;
+  padding: 10px;
+  border: 1px solid var(--v-borde);
+  border-radius: 18px;
+  background: var(--v-superficie);
+}
+
+.xp-popup img {
+  border-radius: 10px;
+}
+
+/* ---------- Foja: paper and ink, the sheet resting on a desk ---------- */
+
+.piel-foja {
+  --v-fondo: light-dark(#e4dccb, #0f1314);
+  --v-superficie: light-dark(#fffdf8, #1f2627);
+  --v-texto: light-dark(#1f2a2e, #ece6da);
+  --v-suave: light-dark(#5f6b6e, #a3aba9);
+  --v-titulo: light-dark(#1f2a2e, #ece6da);
+  --v-borde: light-dark(#ddd3c0, #3a4446);
+  --v-borde-fuerte: light-dark(#5f6b6e, #a3aba9);
+  --v-acento: light-dark(#1f5f5b, #5fb3aa);
+  --v-sobre-acento: light-dark(#ffffff, #0d1a19);
+  --v-acento-texto: light-dark(#1f5f5b, #5fb3aa);
+  --v-f-titulo: "XCharter", Charter, "Bitstream Charter", Georgia, serif;
+  --v-f-texto: system-ui, "Segoe UI", "Noto Sans", Roboto, Helvetica, Arial, sans-serif;
+  --v-f-mono: "XCharter", Charter, Georgia, serif;
+  --v-peso-titulo: 700;
+  --v-radio: 4px;
+  --v-vineta: "—";
+}
+
+/* The text column is the sheet. */
+.piel-foja .v-texto {
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  border-radius: var(--v-radio);
+  background: var(--v-superficie);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.06),
+    0 22px 44px -24px light-dark(rgb(60 45 20 / 0.45), rgb(0 0 0 / 0.8));
+}
+
+/* Small caps headings, like the Legajo style. */
+.piel-foja .v-cabecera {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  border-bottom-color: var(--v-borde-fuerte);
+}
+
+.piel-foja .v-stack li {
+  font-family: var(--v-f-texto);
+}
+
+.fj-formatos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.5rem;
+  margin-top: 1.35rem;
+  padding-block: 0.7rem;
+  border-block: 1px solid var(--v-borde);
+  font-size: 0.9rem;
+}
+
+.fj-formatos dt {
+  font-family: var(--v-f-titulo);
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.08em;
+  color: var(--v-suave);
+}
+
+.fj-formatos dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--v-acento-texto);
+}
+
+.fj-formatos dd + dd::before {
+  content: "· ";
+  color: var(--v-suave);
+  font-weight: 400;
+}
+
+.fj-ventana {
+  overflow: hidden;
+  border: 1px solid var(--v-borde);
+  border-radius: 6px;
+  background: var(--v-superficie);
+  box-shadow: 0 22px 44px -26px light-dark(rgb(60 45 20 / 0.5), rgb(0 0 0 / 0.85));
+}
+
+.fj-barra {
+  display: flex;
+  gap: 6px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--v-borde);
+}
+
+.fj-barra span {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--v-borde);
+}
+
+/* ---------- Rocola: an arcade jukebox on a tube monitor ---------- */
+
+.piel-rocola {
+  color-scheme: dark;
+  --v-fondo: #0b0b15;
+  --v-superficie: #14142a;
+  --v-texto: #f5f5f5;
+  --v-suave: #a3a3c6;
+  --v-titulo: #f5f5f5;
+  --v-borde: #2a2a48;
+  --v-borde-fuerte: #4c4c78;
+  --v-rosa: #ff3366;
+  --v-acento: #ffd24a;
+  --v-sobre-acento: #0b0b15;
+  --v-acento-texto: #ffd24a;
+  --v-f-titulo: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+  --v-f-texto: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+  --v-f-mono: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --v-peso-titulo: 800;
+  --v-radio: 4px;
+  --v-radio-boton: 6px;
+  --v-vineta: "▸";
+}
+
+/* The pink header bar of the interface, as a fill with white letters. */
+.piel-rocola .v-cabecera {
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--v-rosa);
+  color: #ffffff;
+  font-weight: 800;
+  /* Large bold text: white on this pink is 3.5:1 (5.2 in protanopia), enough only at this size. */
+  font-size: 1.17rem;
+  letter-spacing: 0.04em;
+}
+
+.piel-rocola .v-numero {
+  color: #ffffff;
+}
+
+.vitrina.piel-rocola .v-nombre {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.piel-rocola .v-puntos li::before {
+  color: var(--v-rosa);
+}
+
+.rc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1.35rem;
+  padding: 0;
+  list-style: none;
+}
+
+.rc-chips li {
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+  background: var(--v-superficie);
+  border: 1px solid var(--v-borde-fuerte);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* A tube: a thick bezel, a rounded screen and scanlines. */
+.rc-tubo {
+  padding: clamp(10px, 2vw, 18px);
+  border-radius: 22px;
+  background: linear-gradient(160deg, #22223a, #101020);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.08),
+    0 24px 50px -24px rgb(0 0 0 / 0.9);
+}
+
+.rc-pantalla {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.rc-pantalla::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.22) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 60%, rgb(0 0 0 / 0.35));
+}
+
+.rc-mas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  margin-top: 0.9rem;
+}
+
+.rc-mas .rc-tubo {
+  padding: 8px;
+  border-radius: 14px;
+}
+
+.rc-mas .rc-pantalla {
+  border-radius: 8px;
+}
+
+/* ---------- EX Emulators (Pocket): a component datasheet ---------- */
+
+.piel-pocket {
+  --v-fondo: light-dark(#f3f0e8, #0e1012);
+  --v-superficie: light-dark(#fbfaf6, #15181b);
+  --v-texto: light-dark(#16181b, #e9e6df);
+  --v-suave: light-dark(#5b6068, #9a9ea5);
+  --v-titulo: light-dark(#16181b, #e9e6df);
+  --v-borde: light-dark(#d8d3c6, #2a2e33);
+  --v-borde-fuerte: light-dark(#16181b, #e9e6df);
+  --v-acento: light-dark(#16181b, #e9e6df);
+  --v-sobre-acento: light-dark(#fbfaf6, #16181b);
+  --v-acento-texto: light-dark(#a94b25, #e58a55);
+  --v-traza: light-dark(#2c6a4d, #6fbf98);
+  --v-f-titulo: "IBM Plex Sans", system-ui, sans-serif;
+  --v-f-texto: "IBM Plex Sans", system-ui, sans-serif;
+  --v-f-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --v-peso-titulo: 600;
+  --v-radio: 3px;
+  --v-vineta: "▸";
+}
+
+.vitrina.piel-pocket {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--v-borde) 55%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--v-borde) 55%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.vitrina.piel-pocket .v-nombre {
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  letter-spacing: -0.025em;
+}
+
+.pk-hoja {
+  border: 1px solid var(--v-borde);
+  border-radius: var(--v-radio);
+  background: var(--v-superficie);
+}
+
+.pk-hoja + .pk-hoja {
+  margin-top: 1rem;
+}
+
+.pk-titulo {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--v-borde);
+  font-family: var(--v-f-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v-suave);
+}
+
+.pk-specs div {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.92rem;
+}
+
+.pk-specs div + div {
+  border-top: 1px solid var(--v-borde);
+}
+
+.pk-specs dt {
+  font-family: var(--v-f-mono);
+  color: var(--v-suave);
+}
+
+.pk-specs dd {
+  margin: 0;
+}
+
+.pk-codigo {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  font-family: var(--v-f-mono);
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+.pk-codigo .pk-mal {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  color: var(--v-suave);
+}
+
+.pk-codigo .pk-nota {
+  color: var(--v-acento-texto);
+}
+
+.pk-codigo .pk-bien {
+  color: var(--v-traza);
+}

@@ -1,0 +1,235 @@
+/*
+ * Fiori — tokens de la marca personal de Bautista Fiori.
+ *
+ * Dos modos con la misma estructura:
+ *   claro  «Albiceleste»: blancos de cielo, azules hondos, el celeste de la bandera y el oro del Sol de Mayo.
+ *   oscuro «Rojinegro»:   negro carbón, rojo de Newell's como relleno y marfil para el texto.
+ *
+ * Pensada para protanopía (la vista de Bautista): ningún par se distingue solo por el tono, el rojo nunca va
+ * como texto fino sobre negro (se apaga) y cada contraste está medido también en simulación protán y deután
+ * (herramientas/validar_paleta.py). Los estados llevan siempre forma o ícono además del color.
+ *
+ * Cómo se elige el modo: sigue al sistema; data-tema="claro" u "oscuro" en <html> lo fija. Cada color se
+ * define una sola vez con light-dark(), así que basta con que color-scheme diga cuál toca.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* ---------- Tipografía ---------- */
+  --f-titulo: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --f-texto: "Instrument Sans", "Inter", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Fraunces se usa con óptica automática y un poco de «suavidad»: elegante sin ponerse antigua. */
+  --f-titulo-ajustes: "SOFT" 50, "WONK" 0;
+  --f-titulo-ajustes-italica: "SOFT" 100, "WONK" 1;
+
+  /* Escala 1,250 (tercera mayor) con base 16 px. */
+  --t-2xs: 0.6875rem;
+  --t-xs: 0.75rem;
+  --t-sm: 0.875rem;
+  --t-md: 1rem;
+  --t-lg: 1.125rem;
+  --t-xl: 1.375rem;
+  --t-2xl: 1.75rem;
+  --t-3xl: 2.25rem;
+  --t-4xl: 3rem;
+  --t-5xl: 4rem;
+  --t-reloj: clamp(3.5rem, 9vw, 6.5rem);
+
+  --interlineado: 1.55;
+  --interlineado-titulo: 1.1;
+  /* Versalitas de los rótulos: mono, chiquitas y espaciadas. */
+  --rotulo-tracking: 0.14em;
+
+  /* ---------- Espacio, forma, movimiento ---------- */
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-5: 1.5rem;
+  --e-6: 2rem;
+  --e-7: 3rem;
+  --e-8: 4.5rem;
+
+  --r-1: 4px;
+  --r-2: 8px;
+  --r-3: 14px;
+  --r-4: 22px;
+  --r-pildora: 999px;
+
+  --curva: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --curva-resorte: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --d-1: 120ms;
+  --d-2: 220ms;
+  --d-3: 420ms;
+
+  /* ---------- Paleta de marca (fija, igual en los dos modos) ---------- */
+  /* Albiceleste */
+  --celeste: #74acdf;        /* el de la bandera: solo para rellenos y decoración, nunca para texto */
+  --celeste-claro: #cfe3f5;
+  --celeste-nube: #eaf2fb;
+  --azul: #1d4f91;           /* acción principal en claro; 8,1:1 sobre blanco (7,4 en protán) */
+  --azul-medio: #2b63a8;
+  --azul-noche: #0b1e3a;     /* texto principal en claro */
+  --sol: #f6b40e;            /* oro del Sol de Mayo: rellenos, nunca texto sobre blanco */
+  --sol-claro: #fce9b0;
+  --sol-tinta: #8a5b00;      /* el oro cuando tiene que ser texto: 5,9:1 sobre blanco */
+  /* Rojinegro */
+  --rojo: #e2001a;           /* el de Newell's, vivo: franjas, emblema y detalles; nunca texto */
+  --rojo-boton: #c8102e;     /* relleno con letra blanca: 5,9:1 normal, 8,6 protán, 4,9 deután */
+  --rojo-hondo: #b0102a;
+  --rojo-texto: #ff7a82;     /* el rojo cuando tiene que ser texto sobre negro: 5,1:1 en protán sobre cualquier superficie */
+  --rojo-suave: #ff8a8f;
+  --negro: #0a0a0b;
+  --carbon: #131314;
+  --marfil: #f3efea;
+
+  /* Categorías (etiquetas, proyectos, series). Ocho que se separan en protanopía (ΔE mínimo 17)
+     y deuteranopía (16). Igual, nunca solas: van con su nombre. */
+  --cat-noche: #123766;
+  --cat-azul: #2f6db5;
+  --cat-celeste: #8ec1ea;
+  --cat-sol: #f6b40e;
+  --cat-rojo: #b0102a;
+  --cat-ocre: #c46a12;
+  --cat-humo: #6e737c;
+  --cat-marfil: #eadfcb;
+
+  /* ---------- Semántica (cambia con el modo) ---------- */
+  --fondo: light-dark(#f5f8fc, #0a0a0b);
+  --fondo-hondo: light-dark(#eaf1f9, #050505);
+  --superficie: light-dark(#ffffff, #131314);
+  --superficie-2: light-dark(#f0f5fb, #1a1a1c);
+  --superficie-3: light-dark(#e3ecf7, #232326);
+  --borde: light-dark(#d5e1ee, #2a2a2e);
+  --borde-fuerte: light-dark(#b4c6db, #3c3c42);
+
+  --texto: light-dark(#0b1e3a, #f3efea);
+  --texto-2: light-dark(#3a4e6b, #bdb6ae);
+  --texto-3: light-dark(#56677f, #9a938c);
+  --texto-invertido: light-dark(#ffffff, #0a0a0b);
+
+  /* Acento: el color de marca de cada modo. «-relleno» es para fondos con texto encima. */
+  --acento: light-dark(#1d4f91, #c8102e);
+  --acento-hover: light-dark(#163e73, #b80f2a);
+  --acento-sobre: #ffffff;
+  --acento-texto: light-dark(#1d4f91, #ff7a82);
+  --acento-suave: light-dark(#e3edf9, #2a0d11);
+  --acento-borde: light-dark(#9fbfe3, #6e1420);
+
+  /* El segundo color de cada modo: el oro en claro, el marfil en oscuro. */
+  --destello: light-dark(#f6b40e, #f3efea);
+  --destello-suave: light-dark(#fdf1cf, #2a2724);
+
+  /* Enlaces: en oscuro van en marfil con subrayado rojo, así no se confunden con un aviso. */
+  --enlace: light-dark(#1d4f91, #f3efea);
+  --enlace-subrayado: light-dark(#74acdf, #e2001a);
+
+  /* Estados. Cada uno lleva ícono (✓ ◆ ▲ ●) además del color. */
+  --ok: light-dark(#1d4f91, #9dbfe8);
+  --ok-fondo: light-dark(#e3edf9, #13202f);
+  --aviso: light-dark(#8a5b00, #f2b33d);
+  --aviso-fondo: light-dark(#fdf1cf, #2b2210);
+  --peligro: light-dark(#b3132b, #ff7a82);
+  --peligro-fondo: light-dark(#fbe7ea, #2a0d11);
+  --info: light-dark(#3a4e6b, #bdb6ae);
+
+  /* Foco: anillo doble (fondo + acento) que se ve sobre cualquier superficie. */
+  --foco-color: light-dark(#1d4f91, #f3efea);
+  --foco: 0 0 0 2px var(--fondo), 0 0 0 4px var(--foco-color);
+
+  /* Sombras teñidas: azul noche en claro, negro puro en oscuro. */
+  --sombra-1: 0 1px 2px light-dark(rgb(11 30 58 / 0.06), rgb(0 0 0 / 0.5));
+  --sombra-2: 0 1px 2px light-dark(rgb(11 30 58 / 0.05), rgb(0 0 0 / 0.4)),
+    0 8px 24px -10px light-dark(rgb(11 30 58 / 0.18), rgb(0 0 0 / 0.7));
+  --sombra-3: 0 2px 6px light-dark(rgb(11 30 58 / 0.06), rgb(0 0 0 / 0.5)),
+    0 24px 48px -18px light-dark(rgb(11 30 58 / 0.28), rgb(0 0 0 / 0.85));
+  --brillo-interior: inset 0 1px 0 light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.05));
+
+  /* Texturas: las franjas de la camiseta albiceleste y las mitades de la rojinegra. */
+  --franjas: repeating-linear-gradient(90deg, transparent 0 22px, rgb(116 172 223 / 0.09) 22px 44px);
+  --mitades: linear-gradient(90deg, rgb(226 0 26 / 0.1) 0 50%, transparent 50% 100%);
+}
+
+:root[data-tema="claro"] {
+  color-scheme: light;
+}
+
+:root[data-tema="oscuro"] {
+  color-scheme: dark;
+}
+
+/* ---------- Base mínima para páginas personales ---------- */
+.fiori {
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: var(--f-texto);
+  font-size: var(--t-md);
+  line-height: var(--interlineado);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.fiori :is(h1, h2, h3, .titulo) {
+  font-family: var(--f-titulo);
+  font-variation-settings: var(--f-titulo-ajustes);
+  font-optical-sizing: auto;
+  font-weight: 560;
+  line-height: var(--interlineado-titulo);
+  letter-spacing: -0.015em;
+  color: var(--texto);
+  text-wrap: balance;
+}
+
+.fiori :is(h1, h2, h3) em,
+.fiori .titulo em {
+  font-style: italic;
+  font-variation-settings: var(--f-titulo-ajustes-italica);
+  font-weight: 420;
+  color: var(--acento-texto);
+}
+
+.fiori .rotulo {
+  font-family: var(--f-mono);
+  font-size: var(--t-2xs);
+  font-weight: 600;
+  letter-spacing: var(--rotulo-tracking);
+  text-transform: uppercase;
+  color: var(--texto-3);
+}
+
+.fiori a {
+  color: var(--enlace);
+  text-decoration: underline;
+  text-decoration-color: var(--enlace-subrayado);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color var(--d-1) var(--curva);
+}
+
+.fiori a:hover {
+  text-decoration-color: currentColor;
+}
+
+.fiori :focus-visible {
+  outline: none;
+  box-shadow: var(--foco);
+  border-radius: var(--r-1);
+}
+
+.fiori ::selection {
+  background: light-dark(#cfe3f5, #e2001a);
+  color: light-dark(#0b1e3a, #ffffff);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fiori *,
+  .fiori *::before,
+  .fiori *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}

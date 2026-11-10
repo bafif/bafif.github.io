@@ -1,0 +1,71 @@
+---
+import type { Showcase } from "../../data/projects";
+
+interface Props {
+  project: Showcase;
+  index: number;
+  flip?: boolean;
+  /** How many highlights show before "ver más". */
+  visible?: number;
+}
+
+const { project: p, index, flip = false, visible = 3 } = Astro.props;
+const shown = p.highlights.slice(0, visible);
+const more = p.highlights.slice(visible);
+const number = String(index).padStart(2, "0");
+---
+
+<section id={p.id} class={`vitrina piel-${p.skin}`} aria-labelledby={`${p.id}-nombre`}>
+  <div class="v-marco">
+    <p class="v-cabecera">
+      <span class="v-numero">{number}</span>
+      <span>{p.kind}</span>
+      <span>{p.year}</span>
+      <span class="v-estado">{p.status}</span>
+    </p>
+    <div class:list={["v-cuerpo", flip && "v-invertida"]}>
+      <div class="v-texto">
+        <slot name="logo" />
+        <h2 id={`${p.id}-nombre`} class="v-nombre">{p.name}</h2>
+        <p class="v-lema">{p.tagline}</p>
+        <slot name="firma" />
+        <p class="v-descripcion">{p.description}</p>
+        <ul class="v-puntos">
+          {shown.map((item) => <li>{item}</li>)}
+        </ul>
+        {
+          more.length > 0 && (
+            <details class="v-mas">
+              <summary>
+                {more.length === 1 ? "Un detalle más" : `${more.length} detalles más`}
+              </summary>
+              <ul class="v-puntos">
+                {more.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </details>
+          )
+        }
+        <ul class="v-stack" aria-label="Tecnologías">
+          {p.stack.map((item) => <li>{item}</li>)}
+        </ul>
+        <ul class="v-enlaces">
+          {
+            p.links.map((link, i) => (
+              <li>
+                <a class:list={["v-enlace", i === 0 && "v-enlace-principal"]} href={link.href}>
+                  {link.label}
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="v-muestra">
+        <slot name="muestra" />
+      </div>
+    </div>
+  </div>
+</section>
