@@ -30,3 +30,23 @@ export const profile = {
     },
   ],
 } as const;
+
+// DIP-16 pinout shown in the hero. Pins 1-8 run down the left side, 9-16 up the right side.
+export const pinout: readonly string[] = [
+  "C",
+  "C++",
+  "Python",
+  "TypeScript",
+  "GDScript",
+  "Racket",
+  "Bash",
+  "GND",
+  "Git",
+  "Typst",
+  "LaTeX",
+  "AVR",
+  "nginx",
+  "Podman",
+  "Linux",
+  "VCC",
+];
