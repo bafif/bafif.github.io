@@ -1,10 +1,8 @@
 export type Milestone = { year: number; items: string[] };
 
 export const timeline: Milestone[] = [
-  { year: 2018, items: ["Empiezo a reparar equipos y a dar clases particulares."] },
   { year: 2022, items: ["Primer proyecto público: un tema GTK propio."] },
-  { year: 2024, items: ["Pasantía en tecso: firmware para ATtiny85 y ESP32, y automatización en Raspberry Pi."] },
-  { year: 2025, items: ["Mapa interactivo histórico, Racketarra, Generador de CV y Morphtools.", "Aportes a Alejandría."] },
+  { year: 2025, items: ["Mapa interactivo histórico, Racketarra, Morphtools y el generador de CV que dio origen a Foja.", "Aportes a Alejandría."] },
   {
     year: 2026,
     items: [
