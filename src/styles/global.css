@@ -14,6 +14,9 @@
 /* Unlayered on purpose: the skins win over the brand and over utilities inside each showcase. */
 @import "./pieles.css";
 
+/* Motion: showcases that come in on scroll and each project's own small animation. */
+@import "./animaciones.css";
+
 /* Tailwind colors point at the brand tokens, so every page follows the mode on its own. */
 @theme inline {
   --font-sans: var(--f-texto);
