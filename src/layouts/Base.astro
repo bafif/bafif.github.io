@@ -10,6 +10,10 @@ interface Props {
 
 const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+// Link previews (WhatsApp, Telegram, LinkedIn...) need an absolute URL. Source: tools/og-image.html.
+const ogImage = new URL("/og.jpg", Astro.site);
+const ogImageAlt =
+  "Bautista Fiori, técnico electrónico y estudiante de Ciencias de la Computación e IA, junto a capturas de sus proyectos: TellMAP, Urna Abierta, Rocola, Foja, xport y EX Emulators";
 ---
 
 <!doctype html>
@@ -28,6 +32,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content="Bautista Fiori" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
     <script is:inline>
       try {
         // "theme" is the key the previous version of the site used.
