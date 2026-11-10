@@ -22,7 +22,7 @@ podman compose run --rm web npm run build    # type-check and build (into the di
 
 - `src/data/projects.ts`: the showcases (`showcases`) and the smaller projects (`smallProjects`). Only public
   repositories go here.
-- `src/data/career.ts`: experience, education and timeline.
+- `src/data/career.ts`: the timeline.
 - `src/data/profile.ts`: name, lead text, contact links and the pinout of the DIP-16 chip in the hero.
 - `src/data/support.ts`: the aliases, crypto address and payment links listed on `/donaciones/`
   (`src/pages/donaciones.astro`). Anything left empty is left out of the built page.
