@@ -219,7 +219,7 @@ export const showcases: Showcase[] = [
     images: [
       img(
         "foja-editor.webp",
-        "El editor de Foja: a la izquierda el panel Estilo y diseño con los estilos Legajo, Banda y Minimal, a la derecha la vista previa de un CV de ejemplo",
+        "El editor de Foja: a la izquierda el formulario de una entrada de experiencia, a la derecha la vista previa de mi CV, con esa entrada resaltada",
         1200,
         720,
       ),
