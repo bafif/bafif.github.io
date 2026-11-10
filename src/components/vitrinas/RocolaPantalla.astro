@@ -1,0 +1,555 @@
+---
+/*
+ * Rocola's "now playing" screen in the Ámbar theme, drawn live instead of a screenshot: bubbles rise through the
+ * tubes, the 45 turns at 45 rpm with the cover as its label, the bulbs of the arch chase each other and the clock
+ * and the progress lamps follow the song. Pure CSS; it all stands still under prefers-reduced-motion.
+ */
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+
+// Seven bubbles per tube; sizes are in tube widths, so they scale with the screen.
+const bubbles = [0, 1].map((tube) =>
+  Array.from({ length: 7 }, (_, i) => {
+    const size = ((0.8 + (i % 3) * 0.35) / 4.2) * 100;
+    return {
+      size: `${size.toFixed(1)}cqw`,
+      shift: `${(-size / 2 + (((i * 7 + tube * 3) % 5) - 2) * 6).toFixed(1)}cqw`,
+      duration: `${(4.2 + (i % 3) * 0.7).toFixed(1)}s`,
+      delay: `${(-(i * 0.73 + tube * 0.4)).toFixed(2)}s`,
+    };
+  }),
+);
+
+// Bulbs along the arch of the marquee, as percentages of its box (a half ellipse 90 × 18 screen widths).
+const bulbs = Array.from({ length: 15 }, (_, i) => {
+  const angle = Math.PI * (1 - (i + 0.5) / 15);
+  return {
+    left: `${(((45 + 41.4 * Math.cos(angle)) / 90) * 100).toFixed(2)}%`,
+    top: `${(((18 - 15.2 * Math.sin(angle)) / 18) * 100).toFixed(2)}%`,
+    phase: i % 3,
+  };
+});
+
+// The song runs from 2:07 to 3:31: six lamps lit, and the seventh, eighth and ninth light up on the way.
+const lamps = 10;
+const lit = 6;
+const volume = 7;
+const volumeLit = 5;
+---
+
+<div class="rc-bisel" data-vivo>
+  <div class="rc-pantalla" role="img" aria-label={label}>
+    {
+      bubbles.map((tube, t) => (
+        <div class:list={["rc-tubo", t === 0 ? "rc-izq" : "rc-der"]} aria-hidden="true">
+          {tube.map((b) => (
+            <i style={`--tam:${b.size};--corre:${b.shift};--dura:${b.duration};--demora:${b.delay}`} />
+          ))}
+        </div>
+      ))
+    }
+
+    <div class="rc-marquesina" aria-hidden="true">
+      {bulbs.map((b) => <i class={`rc-foco rc-fase-${b.phase}`} style={`left:${b.left};top:${b.top}`} />)}
+      <span>Rocola</span>
+    </div>
+
+    <div class="rc-bandeja" aria-hidden="true">
+      <div class="rc-disco"></div>
+      <div class="rc-etiqueta"></div>
+      <div class="rc-reflejo"></div>
+      <div class="rc-brazo"></div>
+    </div>
+
+    <div class="rc-info" aria-hidden="true">
+      <div class="rc-tira">
+        <b>A1</b><span class="rc-tema">Sesenta cuadros</span><span class="rc-autor">Los Píxeles · Modo Texto</span>
+      </div>
+      <div class="rc-fila">
+        <span class="rc-lamparas rc-avance">
+          {Array.from({ length: lamps }, (_, i) => <i class:list={[i < lit && "rc-on", i >= lit && `rc-l${i + 1}`]} />)}
+        </span>
+        <span><span class="rc-reloj"></span> / 3:31</span>
+      </div>
+      <div class="rc-fila">
+        <span>Volumen</span>
+        <span class="rc-lamparas">
+          {Array.from({ length: volume }, (_, i) => <i class:list={[i < volumeLit && "rc-on"]} />)}
+        </span>
+      </div>
+      <p class="rc-sigue"><em>A continuación</em>A2 · Barrido horizontal</p>
+    </div>
+
+    <div class="rc-leyenda" aria-hidden="true">
+      <span><kbd></kbd>Pausa</span><span><kbd>←→</kbd>Volumen</span><span><kbd></kbd>Atrás</span><span><kbd></kbd>Menú</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* The clock is a pair of counters fed by an animated integer: seconds since the start of the song. */
+  @property --rc-t {
+    syntax: "<integer>";
+    inherits: false;
+    initial-value: 127;
+  }
+
+  @property --rc-m {
+    syntax: "<integer>";
+    inherits: false;
+    initial-value: 2;
+  }
+
+  .rc-bisel {
+    padding: 10px;
+    border-radius: 14px;
+    background: #0a0604;
+    box-shadow: 0 26px 50px -26px rgb(0 0 0 / 0.9);
+  }
+
+  /* A 4:3 screen; everything inside is sized in screen widths (cqw), like the app scales to the display. */
+  .rc-pantalla {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    container-type: inline-size;
+    border-radius: 4px;
+    isolation: isolate;
+    background: radial-gradient(120% 90% at 50% 18%, #3a2112 0%, #24140c 55%, #140b06 100%);
+    font-family: "Oswald", "Arial Narrow", sans-serif;
+  }
+
+  /* Bubble tubes. Each tube is its own container, so a bubble travels exactly its height. */
+  .rc-tubo {
+    position: absolute;
+    top: 22cqw;
+    bottom: 6cqw;
+    width: 4.2cqw;
+    overflow: hidden;
+    container-type: size;
+    border: 0.45cqw solid #cdb88f;
+    border-radius: 2.1cqw;
+    background: linear-gradient(180deg, rgb(226 72 58 / 0.92), rgb(240 164 58 / 0.92) 50%, rgb(95 174 110 / 0.92));
+  }
+
+  .rc-izq {
+    left: 2.2cqw;
+  }
+
+  .rc-der {
+    right: 2.2cqw;
+  }
+
+  .rc-tubo i {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: var(--tam);
+    height: var(--tam);
+    margin-left: var(--corre);
+    border: 6cqw solid rgb(255 250 235 / 0.85);
+    border-radius: 50%;
+    box-sizing: border-box;
+    animation: rc-sube var(--dura) linear var(--demora) infinite;
+  }
+
+  @keyframes rc-sube {
+    from {
+      translate: 0 0;
+    }
+    to {
+      translate: 0 calc(-100cqh - 100%);
+    }
+  }
+
+  /* The amber arch, with its bulbs. */
+  .rc-marquesina {
+    position: absolute;
+    top: 0;
+    left: 5cqw;
+    right: 5cqw;
+    height: 18cqw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.9cqw solid #cdb88f;
+    border-bottom: 0;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    background: linear-gradient(180deg, #ffd98a 0%, #ffb347 45%, #c9611f 100%);
+    box-shadow: 0 0 4cqw rgb(255 179 71 / 0.45);
+  }
+
+  .rc-marquesina span {
+    margin-top: 3.4cqw;
+    font-family: "Limelight", Georgia, serif;
+    font-size: 7.4cqw;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #3a1608;
+    text-shadow: 0 0.2cqw 0 rgb(255 240 200 / 0.6);
+  }
+
+  .rc-foco {
+    position: absolute;
+    width: 1.5cqw;
+    height: 1.5cqw;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #fff8e4, #ffd98a);
+    box-shadow: 0 0 1.2cqw rgb(255 236 190 / 0.95);
+  }
+
+  /* The record: grooves that stay put, the label that turns, the shine that never moves (it doesn't on a real one). */
+  .rc-bandeja {
+    position: absolute;
+    left: 10cqw;
+    top: 24cqw;
+    width: 36cqw;
+    aspect-ratio: 1;
+  }
+
+  .rc-disco {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: repeating-radial-gradient(circle at 50% 50%, #121212 0 0.35cqw, #1e1e1e 0.35cqw 0.7cqw);
+    box-shadow:
+      0 0 0 0.6cqw #0a0604,
+      0 1.4cqw 3cqw rgb(0 0 0 / 0.6);
+  }
+
+  .rc-etiqueta {
+    position: absolute;
+    inset: 30%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      #140b06 0 6%,
+      #f0c52a 6% 17%,
+      #e3313e 17% 29%,
+      #141414 29% 39%,
+      #f0c52a 39% 53%,
+      #e3313e 53% 67%,
+      #f0c52a 67%
+    );
+    animation: rc-gira 1.3333s linear infinite;
+  }
+
+  .rc-etiqueta::after {
+    content: "LOS PÍXELES";
+    position: absolute;
+    top: 9%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2cqw;
+    letter-spacing: 0.1em;
+    color: #140b06;
+  }
+
+  @keyframes rc-gira {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  .rc-reflejo {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 20deg,
+      transparent 0 30deg,
+      rgb(255 255 255 / 0.14) 45deg,
+      transparent 60deg 210deg,
+      rgb(255 255 255 / 0.1) 225deg,
+      transparent 240deg
+    );
+  }
+
+  .rc-brazo {
+    position: absolute;
+    right: -2.4cqw;
+    top: -2cqw;
+    width: 1.6cqw;
+    height: 26cqw;
+    border-radius: 0.8cqw;
+    background: linear-gradient(90deg, #7d766b, #f1ece2 50%, #7d766b);
+    transform: rotate(28deg);
+    transform-origin: 50% 1cqw;
+  }
+
+  .rc-brazo::before {
+    content: "";
+    position: absolute;
+    left: -1.6cqw;
+    top: -1.6cqw;
+    width: 4.8cqw;
+    height: 4.8cqw;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #f1ece2, #7d766b);
+  }
+
+  .rc-brazo::after {
+    content: "";
+    position: absolute;
+    left: -0.9cqw;
+    bottom: -1cqw;
+    width: 3.4cqw;
+    height: 4.2cqw;
+    box-sizing: border-box;
+    border: 0.3cqw solid #cdb88f;
+    border-radius: 0.6cqw;
+    background: #2a2622;
+  }
+
+  /* The song's title card, the progress and volume lamps, and what comes next. */
+  .rc-info {
+    position: absolute;
+    left: 52cqw;
+    right: 9cqw;
+    top: 24cqw;
+    display: flex;
+    flex-direction: column;
+    gap: 2.4cqw;
+  }
+
+  .rc-tira {
+    display: grid;
+    grid-template-columns: 9cqw minmax(0, 1fr);
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    column-gap: 1.6cqw;
+    height: 13cqw;
+    padding-right: 1.4cqw;
+    border-block: 0.55cqw solid #8c1c2c;
+    background: #f1e4c6;
+  }
+
+  .rc-tira b {
+    grid-row: 1 / 3;
+    align-self: stretch;
+    display: grid;
+    place-items: center;
+    background: #8c1c2c;
+    color: #f1e4c6;
+    font-weight: 600;
+    font-size: 4.4cqw;
+  }
+
+  .rc-tema,
+  .rc-autor {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 1.15;
+  }
+
+  .rc-tema {
+    align-self: end;
+    font-family: "Special Elite", "Courier New", monospace;
+    font-size: 3.2cqw;
+    color: #2a160b;
+  }
+
+  .rc-autor {
+    align-self: start;
+    font-size: 1.8cqw;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7a4a2a;
+  }
+
+  .rc-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2cqw;
+    font-size: 1.9cqw;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #e9c99a;
+  }
+
+  .rc-fila > span {
+    white-space: nowrap;
+  }
+
+  .rc-lamparas {
+    display: flex;
+    gap: 0.75cqw;
+  }
+
+  .rc-lamparas i {
+    width: 1.8cqw;
+    height: 1.8cqw;
+    border-radius: 50%;
+    background: #4a2c18;
+    box-shadow: inset 0 0 0 0.25cqw #2a160b;
+  }
+
+  .rc-lamparas i.rc-on {
+    background: radial-gradient(circle at 40% 35%, #fff4d6, #ffb347);
+    box-shadow: 0 0 1.2cqw rgb(255 191 90 / 0.8);
+  }
+
+  .rc-reloj {
+    --rc-m: calc((var(--rc-t) - 30) / 60);
+    counter-reset: rc-min var(--rc-m) rc-seg calc(var(--rc-t) - var(--rc-m) * 60);
+  }
+
+  .rc-reloj::before {
+    content: counter(rc-min) ":" counter(rc-seg, decimal-leading-zero);
+  }
+
+  .rc-sigue {
+    margin: 0;
+    font-family: "Special Elite", "Courier New", monospace;
+    font-size: 2.2cqw;
+    line-height: 1.3;
+    color: #f1e4c6;
+  }
+
+  .rc-sigue em {
+    display: block;
+    font-family: "Oswald", "Arial Narrow", sans-serif;
+    font-style: normal;
+    font-size: 1.7cqw;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #ffcf7a;
+  }
+
+  .rc-leyenda {
+    position: absolute;
+    left: 9cqw;
+    right: 9cqw;
+    bottom: 3.2cqw;
+    height: 5cqw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2cqw;
+    font-size: 1.9cqw;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #e9c99a;
+  }
+
+  .rc-leyenda span {
+    display: flex;
+    align-items: center;
+    gap: 1.1cqw;
+    white-space: nowrap;
+  }
+
+  .rc-leyenda kbd {
+    display: inline-grid;
+    place-items: center;
+    min-width: 4.2cqw;
+    height: 4.2cqw;
+    padding: 0 0.9cqw;
+    box-sizing: border-box;
+    border-radius: 2.1cqw;
+    background: radial-gradient(circle at 40% 35%, #fff0c8, #d9a24a);
+    color: #3a1608;
+    font: inherit;
+  }
+
+  /* Without motion everything above is a still frame: 2:07, six lamps, the bulbs all lit, and each bubble held
+     where its negative delay puts it, so they stay spread along the tube. */
+  @media (prefers-reduced-motion: reduce) {
+    .rc-tubo i,
+    .rc-etiqueta {
+      animation-play-state: paused;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Three-phase chase around the arch, like the lights of a marquee. */
+    .rc-foco {
+      animation: rc-corre 1.35s steps(1, end) infinite;
+    }
+
+    .rc-fase-1 {
+      animation-delay: -0.9s;
+    }
+
+    .rc-fase-2 {
+      animation-delay: -0.45s;
+    }
+
+    /* The song plays in real time: 84 seconds, from 2:07 to 3:31, and starts over. */
+    .rc-reloj {
+      animation: rc-cancion 84s linear infinite;
+    }
+
+    .rc-l7 {
+      animation: rc-l7 84s steps(1, end) infinite;
+    }
+
+    .rc-l8 {
+      animation: rc-l8 84s steps(1, end) infinite;
+    }
+
+    .rc-l9 {
+      animation: rc-l9 84s steps(1, end) infinite;
+    }
+  }
+
+  @keyframes rc-corre {
+    0% {
+      background: radial-gradient(circle at 40% 35%, #fff8e4, #ffd98a);
+      box-shadow: 0 0 1.2cqw rgb(255 236 190 / 0.95);
+    }
+    33.33% {
+      background: #8a4a1c;
+      box-shadow: none;
+    }
+  }
+
+  @keyframes rc-cancion {
+    from {
+      --rc-t: 127;
+    }
+    to {
+      --rc-t: 211;
+    }
+  }
+
+  /* Lamp n lights up when the song passes n tenths of 3:31 (211 s); the loop starts at 127 s. */
+  @keyframes rc-l7 {
+    0% {
+      background: #4a2c18;
+    }
+    24.6% {
+      background: radial-gradient(circle at 40% 35%, #fff4d6, #ffb347);
+      box-shadow: 0 0 1.2cqw rgb(255 191 90 / 0.8);
+    }
+  }
+
+  @keyframes rc-l8 {
+    0% {
+      background: #4a2c18;
+    }
+    49.7% {
+      background: radial-gradient(circle at 40% 35%, #fff4d6, #ffb347);
+      box-shadow: 0 0 1.2cqw rgb(255 191 90 / 0.8);
+    }
+  }
+
+  @keyframes rc-l9 {
+    0% {
+      background: #4a2c18;
+    }
+    74.8% {
+      background: radial-gradient(circle at 40% 35%, #fff4d6, #ffb347);
+      box-shadow: 0 0 1.2cqw rgb(255 191 90 / 0.8);
+    }
+  }
+</style>

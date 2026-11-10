@@ -313,8 +313,15 @@
   box-shadow: 0 18px 40px -22px rgb(0 0 0 / 0.6);
 }
 
-.tm-marco > img {
+/* The lens crops the map, so it can drift and zoom slowly inside the frame. */
+.tm-lente {
+  display: block;
+  overflow: hidden;
   border: 1px solid var(--v-borde-fuerte);
+}
+
+.tm-lente img {
+  display: block;
 }
 
 .tm-esquina {
@@ -514,9 +521,16 @@
   }
 }
 
-.ua-acompanante img {
+.ua-escaner {
+  position: relative;
+  display: block;
+  overflow: hidden;
   border-radius: 6px;
   border: 1px solid var(--v-borde);
+}
+
+.ua-escaner img {
+  display: block;
 }
 
 .ua-acompanante h3 {
@@ -859,12 +873,6 @@
 
 .rc-tarjetas span {
   padding: 0.45rem 0.65rem;
-}
-
-.rc-maqueta {
-  overflow: hidden;
-  border-radius: 14px;
-  box-shadow: 0 26px 50px -26px rgb(0 0 0 / 0.9);
 }
 
 .rc-temas {

@@ -26,7 +26,7 @@ const isPower = (label: string) => label === "GND" || label === "VCC";
 const mark = 34;
 ---
 
-<figure class="chip">
+<figure class="chip" data-vivo>
   <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="chip-title">
     <title id="chip-title">Diagrama de pines con las tecnologías que uso: {pinout.join(", ")}</title>
 
@@ -39,6 +39,7 @@ const mark = 34;
             width={pinLen}
             height="8"
             class:list={["pata", isPower(pin.label) && "pata-energia"]}
+            style={`--n:${pin.n - 1}`}
           />
           <text
             x={pin.side === "l" ? bodyX - pinLen - 8 : bodyX + bodyW + pinLen + 8}
@@ -98,11 +99,35 @@ const mark = 34;
 
   /* Pins in the brand's accent (blue by day, Newell's red by night); power pins in the sun's gold. */
   .pata {
-    fill: var(--acento);
+    --pata-fill: var(--acento);
+    fill: var(--pata-fill);
   }
 
   .pata-energia {
-    fill: var(--sol);
+    --pata-fill: var(--sol);
+  }
+
+  /* A signal runs around the chip in pin order every few seconds: each pin flashes the other pin color. */
+  @media (prefers-reduced-motion: no-preference) {
+    .pata {
+      --destello: var(--sol);
+      animation: senal 6s linear infinite;
+      animation-delay: calc(0.8s + var(--n) * 0.14s);
+    }
+
+    .pata-energia {
+      --destello: var(--acento);
+    }
+  }
+
+  @keyframes senal {
+    0%,
+    9% {
+      fill: var(--destello);
+    }
+    16% {
+      fill: var(--pata-fill);
+    }
   }
 
   .nombre {

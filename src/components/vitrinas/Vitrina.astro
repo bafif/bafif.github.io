@@ -15,8 +15,8 @@ const more = p.highlights.slice(visible);
 const number = String(index).padStart(2, "0");
 ---
 
-<section id={p.id} class={`vitrina piel-${p.skin}`} aria-labelledby={`${p.id}-nombre`}>
-  <div class="v-marco">
+<section id={p.id} class={`vitrina piel-${p.skin}`} aria-labelledby={`${p.id}-nombre`} data-vivo>
+  <div class="v-marco" data-revela>
     <p class="v-cabecera">
       <span class="v-numero">{number}</span>
       <span>{p.kind}</span>

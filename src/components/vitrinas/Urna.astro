@@ -39,14 +39,16 @@ const promises = ["Tus datos en tu servidor.", "Funciona sin señal.", "La puede
     {
       companion && (
         <div class="ua-acompanante">
-          <img
-            src={companion.image.src}
-            alt={companion.image.alt}
-            width={companion.image.width}
-            height={companion.image.height}
-            loading="lazy"
-            decoding="async"
-          />
+          <span class="ua-escaner">
+            <img
+              src={companion.image.src}
+              alt={companion.image.alt}
+              width={companion.image.width}
+              height={companion.image.height}
+              loading="lazy"
+              decoding="async"
+            />
+          </span>
           <div>
             <h3>{companion.name}</h3>
             <p>{companion.tagline}</p>

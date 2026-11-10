@@ -49,6 +49,10 @@ const ogImageAlt =
         if (!tema && viejo) tema = viejo === "dark" ? "oscuro" : viejo === "light" ? "claro" : null;
         if (tema === "claro" || tema === "oscuro") document.documentElement.dataset.tema = tema;
       } catch {}
+      // Motion only for those who haven't asked for less; without this class the page stands still (animaciones.css).
+      if (matchMedia("(prefers-reduced-motion: no-preference)").matches && "IntersectionObserver" in window) {
+        document.documentElement.classList.add("anima");
+      }
     </script>
   </head>
   <body class="fiori min-h-dvh">
@@ -61,5 +65,27 @@ const ogImageAlt =
       <slot />
     </main>
     <Footer />
+    <script is:inline>
+      if (document.documentElement.classList.contains("anima")) {
+        // Blocks come in once, the first time they are seen.
+        const revela = new IntersectionObserver(
+          (vistas) => {
+            for (const v of vistas) {
+              if (v.isIntersecting) {
+                v.target.classList.add("visto");
+                revela.unobserve(v.target);
+              }
+            }
+          },
+          { rootMargin: "0px 0px -10% 0px" },
+        );
+        for (const el of document.querySelectorAll("[data-revela]")) revela.observe(el);
+        // Live pieces only move while they are on screen.
+        const vivo = new IntersectionObserver((vistas) => {
+          for (const v of vistas) v.target.classList.toggle("en-pantalla", v.isIntersecting);
+        });
+        for (const el of document.querySelectorAll("[data-vivo]")) vivo.observe(el);
+      }
+    </script>
   </body>
 </html>

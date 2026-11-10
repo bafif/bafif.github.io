@@ -1,6 +1,7 @@
 ---
 import type { Showcase } from "../../data/projects";
 import Vitrina from "./Vitrina.astro";
+import RocolaPantalla from "./RocolaPantalla.astro";
 
 interface Props {
   project: Showcase;
@@ -38,11 +39,7 @@ const cards = [
   </ul>
 
   <Fragment slot="muestra">
-    <figure>
-      <div class="rc-maqueta">
-        <img src={playing.src} alt={playing.alt} width={playing.width} height={playing.height} loading="lazy" decoding="async" />
-      </div>
-    </figure>
+    <RocolaPantalla label={playing.alt} />
     <div class="rc-temas">
       {
         selectors.map((image, i) => (
@@ -56,7 +53,8 @@ const cards = [
       }
     </div>
     <p class="rc-nota">
-      Maquetas de los cuatro temas de época. Ámbar, el que viene por defecto, llega con la v0.1.2.
+      Arriba, Reproduciendo con Ámbar, en movimiento como va a verse; abajo, el selector en los cuatro temas de época.
+      Ámbar, el que viene por defecto, llega con la v0.1.2.
     </p>
   </Fragment>
 </Vitrina>
