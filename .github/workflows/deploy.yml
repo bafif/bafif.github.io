@@ -24,6 +24,9 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # Every document in English and Spanish, with working links.
+      - run: node tools/check-docs.mjs
+      # astro check and the build; a text missing in either language stops it (src/i18n.ts).
       - run: npm run build
         env:
           ASTRO_TELEMETRY_DISABLED: "1"
