@@ -18,7 +18,7 @@ const skins = { tellmap: TellMap, urna: Urna, xport: Xport, foja: Foja, rocola: 
 
 <Base
   title="Bautista Fiori · Portfolio"
-  description="Técnico electrónico y estudiante de Ciencias de la Computación e IA en Rosario. Un atlas histórico, una app para fiscales, un editor de CV, una rocola booteable y más."
+  description="Los proyectos de Bautista Fiori: un atlas de la historia con sus fuentes, una app para fiscales, un editor de CV en Typst, una rocola booteable y más."
 >
   <!-- Hero -->
   <section class="portada">
@@ -32,17 +32,6 @@ const skins = { tellmap: TellMap, urna: Urna, xport: Xport, foja: Foja, rocola: 
           <a href={profile.github} class="boton">GitHub <span aria-hidden="true">↗</span></a>
           <a href={`mailto:${profile.email}`} class="boton">Escribime</a>
         </div>
-        <p class="rotulo mt-10">Características</p>
-        <ul class="mt-3 grid max-w-xl gap-x-6 gap-y-2.5 sm:grid-cols-2">
-          {
-            profile.features.map((feature) => (
-              <li class="flex gap-2.5 text-[15px] leading-snug">
-                <span aria-hidden="true" class="font-mono text-accent-text">▸</span>
-                {feature}
-              </li>
-            ))
-          }
-        </ul>
       </div>
       <div class="vidrio vidrio-figura">
         <Chip />
@@ -101,8 +90,8 @@ const skins = { tellmap: TellMap, urna: Urna, xport: Xport, foja: Foja, rocola: 
   <!-- Timeline -->
   <section id="recorrido" class="franja">
     <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-      <SectionHeading index="02" title="Recorrido" kicker="Años de hacer cosas, de reparar la primera PC hasta hoy." />
-      <ol class="recorrido relative grid gap-8 md:grid-cols-5 md:gap-6" data-revela>
+      <SectionHeading index="02" title="Recorrido" kicker="Los proyectos, año por año." />
+      <ol class="recorrido relative grid gap-8 md:grid-cols-3 md:gap-6" data-revela>
         <span aria-hidden="true" class="recorrido-linea absolute top-[7px] right-0 left-0 hidden h-px bg-rule-strong md:block"></span>
         {
           timeline.map((milestone) => (
@@ -121,29 +110,14 @@ const skins = { tellmap: TellMap, urna: Urna, xport: Xport, foja: Foja, rocola: 
     </div>
   </section>
 
-  <!-- How I work -->
-  <section id="como-trabajo" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-    <SectionHeading index="03" title="Cómo trabajo" />
-    <dl class="grid gap-x-10 gap-y-8 md:grid-cols-3">
-      {
-        profile.strengths.map((strength) => (
-          <div class="border-l-2 border-accent pl-4">
-            <dt class="font-semibold">{strength.title}</dt>
-            <dd class="mt-1.5 text-[15px] leading-relaxed text-muted">{strength.body}</dd>
-          </div>
-        ))
-      }
-    </dl>
-  </section>
-
   <!-- Contact -->
   <section id="contacto" class="contacto">
     <div class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 sm:py-20 lg:flex-row lg:items-end lg:justify-between">
       <div>
-        <p class="contacto-rotulo">04 · Contacto</p>
-        <h2 class="mt-3 text-[clamp(2rem,5vw,3.25rem)]">¿Hacemos algo <em>juntos</em>?</h2>
+        <p class="contacto-rotulo">03 · Contacto</p>
+        <h2 class="mt-3 text-[clamp(2rem,5vw,3.25rem)]">¿Te sirve alguno de estos <em>proyectos</em>?</h2>
         <p class="mt-4 max-w-lg text-lg opacity-85">
-          Busco proyectos donde aprender herramientas nuevas y aplicar lo que ya sé. Escribime y lo charlamos.
+          Si querés usar uno, sumarte o contarme qué le falta, escribime o abrí un issue en su repositorio.
         </p>
       </div>
       <div class="flex flex-col gap-3 sm:flex-row">
