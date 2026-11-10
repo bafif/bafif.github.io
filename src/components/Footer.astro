@@ -21,18 +21,27 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
+  /* The stripes go in a thin band on top, never behind the small text. */
   .pie {
-    border-top: 1px solid var(--borde);
-    background-image: var(--franjas);
+    position: relative;
+    background: var(--superficie-2);
   }
 
-  :global(:root[data-tema="oscuro"]) .pie {
-    background-image: var(--mitades);
+  .pie::before {
+    content: "";
+    display: block;
+    height: 6px;
+    /* Sky blue against deep blue, apart by lightness (sky blue and white look alike in protanopia). */
+    background: repeating-linear-gradient(90deg, var(--celeste) 0 22px, var(--azul) 22px 44px);
+  }
+
+  :global(:root[data-tema="oscuro"]) .pie::before {
+    background: repeating-linear-gradient(90deg, var(--rojo-boton) 0 22px, var(--negro) 22px 44px);
   }
 
   @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-tema="claro"])) .pie {
-      background-image: var(--mitades);
+    :global(:root:not([data-tema="claro"])) .pie::before {
+      background: repeating-linear-gradient(90deg, var(--rojo-boton) 0 22px, var(--negro) 22px 44px);
     }
   }
 </style>

@@ -231,7 +231,7 @@ export const showcases: Showcase[] = [
     name: "Rocola",
     kind: "Sistema booteable · Debian i386",
     tagline: "Un pendrive que convierte cualquier PC vieja en una rocola de arcade.",
-    short: "Un pendrive que vuelve rocola a una PC vieja, con monitor de tubo incluido.",
+    short: "Un pendrive que vuelve rocola a una PC vieja, con temas de rocolas de época.",
     description:
       "Sistema operativo mínimo basado en Debian i386 que arranca desde un pendrive con una interfaz de rocola propia. " +
       "Un instalador guiado lo clona al disco interno y la máquina queda como jukebox dedicada: abre sola al prender, " +
@@ -240,6 +240,8 @@ export const showcases: Showcase[] = [
       "ISO híbrida que arranca por BIOS y por UEFI x64, verificada de punta a punta en QEMU/KVM.",
       "El instalador clona el sistema a un disco vacío y ese disco arranca solo, también probado por BIOS y UEFI; al reinstalar conserva la música.",
       "Soporte CRT: VGA de 31 kHz y arcade/TV de 15 kHz con switchres y modelines, con vuelta segura a VGA.",
+      "Cuatro temas de rocolas de época, ya diseñados: Ámbar (fines de los 40, con tubos de burbujas), Cromo (mediados " +
+        "de los 50), Neón (los 60 y 70) y Display (los 80, de LED y pensado para 240p). Ámbar va por defecto y llega con la v0.1.2.",
       "Interfaz propia en SDL2 (Python y pygame) sobre MPD: biblioteca por artista y álbum, portada del disco al reproducir, logos y tema reemplazables y controles reasignables desde la configuración.",
       "Importa la música de un segundo pendrive apenas se enchufa: lo monta solo lectura, no duplica y la biblioteca se actualiza sola.",
       "Salida de audio por PipeWire elegible desde la interfaz: analógica, HDMI, USB o parlantes Bluetooth.",
@@ -254,9 +256,16 @@ export const showcases: Showcase[] = [
       { label: "Repositorio", href: gh("rocola") },
     ],
     images: [
-      img("rocola-nowplaying.webp", "Pantalla de reproducción de Rocola, con la portada del disco", 1280, 800),
-      img("rocola-library.webp", "Biblioteca de Rocola por artista, con la cantidad de canciones de cada uno", 1280, 800),
-      img("rocola-menu.webp", "Menú de Rocola: salida de audio, información, controles, biblioteca e instalador", 1280, 800),
+      img(
+        "rocola-ambar-reproduciendo.webp",
+        "Maqueta de Reproduciendo con el tema Ámbar: un disco de 45 que gira con la portada como etiqueta, el brazo del tocadiscos, la tarjeta de la canción, lámparas de avance y volumen, y tubos de burbujas a los costados",
+        980,
+        740,
+      ),
+      img("rocola-ambar.webp", "Selector con el tema Ámbar: marquesina en arco ámbar, tubos de burbujas y tarjetas de papel con franja bordó", 980, 740),
+      img("rocola-cromo.webp", "Selector con el tema Cromo: marquesina cromada con letra cursiva coral, fondo turquesa y tarjetas blancas con pestaña cromada", 980, 740),
+      img("rocola-neon.webp", "Selector con el tema Neón: pared de ladrillo, marquesina de neón rojo y tarjetas oscuras con borde de neón cian", 980, 740),
+      img("rocola-display.webp", "Selector con el tema Display: panel negro, letras de LED rojo y ámbar y cursor verde", 980, 740),
     ],
   },
   {

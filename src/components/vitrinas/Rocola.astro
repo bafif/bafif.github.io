@@ -9,31 +9,54 @@ interface Props {
 }
 
 const { project, index, flip } = Astro.props;
-const [playing, ...others] = project.images;
-const chips = ["BIOS + UEFI", "VGA 31 kHz", "Arcade 15 kHz", "Debian i386"];
+const [playing, ...selectors] = project.images;
+const eras = [
+  ["Ámbar", "fines de los 40"],
+  ["Cromo", "mediados de los 50"],
+  ["Neón", "los 60 y 70"],
+  ["Display", "los 80"],
+];
+// Selection codes, like the title strips of a jukebox.
+const cards = [
+  ["A1", "BIOS + UEFI"],
+  ["A2", "VGA 31 kHz"],
+  ["B1", "Arcade 15 kHz"],
+  ["B2", "Debian i386"],
+];
 ---
 
-<Vitrina project={project} index={index} flip={flip}>
-  <ul slot="firma" class="rc-chips" aria-label="Arranque y pantallas">
-    {chips.map((chip) => <li>{chip}</li>)}
+<Vitrina project={project} index={index} flip={flip} visible={4}>
+  <ul slot="firma" class="rc-tarjetas" aria-label="Arranque y pantallas">
+    {
+      cards.map(([code, label]) => (
+        <li>
+          <b>{code}</b>
+          <span>{label}</span>
+        </li>
+      ))
+    }
   </ul>
 
   <Fragment slot="muestra">
-    <div class="rc-tubo">
-      <div class="rc-pantalla">
+    <figure>
+      <div class="rc-maqueta">
         <img src={playing.src} alt={playing.alt} width={playing.width} height={playing.height} loading="lazy" decoding="async" />
       </div>
-    </div>
-    <div class="rc-mas">
+    </figure>
+    <div class="rc-temas">
       {
-        others.map((image) => (
-          <div class="rc-tubo">
-            <div class="rc-pantalla">
-              <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" />
-            </div>
-          </div>
+        selectors.map((image, i) => (
+          <figure>
+            <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" />
+            <figcaption>
+              <b>{eras[i][0]}</b> · {eras[i][1]}
+            </figcaption>
+          </figure>
         ))
       }
     </div>
+    <p class="rc-nota">
+      Maquetas de los cuatro temas de época. Ámbar, el que viene por defecto, llega con la v0.1.2.
+    </p>
   </Fragment>
 </Vitrina>
