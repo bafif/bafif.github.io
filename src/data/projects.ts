@@ -505,6 +505,7 @@ export const showcases: ShowcaseSource[] = [
     year: 2026,
     status: { es: "Beta pública · v0.1.1", en: "Public beta · v0.1.1" },
     links: [
+      { label: seeSite, href: site("rocola") },
       { label: { es: "Descargar la ISO", en: "Download the ISO" }, href: `${gh("rocola")}/releases` },
       { label: repository, href: gh("rocola") },
     ],
