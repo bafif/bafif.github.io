@@ -10,12 +10,24 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 // Not documentation of the site: hidden folders, dependencies and build output.
 const SKIP_DIRS = new Set(["node_modules", "dist"]);
 const SKIP_FILES = /^(LICENSE.*|CHANGELOG.*)\.md$/;
+// Files a checkout keeps out of git on its own, by exact name in .git/info/exclude: not part of the site.
+const LOCAL_FILES = new Set(
+  (() => {
+    try {
+      return readFileSync(join(root, ".git", "info", "exclude"), "utf8").split("\n");
+    } catch {
+      return [];
+    }
+  })()
+    .map((l) => l.trim())
+    .filter((l) => l && !l.startsWith("#") && !/[*?[\]/!\\]/.test(l)),
+);
 
 function docs(dir = root) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
     const path = join(dir, e.name);
     if (e.isDirectory()) return e.name.startsWith(".") || SKIP_DIRS.has(e.name) ? [] : docs(path);
-    return e.name.endsWith(".md") && !SKIP_FILES.test(e.name) ? [relative(root, path).split("\\").join("/")] : [];
+    return e.name.endsWith(".md") && !SKIP_FILES.test(e.name) && !LOCAL_FILES.has(e.name) ? [relative(root, path).split("\\").join("/")] : [];
   });
 }
 
