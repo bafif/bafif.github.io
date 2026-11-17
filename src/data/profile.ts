@@ -24,7 +24,7 @@ export const profile = {
 export const contactForm = {
   service: { name: "Web3Forms", url: "https://web3forms.com/" },
   endpoint: "https://api.web3forms.com/submit",
-  campos: { access_key: "", from_name: "bafif.github.io" } as Record<string, string>,
+  campos: { access_key: "e8dfc59c-562b-4afc-9afa-048ed7018620", from_name: "bafif.github.io" } as Record<string, string>,
   asunto: "subject",
   trampa: "botcheck",
 };
