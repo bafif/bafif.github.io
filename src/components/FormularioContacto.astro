@@ -1,0 +1,171 @@
+---
+// The contact form. It posts to a mail relay (contactForm in src/data/profile.ts) that forwards the message to my
+// inbox, so my address is never in the page. Without a key configured the form is not rendered at all.
+import { contactForm, contactFormActive } from "../data/profile";
+import { localize, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = localize(
+  {
+    nombre: { es: "Tu nombre", en: "Your name" },
+    opcional: { es: "opcional", en: "optional" },
+    correo: { es: "Tu correo, para responderte", en: "Your email, so I can reply" },
+    mensaje: { es: "Mensaje", en: "Message" },
+    enviar: { es: "Enviar", en: "Send" },
+    enviando: { es: "Enviando…", en: "Sending…" },
+    enviado: {
+      es: "Listo, me llegó. Te respondo a tu correo.",
+      en: "Done, it reached me. I'll reply to your email.",
+    },
+    error: {
+      es: "No se pudo enviar. Probá de nuevo en un rato o abrí un issue en GitHub.",
+      en: "It could not be sent. Try again in a while or open an issue on GitHub.",
+    },
+    asunto: { es: "Mensaje desde bafif.github.io", en: "Message from bafif.github.io" },
+  },
+  lang,
+);
+---
+
+{
+  contactFormActive && (
+    <form
+      class="formulario"
+      action={contactForm.endpoint}
+      method="POST"
+      data-enviando={s.enviando}
+      data-enviado={s.enviado}
+      data-error={s.error}
+    >
+      {Object.entries(contactForm.campos).map(([nombre, valor]) => (
+        <input type="hidden" name={nombre} value={valor} />
+      ))}
+      <input type="hidden" name={contactForm.asunto} value={s.asunto} />
+      {/* Left empty by people, filled by most bots: the relay drops any message that brings it. */}
+      <input type="checkbox" name={contactForm.trampa} class="trampa" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <label>
+        <span>
+          {s.nombre} <span class="opcional">({s.opcional})</span>
+        </span>
+        <input type="text" name="name" autocomplete="name" maxlength="120" />
+      </label>
+      <label>
+        <span>{s.correo}</span>
+        <input type="email" name="email" autocomplete="email" required maxlength="200" />
+      </label>
+      <label>
+        <span>{s.mensaje}</span>
+        <textarea name="message" rows="5" required maxlength="5000"></textarea>
+      </label>
+      <div class="pie-formulario">
+        <button type="submit" class="boton enviar">{s.enviar}</button>
+        <p class="estado" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  )
+}
+
+<script>
+  // With JavaScript the message goes without leaving the page; without it, the plain POST still works.
+  for (const form of document.querySelectorAll<HTMLFormElement>("form.formulario")) {
+    form.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+      const estado = form.querySelector<HTMLElement>(".estado")!;
+      const boton = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+      boton.disabled = true;
+      estado.textContent = form.dataset.enviando ?? "";
+      try {
+        const respuesta = await fetch(form.action, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: new FormData(form),
+        });
+        const datos = await respuesta.json().catch(() => ({}));
+        if (!respuesta.ok || datos.success === false) throw new Error(String(respuesta.status));
+        form.reset();
+        estado.textContent = form.dataset.enviado ?? "";
+      } catch {
+        estado.textContent = form.dataset.error ?? "";
+      } finally {
+        boton.disabled = false;
+      }
+    });
+  }
+</script>
+
+<style>
+  /* On the contact band: light letters over the navy (day) or red (night) fill. */
+  .formulario {
+    display: grid;
+    gap: 0.9rem;
+    width: 100%;
+    max-width: 28rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.35rem;
+    font-weight: 600;
+    font-size: var(--t-sm, 0.95rem);
+  }
+
+  .opcional {
+    font-weight: 400;
+    opacity: 0.75;
+  }
+
+  input:not([type="hidden"]):not(.trampa),
+  textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(255 255 255 / 0.45);
+    background: rgb(255 255 255 / 0.08);
+    color: #ffffff;
+    font: inherit;
+    font-weight: 400;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  .trampa {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .pie-formulario {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+  }
+
+  .estado {
+    margin: 0;
+  }
+
+  .enviar {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: light-dark(var(--azul-noche), var(--negro));
+  }
+
+  button:disabled {
+    opacity: 0.7;
+    cursor: progress;
+  }
+</style>

@@ -4,13 +4,14 @@ import Base from "../../layouts/Base.astro";
 import SectionHeading from "../SectionHeading.astro";
 import Indice from "../Indice.astro";
 import Chip from "../Chip.astro";
+import FormularioContacto from "../FormularioContacto.astro";
 import TellMap from "../vitrinas/TellMap.astro";
 import Urna from "../vitrinas/Urna.astro";
 import Xport from "../vitrinas/Xport.astro";
 import Foja from "../vitrinas/Foja.astro";
 import Rocola from "../vitrinas/Rocola.astro";
 import Pocket from "../vitrinas/Pocket.astro";
-import { profile } from "../../data/profile";
+import { contactFormActive, profile } from "../../data/profile";
 import { showcases as allShowcases, smallProjects as allSmall } from "../../data/projects";
 import { timeline as allTimeline } from "../../data/career";
 import { localize, type Lang } from "../../i18n";
@@ -55,6 +56,10 @@ const s = localize(
       { es: "?", en: " be of use to you?" },
     ],
     sumarte: {
+      es: "Si querés usar uno, sumarte o contarme qué le falta, escribime o abrí un issue en su repositorio.",
+      en: "If you want to use one, join in or tell me what it's missing, write to me or open an issue in its repository.",
+    },
+    sumarteSinFormulario: {
       es: "Si querés usar uno, sumarte o contarme qué le falta, abrí un issue en su repositorio.",
       en: "If you want to use one, join in or tell me what it's missing, open an issue in its repository.",
     },
@@ -76,7 +81,7 @@ const skins = { tellmap: TellMap, urna: Urna, xport: Xport, foja: Foja, rocola: 
         <div class="mt-8 flex flex-wrap gap-3">
           <a href="#proyectos" class="boton boton-principal">{s.verProyectos}</a>
           <a href={profile.github} class="boton">GitHub <span aria-hidden="true">↗</span></a>
-          <a href="#contacto" class="boton">{s.escribime}</a>
+          {contactFormActive && <a href="#contacto" class="boton">{s.escribime}</a>}
         </div>
       </div>
       <div class="vidrio vidrio-figura">
@@ -154,14 +159,15 @@ const skins = { tellmap: TellMap, urna: Urna, xport: Xport, foja: Foja, rocola: 
 
   <!-- Contact -->
   <section id="contacto" class="contacto">
-    <div class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 sm:py-20 lg:flex-row lg:items-end lg:justify-between">
+    <div class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 sm:py-20 lg:flex-row lg:items-start lg:justify-between">
       <div>
         <p class="contacto-rotulo">03 · {s.contacto}</p>
         <h2 class="mt-3 text-[clamp(2rem,5vw,3.25rem)]">{s.teSirve[0]}<em>{s.teSirve[1]}</em>{s.teSirve[2]}</h2>
-        <p class="mt-4 max-w-lg text-lg opacity-85">{s.sumarte}</p>
+        <p class="mt-4 max-w-lg text-lg opacity-85">{contactFormActive ? s.sumarte : s.sumarteSinFormulario}</p>
       </div>
-      <div class="flex flex-col gap-3 sm:flex-row">
-        <a href={profile.github} class="boton contacto-principal">github.com/{profile.githubHandle} <span aria-hidden="true">↗</span></a>
+      <div class="flex w-full flex-col gap-4 lg:max-w-md">
+        <FormularioContacto lang={lang} />
+        <a href={profile.github} class:list={["boton self-start", contactFormActive ? "contacto-secundario" : "contacto-principal"]}>github.com/{profile.githubHandle} <span aria-hidden="true">↗</span></a>
       </div>
     </div>
   </section>

@@ -2,6 +2,7 @@
 // The privacy policy, in either language. /privacy/ (Spanish) is also the privacy URL of the "Automatizaciones de
 // Bautista Fiori" OAuth app, so it never moves; /en/privacy/ is its English version.
 import Base from "../../layouts/Base.astro";
+import { contactForm, contactFormActive } from "../../data/profile";
 import { localize, routes, type Lang } from "../../i18n";
 
 interface Props {
@@ -26,6 +27,14 @@ const s = localize(
         "This is a static site. It uses no cookies, analytics or trackers, and it loads nothing from third parties: the " +
         "fonts are served from the site itself. All it keeps is your choice of light or dark theme and of language, and it " +
         "keeps it in your own browser.",
+    },
+    formulario: {
+      es:
+        "El formulario de contacto manda lo que escribís (tu nombre si lo ponés, tu correo y el mensaje) a " +
+        `${contactForm.service.name}, que me lo reenvía por correo. Solo se usa para responderte.`,
+      en:
+        "The contact form sends what you write (your name if you give it, your email and the message) to " +
+        `${contactForm.service.name}, which forwards it to my inbox. It is only used to reply to you.`,
     },
     google: { es: "Automatizaciones personales con Google", en: "Personal automations with Google" },
     googleTexto: {
@@ -85,6 +94,7 @@ const link = "underline decoration-rule underline-offset-4 hover:decoration-ink"
       <section>
         <h2 class="text-xl font-semibold tracking-tight">{s.sitio}</h2>
         <p class="mt-3">{s.sitioTexto}</p>
+        {contactFormActive && <p class="mt-3">{s.formulario}</p>}
       </section>
 
       <section>
@@ -120,7 +130,9 @@ const link = "underline decoration-rule underline-offset-4 hover:decoration-ink"
           <section lang="en" class="rounded-md border border-rule bg-surface p-5 text-sm text-muted">
             <h2 class="font-semibold text-ink">Summary in English</h2>
             <p class="mt-2">
-              This static site sets no cookies and uses no analytics. "Automatizaciones de Bautista Fiori" is a set of personal
+              This static site sets no cookies and uses no analytics.{" "}
+              {contactFormActive && `Its contact form sends what you write to ${contactForm.service.name}, which forwards it to my inbox. `}
+              "Automatizaciones de Bautista Fiori" is a set of personal
               scripts that run on my own computer and access Google Tasks, Drive or Calendar only for accounts I own or
               manage. Data stays on that computer or in the same Google accounts and is never sold, shared, or used for
               advertising or model training. Use of information received from Google APIs adheres to the Google API
