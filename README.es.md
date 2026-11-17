@@ -30,7 +30,9 @@ Todo texto que lee quien visita el sitio está escrito en español y en inglés,
 - `src/data/projects.ts`: las vitrinas (`showcases`) y los proyectos más chicos (`smallProjects`). Acá van solo
   repositorios públicos.
 - `src/data/career.ts`: la línea de tiempo.
-- `src/data/profile.ts`: nombre, texto de presentación, enlaces de contacto y el pinout del chip DIP-16 del hero.
+- `src/data/profile.ts`: nombre, texto de presentación, el enlace a GitHub, el formulario de contacto (`contactForm`:
+  manda a un servicio que me reenvía el mensaje, así mi correo nunca está en la página; con la clave vacía no se
+  muestra) y el pinout del chip DIP-16 del hero.
 - `src/data/support.ts`: los alias, la dirección cripto y los enlaces de pago que aparecen en `/donaciones/` y
   `/en/donations/` (`src/components/paginas/Donaciones.astro`). Lo que quede vacío no aparece en la página generada.
 - `/privacy/` y `/en/privacy/` (`src/components/paginas/Privacidad.astro`): política de privacidad. `/privacy/` es

@@ -29,7 +29,9 @@ and stops the build when a text is missing in either.
 - `src/data/projects.ts`: the showcases (`showcases`) and the smaller projects (`smallProjects`). Only public
   repositories go here.
 - `src/data/career.ts`: the timeline.
-- `src/data/profile.ts`: name, lead text, contact links and the pinout of the DIP-16 chip in the hero.
+- `src/data/profile.ts`: name, lead text, the GitHub link, the contact form (`contactForm`: it posts to a relay that
+  forwards to my inbox, so my address is never in the page; with an empty key the form is hidden) and the pinout of
+  the DIP-16 chip in the hero.
 - `src/data/support.ts`: the aliases, crypto address and payment links listed on `/donaciones/` and
   `/en/donations/` (`src/components/paginas/Donaciones.astro`). Anything left empty is left out of the built page.
 - `/privacy/` and `/en/privacy/` (`src/components/paginas/Privacidad.astro`): privacy policy. `/privacy/` is also
