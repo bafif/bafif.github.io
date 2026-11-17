@@ -2,7 +2,6 @@
 // The privacy policy, in either language. /privacy/ (Spanish) is also the privacy URL of the "Automatizaciones de
 // Bautista Fiori" OAuth app, so it never moves; /en/privacy/ is its English version.
 import Base from "../../layouts/Base.astro";
-import { profile } from "../../data/profile";
 import { localize, routes, type Lang } from "../../i18n";
 
 interface Props {
@@ -16,7 +15,7 @@ const s = localize(
       es: "Política de privacidad de este sitio y de las automatizaciones personales de Bautista Fiori que usan servicios de Google.",
       en: "Privacy policy of this site and of Bautista Fiori's personal automations that use Google services.",
     },
-    actualizada: { es: "Última actualización: 10 de noviembre de 2026", en: "Last updated: November 10, 2026" },
+    actualizada: { es: "Última actualización: 16 de noviembre de 2026", en: "Last updated: November 16, 2026" },
     sitio: { es: "Este sitio", en: "This site" },
     sitioTexto: {
       es:
@@ -69,7 +68,8 @@ const s = localize(
     ],
     revocar: { es: "El acceso se puede revocar en cualquier momento desde", en: "Access can be revoked at any time at" },
     contacto: { es: "Contacto", en: "Contact" },
-    consulta: { es: "Para cualquier consulta sobre esta política, escribí a", en: "For any question about this policy, write to" },
+    consulta: { es: "Para cualquier consulta sobre esta política, escribime desde", en: "For any question about this policy, write to me from" },
+    seccionContacto: { es: "la sección de contacto", en: "the contact section" },
   },
   lang,
 );
@@ -111,7 +111,7 @@ const link = "underline decoration-rule underline-offset-4 hover:decoration-ink"
         <h2 class="text-xl font-semibold tracking-tight">{s.contacto}</h2>
         <p class="mt-3">
           {s.consulta}{" "}
-          <a class={link} href={`mailto:${profile.email}`}>{profile.email}</a>.
+          <a class={link} href={`${routes.inicio[lang]}#contacto`}>{s.seccionContacto}</a>.
         </p>
       </section>
 

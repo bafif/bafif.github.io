@@ -4,7 +4,6 @@ export const profile = {
   name: "Bautista Fiori",
   fullName: "Bautista Damián Fiori",
   location: "Rosario, Argentina",
-  email: "",
   github: "https://github.com/bafif",
   githubHandle: "bafif",
   lead: {

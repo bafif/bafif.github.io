@@ -55,8 +55,8 @@ const s = localize(
       { es: "?", en: " be of use to you?" },
     ],
     sumarte: {
-      es: "Si querés usar uno, sumarte o contarme qué le falta, escribime o abrí un issue en su repositorio.",
-      en: "If you want to use one, join in or tell me what it's missing, write to me or open an issue in its repository.",
+      es: "Si querés usar uno, sumarte o contarme qué le falta, abrí un issue en su repositorio.",
+      en: "If you want to use one, join in or tell me what it's missing, open an issue in its repository.",
     },
   },
   lang,
@@ -76,7 +76,7 @@ const skins = { tellmap: TellMap, urna: Urna, xport: Xport, foja: Foja, rocola: 
         <div class="mt-8 flex flex-wrap gap-3">
           <a href="#proyectos" class="boton boton-principal">{s.verProyectos}</a>
           <a href={profile.github} class="boton">GitHub <span aria-hidden="true">↗</span></a>
-          <a href={`mailto:${profile.email}`} class="boton">{s.escribime}</a>
+          <a href="#contacto" class="boton">{s.escribime}</a>
         </div>
       </div>
       <div class="vidrio vidrio-figura">
@@ -161,8 +161,7 @@ const skins = { tellmap: TellMap, urna: Urna, xport: Xport, foja: Foja, rocola: 
         <p class="mt-4 max-w-lg text-lg opacity-85">{s.sumarte}</p>
       </div>
       <div class="flex flex-col gap-3 sm:flex-row">
-        <a href={`mailto:${profile.email}`} class="boton contacto-principal">{profile.email}</a>
-        <a href={profile.github} class="boton contacto-secundario">github.com/{profile.githubHandle} <span aria-hidden="true">↗</span></a>
+        <a href={profile.github} class="boton contacto-principal">github.com/{profile.githubHandle} <span aria-hidden="true">↗</span></a>
       </div>
     </div>
   </section>

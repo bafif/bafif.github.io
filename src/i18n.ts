@@ -50,7 +50,6 @@ const ui = {
   proyectos: { es: "Proyectos", en: "Projects" },
   recorrido: { es: "Recorrido", en: "Timeline" },
   contacto: { es: "Contacto", en: "Contact" },
-  correo: { es: "Correo", en: "Email" },
   donaciones: { es: "Donaciones", en: "Donations" },
   privacidad: { es: "Privacidad", en: "Privacy" },
   tema: { es: "Cambiar entre Albiceleste (claro) y Rojinegro (oscuro)", en: "Switch between Albiceleste (light) and Rojinegro (dark)" },

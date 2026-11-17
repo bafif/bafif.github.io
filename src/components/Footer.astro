@@ -19,7 +19,7 @@ const year = new Date().getFullYear();
     </p>
     <ul class="flex flex-wrap gap-x-5 gap-y-2">
       <li><a href={profile.github} rel="me">GitHub</a></li>
-      <li><a href={`mailto:${profile.email}`}>{s.correo}</a></li>
+      <li><a href={`${routes.inicio[lang]}#contacto`}>{s.contacto}</a></li>
       <li><a href={routes.donaciones[lang]}>{s.donaciones}</a></li>
       <li><a href={routes.privacidad[lang]}>{s.privacidad}</a></li>
     </ul>
